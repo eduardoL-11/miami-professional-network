@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C-05 · Detalle de empleo — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .detail-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+    @media (max-width: 1100px) { .detail-layout { grid-template-columns: 1fr; } }
+
+    .job-hero {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 28px;
+      display: flex; gap: 20px; align-items: flex-start;
+    }
+    .job-hero .logo {
+      width: 80px; height: 80px; border-radius: var(--r-md);
+      background: var(--ink-100); color: var(--ink-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; font-weight: 800; flex-shrink: 0;
+    }
+    .job-hero .info { flex: 1; }
+    .job-hero h1 { margin: 0 0 6px; }
+    .job-hero .company { color: var(--ink-700); font-size: 15px; }
+    .job-hero .meta { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; font-size: 13px; color: var(--ink-600); }
+    .job-hero .actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+
+    .section { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 24px; margin-top: 16px; }
+    .section h3 { margin: 0 0 14px; }
+
+    .req-list { padding: 0; margin: 0; list-style: none; }
+    .req-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; font-size: 14px; color: var(--ink-700); line-height: 1.5;
+    }
+    .req-list li .mark { color: var(--brand-green); font-weight: 700; flex-shrink: 0; }
+    .req-list li .star { color: var(--brand-orange); }
+
+    .quick-facts {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      padding: 18px; background: var(--ink-50); border-radius: var(--r-md);
+      margin-top: 16px;
+    }
+    .fact .lbl { font-size: 11px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 4px; }
+    .fact .val { font-size: 14px; color: var(--ink-900); font-weight: 600; }
+
+    /* Side: Apply card */
+    .side-col { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 24px; }
+
+    .apply-card {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 22px;
+    }
+    .apply-card .salary-line { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--ink-200); }
+    .apply-card .salary { font-size: 24px; font-weight: 800; color: var(--ink-900); }
+    .apply-card .salary-period { font-size: 12px; color: var(--ink-600); }
+
+    .blocked-card {
+      background: var(--brand-orange-50); border: 1px solid var(--brand-orange-100);
+      border-radius: var(--r-md); padding: 16px;
+      margin-bottom: 16px;
+    }
+    .blocked-card .head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .blocked-card .icon { width: 32px; height: 32px; border-radius: 50%; background: var(--brand-orange); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+
+    .progress-mini { display: flex; flex-direction: column; gap: 4px; margin: 12px 0; }
+    .progress-mini .bar { height: 6px; background: var(--ink-200); border-radius: var(--r-full); overflow: hidden; }
+    .progress-mini .bar > div { height: 100%; background: var(--brand-orange); }
+    .progress-mini .pct { font-size: 12px; font-weight: 700; color: var(--brand-orange-700); }
+
+    .similar-card { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--ink-200); }
+    .similar-card:last-child { border-bottom: 0; }
+    .similar-card .lg {
+      width: 40px; height: 40px; border-radius: var(--r-md);
+      background: var(--ink-100); color: var(--ink-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; flex-shrink: 0;
+    }
+    .similar-card .info { flex: 1; min-width: 0; }
+    .similar-card .info .t { font-weight: 600; font-size: 14px; color: var(--ink-900); }
+    .similar-card .info .c { font-size: 12px; color: var(--ink-600); }
+
+    .toggle-state {
+      display: inline-flex; padding: 4px;
+      background: var(--ink-100); border-radius: var(--r-full); gap: 2px;
+      font-size: 12px;
+    }
+    .toggle-state button {
+      border: 0; background: transparent; padding: 5px 12px;
+      border-radius: var(--r-full); cursor: pointer; font-weight: 600; color: var(--ink-600);
+    }
+    .toggle-state button.active { background: var(--white); color: var(--brand-green); box-shadow: var(--shadow-sm); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="candidate" data-active="jobs">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="row items-center gap-3">
+            <a href="c04-jobs.html" class="t-body-sm muted">← <span data-i18n-es="Volver a empleos" data-i18n-en="Back to jobs">Volver a empleos</span></a>
+          </div>
+          <div class="row items-center gap-3" style="margin-top: 6px;">
+            <h1 class="t-h2" style="margin: 0;">Hospitality Marketing Lead</h1>
+          </div>
+          <div class="t-body-sm muted mt-2">Sunset Hotels Group · Miami, FL</div>
+        </div>
+        <div class="row items-center gap-3">
+          <div class="toggle-state" title="Demo">
+            <button class="active" data-state="ready" data-i18n-es="Perfil 100%" data-i18n-en="Profile 100%">Perfil 100%</button>
+            <button data-state="incomplete" data-i18n-es="Perfil 85%" data-i18n-en="Profile 85%">Perfil 85%</button>
+          </div>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-layout">
+
+        <!-- LEFT: Job content -->
+        <div>
+
+          <!-- Hero -->
+          <div class="job-hero">
+            <div class="logo">SH</div>
+            <div class="info">
+              <div class="t-overline muted" style="margin-bottom: 6px;">Sunset Hotels Group · Hospitality</div>
+              <h1 class="t-h2">Hospitality Marketing Lead</h1>
+              <div class="company" data-i18n-es="Miami, FL · Tiempo completo · Híbrido" data-i18n-en="Miami, FL · Full-time · Hybrid">Miami, FL · Tiempo completo · Híbrido</div>
+              <div class="meta">
+                <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Publicado hace 3 días" data-i18n-en="Posted 3 days ago">Publicado hace 3 días</span></span>
+                <span><i class='i' data-icon='users'></i> <span data-i18n-es="24 aplicantes" data-i18n-en="24 applicants">24 aplicantes</span></span>
+                <span><i class='i' data-icon='clock'></i> <span data-i18n-es="Aplicar antes del 30 Jun 2026" data-i18n-en="Apply by Jun 30, 2026">Aplicar antes del 30 Jun 2026</span></span>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="save-btn" style="width: 40px; height: 40px; border: 1px solid var(--ink-300); border-radius: var(--r-md); background: transparent; cursor: pointer; font-size: 18px; color: var(--brand-orange);">★</button>
+              <button class="btn btn-ghost btn-sm" data-i18n-es="<i class='i' data-icon='link'></i> Compartir" data-i18n-en="<i class='i' data-icon='link'></i> Share"><i class='i' data-icon='link'></i> Compartir</button>
+            </div>
+          </div>
+
+          <!-- Quick facts -->
+          <div class="quick-facts">
+            <div class="fact"><div class="lbl" data-i18n-es="Tipo de empleo" data-i18n-en="Employment type">Tipo de empleo</div><div class="val">Full-time</div></div>
+            <div class="fact"><div class="lbl" data-i18n-es="Modalidad" data-i18n-en="Mode">Modalidad</div><div class="val" data-i18n-es="Híbrido (3 días oficina)" data-i18n-en="Hybrid (3 days office)">Híbrido (3 días oficina)</div></div>
+            <div class="fact"><div class="lbl" data-i18n-es="Experiencia" data-i18n-en="Experience">Experiencia</div><div class="val">5+ <span data-i18n-es="años" data-i18n-en="years">años</span></div></div>
+            <div class="fact"><div class="lbl" data-i18n-es="Industria" data-i18n-en="Industry">Industria</div><div class="val">Hospitality</div></div>
+          </div>
+
+          <!-- Description -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Sobre el rol" data-i18n-en="About the role">Sobre el rol</h3>
+            <p class="t-body" style="color: var(--ink-700); line-height: 1.6;" data-i18n-es="El Hospitality Marketing Lead diseñará y ejecutará estrategias de marca para nuestra cartera de hoteles boutique en Miami. Trabajará cross-funcional con operaciones, F&B y digital para crear experiencias memorables para huéspedes y elevar la presencia de la marca en mercados clave." data-i18n-en="The Hospitality Marketing Lead will design and execute brand strategies for our boutique hotel portfolio in Miami. You'll work cross-functional with operations, F&B and digital to create memorable guest experiences and elevate brand presence in key markets.">El Hospitality Marketing Lead diseñará y ejecutará estrategias de marca para nuestra cartera de hoteles boutique en Miami. Trabajará cross-funcional con operaciones, F&B y digital para crear experiencias memorables para huéspedes y elevar la presencia de la marca en mercados clave.</p>
+            <p class="t-body mt-4" style="color: var(--ink-700); line-height: 1.6;" data-i18n-es="Liderarás un equipo de 4 personas con un presupuesto anual de $750k, reportando directamente al VP de Marketing. El rol incluye gestión de campañas, partnerships locales, y experiencias in-property." data-i18n-en="You'll lead a team of 4 with an annual budget of $750k, reporting directly to the VP of Marketing. The role includes campaign management, local partnerships, and in-property experiences.">Liderarás un equipo de 4 personas con un presupuesto anual de $750k, reportando directamente al VP de Marketing. El rol incluye gestión de campañas, partnerships locales, y experiencias in-property.</p>
+          </div>
+
+          <!-- Requirements -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Requisitos" data-i18n-en="Requirements">Requisitos</h3>
+            <ul class="req-list">
+              <li><span class="mark">✓</span> <span data-i18n-es="5+ años en marketing de hospitalidad o industria de servicio premium" data-i18n-en="5+ years in hospitality marketing or premium service industry">5+ años en marketing de hospitalidad o industria de servicio premium</span></li>
+              <li><span class="mark">✓</span> <span data-i18n-es="Inglés y español nativos o profesionales" data-i18n-en="Native or professional English and Spanish">Inglés y español nativos o profesionales</span></li>
+              <li><span class="mark">✓</span> <span data-i18n-es="Experiencia liderando equipos de 3+ personas" data-i18n-en="Experience leading teams of 3+ people">Experiencia liderando equipos de 3+ personas</span></li>
+              <li><span class="mark">✓</span> <span data-i18n-es="Gestión de presupuesto $500k+" data-i18n-en="$500k+ budget management">Gestión de presupuesto $500k+</span></li>
+              <li><span class="mark">✓</span> <span data-i18n-es="Disponibilidad de fines de semana ocasionales para eventos" data-i18n-en="Availability for occasional weekend events">Disponibilidad de fines de semana ocasionales para eventos</span></li>
+            </ul>
+          </div>
+
+          <!-- Nice to haves -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Plus (no obligatorio)" data-i18n-en="Nice to have">Plus (no obligatorio)</h3>
+            <ul class="req-list">
+              <li><span class="star">★</span> <span data-i18n-es="Experiencia previa en marcas de lujo" data-i18n-en="Previous luxury brand experience">Experiencia previa en marcas de lujo</span></li>
+              <li><span class="star">★</span> <span data-i18n-es="Portugués conversacional" data-i18n-en="Conversational Portuguese">Portugués conversacional</span></li>
+              <li><span class="star">★</span> <span data-i18n-es="Red de contactos en medios y eventos en Miami" data-i18n-en="Media and events network in Miami">Red de contactos en medios y eventos en Miami</span></li>
+            </ul>
+          </div>
+
+          <!-- About company -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Sobre Sunset Hotels Group" data-i18n-en="About Sunset Hotels Group">Sobre Sunset Hotels Group</h3>
+            <p class="t-body" style="color: var(--ink-700); line-height: 1.6;" data-i18n-es="Grupo hotelero boutique con 7 propiedades en Miami y Miami Beach. Fundado en 2014, especializado en experiencias de lujo casual para viajeros de negocios y leisure. 280 colaboradores, certificación de Great Place to Work 2024 y 2025." data-i18n-en="Boutique hotel group with 7 properties in Miami and Miami Beach. Founded in 2014, specialized in casual-luxury experiences for business and leisure travelers. 280 employees, Great Place to Work certification 2024 and 2025.">Grupo hotelero boutique con 7 propiedades en Miami y Miami Beach. Fundado en 2014, especializado en experiencias de lujo casual para viajeros de negocios y leisure. 280 colaboradores, certificación de Great Place to Work 2024 y 2025.</p>
+            <div class="row gap-4 mt-4">
+              <span class="t-body-sm muted"><i class='i' data-icon='building'></i> 280 <span data-i18n-es="empleados" data-i18n-en="employees">empleados</span></span>
+              <span class="t-body-sm muted"><i class='i' data-icon='map-pin'></i> 7 <span data-i18n-es="ubicaciones" data-i18n-en="locations">ubicaciones</span></span>
+              <span class="t-body-sm muted"><i class='i' data-icon='award'></i> Great Place to Work 2024–2025</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Apply panel (two states) -->
+        <aside class="side-col">
+
+          <!-- STATE A: Profile 100% — Apply enabled -->
+          <div class="apply-card" id="state-ready">
+            <div class="salary-line">
+              <div>
+                <div class="salary">$80k–$110k</div>
+                <div class="salary-period" data-i18n-es="USD anual · negociable" data-i18n-en="USD yearly · negotiable">USD anual · negociable</div>
+              </div>
+              <span class="badge badge-success" style="font-size: 11px;">✓ <span data-i18n-es="Visible" data-i18n-en="Visible">Visible</span></span>
+            </div>
+
+            <button class="btn btn-primary btn-lg w-full" style="display: flex; justify-content: center;" data-i18n-es="<i class='i' data-icon='send'></i> Aplicar ahora" data-i18n-en="<i class='i' data-icon='send'></i> Apply now"><i class='i' data-icon='send'></i> Aplicar ahora</button>
+            <button class="btn btn-outline w-full mt-2" style="display: flex; justify-content: center;" data-i18n-es="☆ Guardar para después" data-i18n-en="☆ Save for later">☆ Guardar para después</button>
+
+            <div style="margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--ink-200);">
+              <div class="t-caption mb-2" style="font-weight: 700; color: var(--ink-700);" data-i18n-es="LO QUE COMPARTIRÁS" data-i18n-en="WHAT YOU'LL SHARE">LO QUE COMPARTIRÁS</div>
+              <ul class="req-list" style="font-size: 13px;">
+                <li><span class="mark">✓</span> <span data-i18n-es="Perfil completo + headshot" data-i18n-en="Full profile + headshot">Perfil completo + headshot</span></li>
+                <li><span class="mark">✓</span> Resume PDF <span class="t-caption muted">(<span data-i18n-es="link temporal" data-i18n-en="temporary link">link temporal</span>)</span></li>
+                <li><span class="mark">✓</span> <span data-i18n-es="Educación y referencias" data-i18n-en="Education and references">Educación y referencias</span></li>
+              </ul>
+
+              <div class="t-body-sm muted mt-4" style="line-height: 1.5;" data-i18n-es="Recibirás un correo de confirmación. El empleador puede tomar hasta 14 días en revisar." data-i18n-en="You'll get a confirmation email. The employer may take up to 14 days to review.">Recibirás un correo de confirmación. El empleador puede tomar hasta 14 días en revisar.</div>
+            </div>
+          </div>
+
+          <!-- STATE B: Profile incomplete — Apply blocked -->
+          <div class="apply-card hidden" id="state-incomplete">
+            <div class="salary-line">
+              <div>
+                <div class="salary">$80k–$110k</div>
+                <div class="salary-period" data-i18n-es="USD anual · negociable" data-i18n-en="USD yearly · negotiable">USD anual · negociable</div>
+              </div>
+            </div>
+
+            <div class="blocked-card">
+              <div class="head">
+                <div class="icon"><i class='i' data-icon='lock'></i></div>
+                <div style="font-weight: 700; color: var(--brand-orange-700);" data-i18n-es="Completa tu perfil para aplicar" data-i18n-en="Complete your profile to apply">Completa tu perfil para aplicar</div>
+              </div>
+              <div class="progress-mini">
+                <div class="pct">85% <span style="color: var(--ink-600); font-weight: 500;" data-i18n-es="completo" data-i18n-en="complete">completo</span></div>
+                <div class="bar"><div style="width: 85%;"></div></div>
+              </div>
+              <div class="t-body-sm" style="color: var(--ink-700);" data-i18n-es="Te falta: resume PDF y una segunda referencia." data-i18n-en="Missing: resume PDF and a second reference.">Te falta: resume PDF y una segunda referencia.</div>
+            </div>
+
+            <button class="btn btn-primary btn-lg w-full" disabled style="display: flex; justify-content: center;" data-i18n-es="<i class='i' data-icon='lock'></i> Aplicar (bloqueado)" data-i18n-en="<i class='i' data-icon='lock'></i> Apply (blocked)"><i class='i' data-icon='lock'></i> Aplicar (bloqueado)</button>
+            <a href="c02-profile.html" class="btn btn-secondary w-full mt-2" style="display: flex; justify-content: center;" data-i18n-es="Completar mi perfil →" data-i18n-en="Complete my profile →">Completar mi perfil →</a>
+            <button class="btn btn-outline w-full mt-2" style="display: flex; justify-content: center;" data-i18n-es="☆ Guardar para después" data-i18n-en="☆ Save for later">☆ Guardar para después</button>
+          </div>
+
+          <!-- Similar jobs -->
+          <div class="apply-card">
+            <div class="t-h4 mb-4" data-i18n-es="Empleos similares" data-i18n-en="Similar jobs">Empleos similares</div>
+
+            <a href="c05-job-detail.html" class="similar-card" style="text-decoration: none; color: inherit;">
+              <div class="lg">OM</div>
+              <div class="info">
+                <div class="t">Service Designer (Hospitality)</div>
+                <div class="c">Ocean Mirage · Miami Beach</div>
+              </div>
+            </a>
+            <a href="c05-job-detail.html" class="similar-card" style="text-decoration: none; color: inherit;">
+              <div class="lg">BB</div>
+              <div class="info">
+                <div class="t">Senior Product Designer</div>
+                <div class="c">Brickell Build Co. · Miami</div>
+              </div>
+            </a>
+            <a href="c05-job-detail.html" class="similar-card" style="text-decoration: none; color: inherit;">
+              <div class="lg">MR</div>
+              <div class="info">
+                <div class="t">CX Designer</div>
+                <div class="c">Mango Republic · Coral Gables</div>
+              </div>
+            </a>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+  <script>
+    // Demo toggle between ready / incomplete state
+    document.querySelectorAll('.toggle-state button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.toggle-state button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const state = btn.getAttribute('data-state');
+        document.getElementById('state-ready').classList.toggle('hidden', state !== 'ready');
+        document.getElementById('state-incomplete').classList.toggle('hidden', state !== 'incomplete');
+      });
+    });
+  </script>
+</body>
+</html>

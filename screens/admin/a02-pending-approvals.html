@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-02 · Aprobaciones pendientes — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .tabs {
+      display: flex; gap: 4px; border-bottom: 1px solid var(--ink-200); margin-bottom: 20px;
+    }
+    .tabs a {
+      padding: 10px 14px; font-size: 14px; font-weight: 600;
+      color: var(--ink-600); border-bottom: 2px solid transparent;
+      margin-bottom: -1px; text-decoration: none;
+    }
+    .tabs a:hover { color: var(--ink-900); text-decoration: none; }
+    .tabs a.active { color: var(--ink-900); border-bottom-color: var(--ink-900); }
+    .tabs a .count { display: inline-block; min-width: 18px; padding: 1px 6px; background: var(--ink-100); color: var(--ink-700); border-radius: var(--r-full); font-size: 11px; margin-left: 6px; }
+
+    .approval-card {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 20px;
+      margin-bottom: 12px; transition: border-color .12s, box-shadow .12s;
+    }
+    .approval-card:hover { border-color: var(--ink-300); box-shadow: var(--shadow-sm); }
+    .approval-card .head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+    .approval-card .head .avatar { width: 48px; height: 48px; font-size: 16px; border-radius: var(--r-md); }
+    .approval-card .info { flex: 1; min-width: 0; }
+    .approval-card .name { font-weight: 600; font-size: 17px; color: var(--ink-900); letter-spacing: -0.015em; }
+    .approval-card .meta { font-size: 13px; color: var(--ink-600); margin-top: 2px; }
+
+    .info-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+      padding: 14px; background: var(--ink-50); border-radius: var(--r-md);
+      margin-bottom: 14px;
+    }
+    @media (max-width: 800px) { .info-grid { grid-template-columns: repeat(2, 1fr); } }
+    .info-grid .lbl { font-size: 10px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 4px; }
+    .info-grid .val { font-size: 13px; color: var(--ink-900); font-weight: 500; }
+
+    .needs-block {
+      background: var(--ink-50); border: 1px solid var(--ink-200);
+      border-radius: var(--r-md);
+      padding: 12px 14px; margin-bottom: 14px;
+      font-size: 13px; color: var(--ink-700); line-height: 1.55;
+      max-height: 80px; overflow: hidden; position: relative;
+    }
+    .needs-block .lbl { font-size: 10px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 6px; }
+
+    .approval-actions {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 14px; border-top: 1px solid var(--ink-200);
+    }
+
+    .search-bar {
+      background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-md);
+      padding: 6px; display: flex; gap: 4px; align-items: center;
+      margin-bottom: 16px;
+    }
+    .search-bar .search-i { color: var(--ink-500); padding: 0 8px; font-size: 14px; }
+    .search-bar input {
+      border: 0; outline: none; flex: 1; padding: 6px 0;
+      font-family: var(--font-sans); font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="admin" data-active="approvals">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Admin · Aprobaciones" data-i18n-en="Admin · Approvals">Admin · Aprobaciones</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Aprobaciones de empleadores" data-i18n-en="Employer approvals">Aprobaciones de empleadores</h1>
+          <div class="t-body-sm muted" data-i18n-es="Revisa las solicitudes de acceso. Tiempo promedio: 1.2 días." data-i18n-en="Review access requests. Average turnaround: 1.2 days.">Revisa las solicitudes de acceso. Tiempo promedio: 1.2 días.</div>
+        </div>
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+        <div class="lang-toggle">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <a href="#" class="active" data-i18n-es="Pendientes" data-i18n-en="Pending">Pendientes<span class="count">3</span></a>
+        <a href="#" data-i18n-es="Aprobados" data-i18n-en="Approved">Aprobados<span class="count">147</span></a>
+        <a href="#" data-i18n-es="Rechazados" data-i18n-en="Rejected">Rechazados<span class="count">12</span></a>
+      </div>
+
+      <!-- Search -->
+      <div class="search-bar">
+        <i class="i search-i" data-icon="search"></i>
+        <input data-i18n-es-placeholder="Buscar por nombre de empresa, industria, contacto…" data-i18n-en-placeholder="Search by company name, industry, contact…" placeholder="Buscar por nombre de empresa, industria, contacto…" />
+        <select class="select" style="width: auto; min-width: 140px; border: 0; background-color: transparent;">
+          <option data-i18n-es="Todas las industrias" data-i18n-en="All industries">Todas las industrias</option>
+          <option>Hospitality</option><option>Tech</option><option>Construction</option>
+        </select>
+      </div>
+
+      <!-- Approval cards -->
+
+      <article class="approval-card">
+        <div class="head">
+          <div class="avatar">PB</div>
+          <div class="info">
+            <div class="name">Palm Beach Studios</div>
+            <div class="meta">Marketing · <span data-i18n-es="Solicitud enviada hace 4 horas" data-i18n-en="Request submitted 4h ago">Solicitud enviada hace 4 horas</span></div>
+          </div>
+          <span class="badge"><span class="dot" style="background: var(--warning);"></span>Pending</span>
+        </div>
+
+        <div class="info-grid">
+          <div><div class="lbl" data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</div><div class="val">Ana Vargas</div></div>
+          <div><div class="lbl">Email</div><div class="val">ana@palmbeach.studio</div></div>
+          <div><div class="lbl" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</div><div class="val">+1 (305) 555-0188</div></div>
+          <div><div class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</div><div class="val">4</div></div>
+        </div>
+
+        <div class="needs-block">
+          <div class="lbl" data-i18n-es="Necesidades de contratación" data-i18n-en="Hiring needs">Necesidades de contratación</div>
+          <span data-i18n-es="Estudio de branding y marketing creativo en expansión. Necesitamos 4 perfiles senior en los próximos 3 meses: Brand Designer, Motion Designer, Content Strategist y Account Manager. Foco en clientes hospitality y retail en Miami y NYC." data-i18n-en="Branding and creative marketing studio in expansion. We need 4 senior profiles in the next 3 months: Brand Designer, Motion Designer, Content Strategist and Account Manager. Focus on hospitality and retail clients in Miami and NYC.">Estudio de branding y marketing creativo en expansión. Necesitamos 4 perfiles senior en los próximos 3 meses: Brand Designer, Motion Designer, Content Strategist y Account Manager. Foco en clientes hospitality y retail en Miami y NYC.</span>
+        </div>
+
+        <div class="approval-actions">
+          <a href="a03-employer-detail.html" class="btn btn-ghost btn-sm" data-i18n-es="Ver detalle completo →" data-i18n-en="View full detail →">Ver detalle completo →</a>
+          <div class="row gap-2">
+            <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: rgba(220,38,38,0.30);" data-i18n-es="Rechazar" data-i18n-en="Reject">Rechazar</button>
+            <button class="btn btn-secondary btn-sm" data-i18n-es="Aprobar" data-i18n-en="Approve">Aprobar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="approval-card">
+        <div class="head">
+          <div class="avatar">CV</div>
+          <div class="info">
+            <div class="name">Coastal Ventures</div>
+            <div class="meta">Hospitality · <span data-i18n-es="Solicitud enviada hace 1 día" data-i18n-en="Request submitted 1 day ago">Solicitud enviada hace 1 día</span></div>
+          </div>
+          <span class="badge"><span class="dot" style="background: var(--warning);"></span>Pending</span>
+        </div>
+
+        <div class="info-grid">
+          <div><div class="lbl" data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</div><div class="val">Pedro Castillo</div></div>
+          <div><div class="lbl">Email</div><div class="val">pedro@coastalv.com</div></div>
+          <div><div class="lbl" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</div><div class="val">+1 (786) 555-2014</div></div>
+          <div><div class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</div><div class="val">8</div></div>
+        </div>
+
+        <div class="needs-block">
+          <div class="lbl" data-i18n-es="Necesidades de contratación" data-i18n-en="Hiring needs">Necesidades de contratación</div>
+          <span data-i18n-es="Grupo de restaurantes premium con 6 ubicaciones en Miami Beach y South Beach. Buscamos personal de servicio, cocineros senior, sommelier y un GM para nueva apertura. Disponibilidad fines de semana indispensable." data-i18n-en="Premium restaurant group with 6 locations in Miami Beach and South Beach. Looking for service staff, senior chefs, sommelier and a GM for a new opening. Weekend availability required.">Grupo de restaurantes premium con 6 ubicaciones en Miami Beach y South Beach. Buscamos personal de servicio, cocineros senior, sommelier y un GM para nueva apertura. Disponibilidad fines de semana indispensable.</span>
+        </div>
+
+        <div class="approval-actions">
+          <a href="a03-employer-detail.html" class="btn btn-ghost btn-sm" data-i18n-es="Ver detalle completo →" data-i18n-en="View full detail →">Ver detalle completo →</a>
+          <div class="row gap-2">
+            <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: rgba(220,38,38,0.30);" data-i18n-es="Rechazar" data-i18n-en="Reject">Rechazar</button>
+            <button class="btn btn-secondary btn-sm" data-i18n-es="Aprobar" data-i18n-en="Approve">Aprobar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="approval-card">
+        <div class="head">
+          <div class="avatar">DC</div>
+          <div class="info">
+            <div class="name">Doral Construction Co.</div>
+            <div class="meta">Construction · <span data-i18n-es="Solicitud enviada hace 2 días" data-i18n-en="Request submitted 2 days ago">Solicitud enviada hace 2 días</span></div>
+          </div>
+          <span class="badge" style="background: var(--warning-bg); color: var(--warning-bg) !important;"><span class="dot" style="background: var(--warning);"></span><span style="color: var(--warning);" data-i18n-es="Pendiente · vence en 24h" data-i18n-en="Pending · 24h SLA">Pendiente · vence en 24h</span></span>
+        </div>
+
+        <div class="info-grid">
+          <div><div class="lbl" data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</div><div class="val">Ricardo Méndez</div></div>
+          <div><div class="lbl">Email</div><div class="val">r.mendez@doralcc.com</div></div>
+          <div><div class="lbl" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</div><div class="val">+1 (305) 555-9921</div></div>
+          <div><div class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</div><div class="val">12</div></div>
+        </div>
+
+        <div class="needs-block">
+          <div class="lbl" data-i18n-es="Necesidades de contratación" data-i18n-en="Hiring needs">Necesidades de contratación</div>
+          <span data-i18n-es="Constructora con 18 años en Miami, especializada en proyectos residenciales high-end. Buscamos ingenieros estructurales, project managers, foremen y arquitectos para proyectos en marcha. Certificaciones OSHA y licencias FL indispensables." data-i18n-en="Construction firm with 18 years in Miami, specialized in high-end residential projects. Looking for structural engineers, project managers, foremen and architects for ongoing projects. OSHA certifications and FL licenses required.">Constructora con 18 años en Miami, especializada en proyectos residenciales high-end. Buscamos ingenieros estructurales, project managers, foremen y arquitectos para proyectos en marcha. Certificaciones OSHA y licencias FL indispensables.</span>
+        </div>
+
+        <div class="approval-actions">
+          <a href="a03-employer-detail.html" class="btn btn-ghost btn-sm" data-i18n-es="Ver detalle completo →" data-i18n-en="View full detail →">Ver detalle completo →</a>
+          <div class="row gap-2">
+            <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: rgba(220,38,38,0.30);" data-i18n-es="Rechazar" data-i18n-en="Reject">Rechazar</button>
+            <button class="btn btn-secondary btn-sm" data-i18n-es="Aprobar" data-i18n-en="Approve">Aprobar</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Helper tip -->
+      <div class="alert alert-info mt-6">
+        <div><i class="i" data-icon="lightbulb"></i></div>
+        <div class="alert-body-wrap">
+          <div class="alert-title" data-i18n-es="Tip de revisión" data-i18n-en="Review tip">Tip de revisión</div>
+          <div class="alert-body" data-i18n-es="Verifica que la empresa exista (web, LinkedIn), que el dominio del correo coincida y que las necesidades sean específicas. Si todo está claro, aprueba — el empleador recibe acceso inmediato y un correo de bienvenida." data-i18n-en="Confirm the company exists (web, LinkedIn), the email domain matches, and the needs are specific. If everything checks out, approve — the employer gets immediate access and a welcome email.">Verifica que la empresa exista (web, LinkedIn), que el dominio del correo coincida y que las necesidades sean específicas. Si todo está claro, aprueba — el empleador recibe acceso inmediato y un correo de bienvenida.</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

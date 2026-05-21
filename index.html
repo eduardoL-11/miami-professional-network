@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sitemap — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/brand.css" />
+  <link rel="stylesheet" href="css/lang-toggle.css" />
+  <style>
+    .nav-top { position: sticky; top: 0; z-index: 10; background: var(--white); border-bottom: 1px solid var(--ink-200); }
+    .nav-top .container { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; padding-bottom: 14px; }
+    .nav-top a.brand { display: flex; align-items: center; gap: 12px; color: var(--ink-800); font-weight: 700; }
+    .nav-top a.brand img { height: 32px; }
+    .nav-top nav { display: flex; gap: 24px; }
+    .nav-top nav a { color: var(--ink-700); font-size: 14px; font-weight: 500; }
+
+    .hero {
+      background: var(--surface-dark);
+      color: var(--white);
+      padding: 72px 0 56px;
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: ''; position: absolute; right: -8%; top: -50%;
+      width: 55%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(41,94,36,0.16) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero .container { position: relative; z-index: 1; }
+    .hero h1 { color: var(--white); margin: 0 0 14px; max-width: 720px; font-weight: 600; }
+    .hero p  { color: rgba(255,255,255,0.65); margin: 0; max-width: 620px; font-size: 16px; }
+    .hero .row { margin-top: 24px; }
+
+    .screen-card { transition: border-color .12s, box-shadow .12s; }
+    .screen-card:hover { box-shadow: var(--shadow-sm); border-color: var(--ink-300); transform: none; }
+    .screen-card .arrow { color: var(--ink-400); font-weight: 400; transition: color .12s, transform .12s; }
+    .screen-card:hover .arrow { color: var(--brand-orange); transform: translateX(2px); }
+
+    /* Hero CTAs (dark-context btn-outline) */
+    .hero .row { flex-wrap: wrap; gap: 10px; }
+    .hero .btn-outline {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.9);
+    }
+    .hero .btn-outline:hover {
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.32);
+      color: #FFFFFF;
+    }
+
+    .role-section { padding: 56px 0; }
+    .role-section + .role-section { border-top: 1px solid var(--ink-200); }
+
+    .role-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .role-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--r-full);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .role-tag.public   { background: var(--ink-100); color: var(--ink-700); }
+    .role-tag.candidate{ background: var(--brand-green-100); color: var(--brand-green-700); }
+    .role-tag.employer { background: var(--brand-orange-50); color: var(--brand-orange-700); }
+    .role-tag.admin    { background: var(--violet-bg); color: var(--violet); }
+
+    .screen-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 900px) { .screen-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .screen-grid { grid-template-columns: 1fr; } }
+
+    .screen-card {
+      background: var(--white);
+      border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow .15s ease, border-color .15s ease, transform .05s ease;
+      position: relative;
+    }
+    .screen-card:hover { box-shadow: var(--shadow-md); border-color: var(--brand-green); text-decoration: none; transform: translateY(-1px); }
+    .screen-card .num { font-size: 11px; font-weight: 700; color: var(--ink-400); letter-spacing: 0.08em; }
+    .screen-card .title { font-size: 15px; font-weight: 600; color: var(--ink-900); }
+    .screen-card .desc { font-size: 12px; color: var(--ink-600); line-height: 1.45; }
+    .screen-card .footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+    .screen-card .arrow { color: var(--brand-orange); font-weight: 700; }
+
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+    .status-done .status-dot     { background: var(--success); }
+    .status-progress .status-dot { background: var(--brand-orange); }
+    .status-todo .status-dot     { background: var(--ink-300); }
+    .status-label { font-size: 11px; color: var(--ink-600); font-weight: 600; }
+
+    .screen-card.todo { opacity: 0.7; }
+    .screen-card.todo:hover { opacity: 1; }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+      padding: 12px 16px;
+      background: var(--ink-100);
+      border-radius: var(--r-md);
+      font-size: 12px;
+      color: var(--ink-700);
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top nav -->
+  <div class="nav-top">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <img src="assets/logo-fullcolor.png" alt="Miami Professional Network" />
+        <span>Miami Professional Network</span>
+      </a>
+      <nav>
+        <a href="index.html" data-i18n-es="Sitemap" data-i18n-en="Sitemap">Sitemap</a>
+        <a href="design-system.html" data-i18n-es="Design System" data-i18n-en="Design System">Design System</a>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+      <div class="lang-toggle">
+        <button data-lang="es">ES</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="t-overline" style="opacity:0.7" data-i18n-es="Prototipo UI · v0.1" data-i18n-en="UI Prototype · v0.1">Prototipo UI · v0.1</div>
+      <h1 class="t-display mt-2" data-i18n-es="Diseño de plataforma — sitemap completo" data-i18n-en="Platform design — full sitemap">Diseño de plataforma — sitemap completo</h1>
+      <p data-i18n-es="35 pantallas distribuidas en 4 secciones: Public/Auth, Candidate, Employer y Admin. Cada tarjeta es una pantalla del flujo descrito en el brief del backend." data-i18n-en="35 screens across 4 sections: Public/Auth, Candidate, Employer, and Admin. Each card is a screen from the backend brief flow.">35 pantallas distribuidas en 4 secciones: Public/Auth, Candidate, Employer y Admin. Cada tarjeta es una pantalla del flujo descrito en el brief del backend.</p>
+      <div class="row">
+        <a href="design-system.html" class="btn btn-primary" data-i18n-es="Ver Design System" data-i18n-en="View Design System">Ver Design System</a>
+        <a href="#public" class="btn btn-outline" data-i18n-es="Saltar a Auth" data-i18n-en="Jump to Auth">Saltar a Auth</a>
+        <a href="#candidate" class="btn btn-outline" data-i18n-es="Saltar a Candidato" data-i18n-en="Jump to Candidate">Saltar a Candidato</a>
+        <a href="#employer" class="btn btn-outline" data-i18n-es="Saltar a Empleador" data-i18n-en="Jump to Employer">Saltar a Empleador</a>
+        <a href="#admin" class="btn btn-outline" data-i18n-es="Saltar a Admin" data-i18n-en="Jump to Admin">Saltar a Admin</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="container" style="padding-top: 32px;">
+
+    <div class="legend mb-6">
+      <strong data-i18n-es="Estado:" data-i18n-en="Status:">Estado:</strong>
+      <span><span class="status-dot" style="background: var(--success);"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span>
+      <span><span class="status-dot" style="background: var(--brand-orange);"></span><span data-i18n-es="En progreso" data-i18n-en="In progress">En progreso</span></span>
+      <span><span class="status-dot" style="background: var(--ink-300);"></span><span data-i18n-es="Pendiente" data-i18n-en="Pending">Pendiente</span></span>
+    </div>
+
+    <!-- ============ PUBLIC / AUTH ============ -->
+    <section class="role-section" id="public">
+      <div class="role-header">
+        <div class="role-tag public" data-i18n-es="01 · Público / Auth" data-i18n-en="01 · Public / Auth">01 · Público / Auth</div>
+        <span class="t-body-sm muted" data-i18n-es="7 pantallas" data-i18n-en="7 screens">7 pantallas</span>
+      </div>
+      <h2 class="t-h2 mb-6" data-i18n-es="Entrada al producto" data-i18n-en="Entry to the product">Entrada al producto</h2>
+
+      <div class="screen-grid">
+
+        <a href="screens/auth/p01-landing.html" class="screen-card status-done">
+          <div class="num">P-01</div>
+          <div class="title" data-i18n-es="Landing page" data-i18n-en="Landing page">Landing page</div>
+          <div class="desc" data-i18n-es="Hero con CTAs separados para Candidate y Employer. Tagline de marca y valor del producto." data-i18n-en="Hero with separate CTAs for Candidate and Employer. Brand tagline and product value.">Hero con CTAs separados para Candidate y Employer. Tagline de marca y valor del producto.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/auth/p02-candidate-signup.html" class="screen-card status-done">
+          <div class="num">P-02</div>
+          <div class="title" data-i18n-es="Candidate sign up" data-i18n-en="Candidate sign up">Candidate sign up</div>
+          <div class="desc" data-i18n-es="Email + password. Tras submit, va a verificación de correo." data-i18n-en="Email + password. After submit, goes to email verification.">Email + password. Tras submit, va a verificación de correo.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/auth/p03-employer-signup.html" class="screen-card status-done">
+          <div class="num">P-03</div>
+          <div class="title" data-i18n-es="Employer sign up / request access" data-i18n-en="Employer sign up / request access">Employer sign up / request access</div>
+          <div class="desc" data-i18n-es="Formulario largo: empresa, contacto, industria, # roles, descripción de necesidades. Va a estado pending." data-i18n-en="Long form: company, contact, industry, # roles, hiring needs. Goes to pending state.">Formulario largo: empresa, contacto, industria, # roles, descripción de necesidades. Va a estado pending.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/auth/p04-login.html" class="screen-card status-done">
+          <div class="num">P-04</div>
+          <div class="title">Login</div>
+          <div class="desc" data-i18n-es="Login único para los 3 roles. Backend decide hacia qué dashboard redirigir." data-i18n-en="Single login for all 3 roles. Backend decides which dashboard to route to.">Login único para los 3 roles. Backend decide hacia qué dashboard redirigir.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/auth/p05-email-verification.html" class="screen-card status-done">
+          <div class="num">P-05</div>
+          <div class="title" data-i18n-es="Verificación de email" data-i18n-en="Email verification">Verificación de email</div>
+          <div class="desc" data-i18n-es="Mensaje 'Verifica tu correo' con reenvío. También estado de éxito tras click en el link." data-i18n-en="'Verify your email' state with resend. Also success state after clicking link.">Mensaje 'Verifica tu correo' con reenvío. También estado de éxito tras click en el link.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/auth/p06-forgot-password.html" class="screen-card status-done">
+          <div class="num">P-06</div>
+          <div class="title" data-i18n-es="Olvidé mi contraseña" data-i18n-en="Forgot password">Olvidé mi contraseña</div>
+          <div class="desc" data-i18n-es="Input de correo. Envía link de reset." data-i18n-en="Email input. Sends reset link.">Input de correo. Envía link de reset.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/auth/p07-reset-password.html" class="screen-card status-done">
+          <div class="num">P-07</div>
+          <div class="title" data-i18n-es="Reset de contraseña" data-i18n-en="Reset password">Reset de contraseña</div>
+          <div class="desc" data-i18n-es="Nueva contraseña + confirmación. Validaciones visuales." data-i18n-en="New password + confirm. Visual validations.">Nueva contraseña + confirmación. Validaciones visuales.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ============ CANDIDATE ============ -->
+    <section class="role-section" id="candidate">
+      <div class="role-header">
+        <div class="role-tag candidate" data-i18n-es="02 · Candidato" data-i18n-en="02 · Candidate">02 · Candidato</div>
+        <span class="t-body-sm muted" data-i18n-es="9 pantallas" data-i18n-en="9 screens">9 pantallas</span>
+      </div>
+      <h2 class="t-h2 mb-2" data-i18n-es="Flujo del candidato" data-i18n-en="Candidate flow">Flujo del candidato</h2>
+      <p class="t-body muted mb-6" data-i18n-es="Regla clave: no puede aplicar hasta tener perfil 100% completo." data-i18n-en="Key rule: cannot apply until profile is 100% complete.">Regla clave: no puede aplicar hasta tener perfil 100% completo.</p>
+
+      <div class="screen-grid">
+
+        <a href="screens/candidate/c01-onboarding.html" class="screen-card status-done">
+          <div class="num">C-01</div>
+          <div class="title" data-i18n-es="Onboarding" data-i18n-en="Onboarding">Onboarding</div>
+          <div class="desc" data-i18n-es="Tras verificación, walkthrough corto que explica la regla del perfil completo." data-i18n-en="After verification, short walkthrough explaining the complete-profile rule.">Tras verificación, walkthrough corto que explica la regla del perfil completo.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/candidate/c02-profile.html" class="screen-card status-done">
+          <div class="num">C-02</div>
+          <div class="title" data-i18n-es="Completar perfil" data-i18n-en="Profile completion">Completar perfil</div>
+          <div class="desc" data-i18n-es="Foto, resume PDF, datos personales, industria, experiencia, bio, educación, referencias. Indicador % en tiempo real." data-i18n-en="Photo, resume PDF, personal info, industry, experience, bio, education, references. Live % indicator.">Foto, resume PDF, datos personales, industria, experiencia, bio, educación, referencias. Indicador % en tiempo real.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/candidate/c03-upload.html" class="screen-card status-done">
+          <div class="num">C-03</div>
+          <div class="title" data-i18n-es="Subir resume / headshot" data-i18n-en="Resume / headshot upload">Subir resume / headshot</div>
+          <div class="desc" data-i18n-es="Modal/sub-pantalla con drag&drop. Validación de formato (PDF) y tamaño." data-i18n-en="Modal/sub-screen with drag&drop. Format (PDF) and size validation.">Modal/sub-pantalla con drag&drop. Validación de formato (PDF) y tamaño.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/candidate/c04-jobs.html" class="screen-card status-done">
+          <div class="num">C-04</div>
+          <div class="title" data-i18n-es="Lista de empleos" data-i18n-en="Job list">Lista de empleos</div>
+          <div class="desc" data-i18n-es="Search + filtros (industria, ubicación, employment type, fecha). Cards de job con Save/Apply." data-i18n-en="Search + filters (industry, location, employment type, date). Job cards with Save/Apply.">Search + filtros (industria, ubicación, employment type, fecha). Cards de job con Save/Apply.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/candidate/c05-job-detail.html" class="screen-card status-done">
+          <div class="num">C-05</div>
+          <div class="title" data-i18n-es="Detalle de empleo" data-i18n-en="Job detail">Detalle de empleo</div>
+          <div class="desc" data-i18n-es="Descripción completa, requirements, nice-to-haves, deadline. Botón Apply (bloqueado si perfil incompleto)." data-i18n-en="Full description, requirements, nice-to-haves, deadline. Apply button (blocked if profile incomplete).">Descripción completa, requirements, nice-to-haves, deadline. Botón Apply (bloqueado si perfil incompleto).</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/candidate/c06-saved-jobs.html" class="screen-card status-done">
+          <div class="num">C-06</div>
+          <div class="title" data-i18n-es="Empleos guardados" data-i18n-en="Saved jobs">Empleos guardados</div>
+          <div class="desc" data-i18n-es="Lista filtrada por bookmark. Mismas cards que la lista principal." data-i18n-en="Bookmarked list. Same cards as main list.">Lista filtrada por bookmark. Mismas cards que la lista principal.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/candidate/c07-my-applications.html" class="screen-card status-done">
+          <div class="num">C-07</div>
+          <div class="title" data-i18n-es="Mis aplicaciones" data-i18n-en="My applications">Mis aplicaciones</div>
+          <div class="desc" data-i18n-es="Dashboard del candidato: lista de aplicaciones con status badges, fechas, última actualización." data-i18n-en="Candidate dashboard: list of applications with status badges, dates, last update.">Dashboard del candidato: lista de aplicaciones con status badges, fechas, última actualización.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/candidate/c08-application-timeline.html" class="screen-card status-done">
+          <div class="num">C-08</div>
+          <div class="title" data-i18n-es="Timeline de aplicación" data-i18n-en="Application timeline">Timeline de aplicación</div>
+          <div class="desc" data-i18n-es="Status timeline con los 6 estados. Botón Withdraw (con confirmación)." data-i18n-en="Status timeline with the 6 statuses. Withdraw button (with confirmation).">Status timeline con los 6 estados. Botón Withdraw (con confirmación).</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/candidate/c09-settings.html" class="screen-card status-done">
+          <div class="num">C-09</div>
+          <div class="title" data-i18n-es="Configuración" data-i18n-en="Settings">Configuración</div>
+          <div class="desc" data-i18n-es="Cuenta, preferencias de notificaciones, cambio de contraseña, eliminar cuenta." data-i18n-en="Account, notification preferences, change password, delete account.">Cuenta, preferencias de notificaciones, cambio de contraseña, eliminar cuenta.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ============ EMPLOYER ============ -->
+    <section class="role-section" id="employer">
+      <div class="role-header">
+        <div class="role-tag employer" data-i18n-es="03 · Empleador" data-i18n-en="03 · Employer">03 · Empleador</div>
+        <span class="t-body-sm muted" data-i18n-es="10 pantallas" data-i18n-en="10 screens">10 pantallas</span>
+      </div>
+      <h2 class="t-h2 mb-2" data-i18n-es="Flujo del empleador" data-i18n-en="Employer flow">Flujo del empleador</h2>
+      <p class="t-body muted mb-6" data-i18n-es="Requiere aprobación manual del admin antes de tener acceso." data-i18n-en="Requires manual admin approval before getting access.">Requiere aprobación manual del admin antes de tener acceso.</p>
+
+      <div class="screen-grid">
+
+        <a href="screens/employer/e01-pending-approval.html" class="screen-card status-done">
+          <div class="num">E-01</div>
+          <div class="title" data-i18n-es="Pendiente de aprobación" data-i18n-en="Pending approval">Pendiente de aprobación</div>
+          <div class="desc" data-i18n-es="Estado bloqueante después del registro. Mensaje, contacto y logout." data-i18n-en="Blocking state after registration. Message, contact, and logout.">Estado bloqueante después del registro. Mensaje, contacto y logout.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/employer/e02-dashboard.html" class="screen-card status-done">
+          <div class="num">E-02</div>
+          <div class="title" data-i18n-es="Dashboard" data-i18n-en="Dashboard">Dashboard</div>
+          <div class="desc" data-i18n-es="KPIs: jobs activos, aplicantes nuevos, overdue. Lista de jobs y últimos aplicantes." data-i18n-en="KPIs: active jobs, new applicants, overdue. List of jobs and recent applicants.">KPIs: jobs activos, aplicantes nuevos, overdue. Lista de jobs y últimos aplicantes.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/employer/e03-create-job.html" class="screen-card status-done">
+          <div class="num">E-03</div>
+          <div class="title" data-i18n-es="Crear empleo" data-i18n-en="Create job">Crear empleo</div>
+          <div class="desc" data-i18n-es="Form completo: título, ubicación, industria, tipo, salario + toggle visibilidad, descripción, requirements, deadline." data-i18n-en="Full form: title, location, industry, type, salary + visibility toggle, description, requirements, deadline.">Form completo: título, ubicación, industria, tipo, salario + toggle visibilidad, descripción, requirements, deadline.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/employer/e04-edit-job.html" class="screen-card status-done">
+          <div class="num">E-04</div>
+          <div class="title" data-i18n-es="Editar empleo" data-i18n-en="Edit job">Editar empleo</div>
+          <div class="desc" data-i18n-es="Misma estructura que crear, prellenado. Acción de pausar/cerrar visible." data-i18n-en="Same as create, prefilled. Pause/close action visible.">Misma estructura que crear, prellenado. Acción de pausar/cerrar visible.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/employer/e05-manage-jobs.html" class="screen-card status-done">
+          <div class="num">E-05</div>
+          <div class="title" data-i18n-es="Gestión de empleos" data-i18n-en="Manage jobs">Gestión de empleos</div>
+          <div class="desc" data-i18n-es="Tabla de todos los jobs del empleador con status (Active/Paused/Closed) y acciones rápidas." data-i18n-en="Table of all employer's jobs with status (Active/Paused/Closed) and quick actions.">Tabla de todos los jobs del empleador con status (Active/Paused/Closed) y acciones rápidas.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/employer/e06-applicants.html" class="screen-card status-done">
+          <div class="num">E-06</div>
+          <div class="title" data-i18n-es="Lista de aplicantes" data-i18n-en="Applicants list">Lista de aplicantes</div>
+          <div class="desc" data-i18n-es="Solo aplicantes de SUS jobs. Filtros por status, búsqueda. Cards con datos clave." data-i18n-en="Only applicants from THEIR jobs. Filters by status, search. Cards with key data.">Solo aplicantes de SUS jobs. Filtros por status, búsqueda. Cards con datos clave.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/employer/e07-applicant-detail.html" class="screen-card status-done">
+          <div class="num">E-07</div>
+          <div class="title" data-i18n-es="Detalle de aplicante" data-i18n-en="Applicant detail">Detalle de aplicante</div>
+          <div class="desc" data-i18n-es="Perfil completo con View Resume (link seguro), educación, referencias, fecha. Status dropdown + notes." data-i18n-en="Full profile with View Resume (secure link), education, references, date. Status dropdown + notes.">Perfil completo con View Resume (link seguro), educación, referencias, fecha. Status dropdown + notes.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/employer/e08-status-modal.html" class="screen-card status-done">
+          <div class="num">E-08</div>
+          <div class="title" data-i18n-es="Modal de cambio de status" data-i18n-en="Status update modal">Modal de cambio de status</div>
+          <div class="desc" data-i18n-es="Dropdown de los 6 status + nota opcional. Confirma cambio, dispara email al candidato." data-i18n-en="Dropdown of the 6 statuses + optional note. Confirms change, triggers email to candidate.">Dropdown de los 6 status + nota opcional. Confirma cambio, dispara email al candidato.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/employer/e07-applicant-detail.html" class="screen-card status-done">
+          <div class="num">E-09</div>
+          <div class="title" data-i18n-es="Notas privadas" data-i18n-en="Private notes">Notas privadas</div>
+          <div class="desc" data-i18n-es="Sección integrada en E-07 (panel derecho). Solo employer + admin pueden ver." data-i18n-en="Integrated section in E-07 (right panel). Only employer + admin can see.">Sección integrada en E-07 (panel derecho). Solo employer + admin pueden ver.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/employer/e10-overdue.html" class="screen-card status-done">
+          <div class="num">E-10</div>
+          <div class="title" data-i18n-es="Aviso de aplicación vencida" data-i18n-en="Overdue warning">Aviso de aplicación vencida</div>
+          <div class="desc" data-i18n-es="Estado visual cuando una aplicación lleva +14 días en Under Review. Banner + badge." data-i18n-en="Visual state when an app is +14 days in Under Review. Banner + badge.">Estado visual cuando una aplicación lleva +14 días en Under Review. Banner + badge.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ============ ADMIN ============ -->
+    <section class="role-section" id="admin">
+      <div class="role-header">
+        <div class="role-tag admin" data-i18n-es="04 · Admin" data-i18n-en="04 · Admin">04 · Admin</div>
+        <span class="t-body-sm muted" data-i18n-es="9 pantallas" data-i18n-en="9 screens">9 pantallas</span>
+      </div>
+      <h2 class="t-h2 mb-2" data-i18n-es="Centro de control" data-i18n-en="Control center">Centro de control</h2>
+      <p class="t-body muted mb-6" data-i18n-es="Sin Stripe en Fase 1 — el 1% se gestiona manualmente cuando un employer marca Hired." data-i18n-en="No Stripe in Phase 1 — the 1% is handled manually when an employer marks Hired.">Sin Stripe en Fase 1 — el 1% se gestiona manualmente cuando un employer marca Hired.</p>
+
+      <div class="screen-grid">
+
+        <a href="screens/admin/a01-dashboard.html" class="screen-card status-done">
+          <div class="num">A-01</div>
+          <div class="title" data-i18n-es="Dashboard" data-i18n-en="Dashboard">Dashboard</div>
+          <div class="desc" data-i18n-es="9 métricas globales: candidatos, empleadores, jobs activos, apps, overdue, offers, hired." data-i18n-en="9 global metrics: candidates, employers, active jobs, apps, overdue, offers, hired.">9 métricas globales: candidatos, empleadores, jobs activos, apps, overdue, offers, hired.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/admin/a02-pending-approvals.html" class="screen-card status-done">
+          <div class="num">A-02</div>
+          <div class="title" data-i18n-es="Aprobaciones pendientes" data-i18n-en="Pending approvals">Aprobaciones pendientes</div>
+          <div class="desc" data-i18n-es="Tabla de empleadores en estado pending con Approve / Reject inline." data-i18n-en="Table of pending employers with inline Approve / Reject.">Tabla de empleadores en estado pending con Approve / Reject inline.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/admin/a03-employer-detail.html" class="screen-card status-done">
+          <div class="num">A-03</div>
+          <div class="title" data-i18n-es="Detalle de empleador" data-i18n-en="Employer detail">Detalle de empleador</div>
+          <div class="desc" data-i18n-es="Toda la info del registro + jobs publicados + decisión de aprobación con razón." data-i18n-en="Full registration info + posted jobs + approval decision with reason.">Toda la info del registro + jobs publicados + decisión de aprobación con razón.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/admin/a04-candidate-management.html" class="screen-card status-done">
+          <div class="num">A-04</div>
+          <div class="title" data-i18n-es="Gestión de candidatos" data-i18n-en="Candidate management">Gestión de candidatos</div>
+          <div class="desc" data-i18n-es="Tabla buscable de candidatos. Click para ver perfil completo (con resume seguro)." data-i18n-en="Searchable table of candidates. Click to view full profile (with secure resume).">Tabla buscable de candidatos. Click para ver perfil completo (con resume seguro).</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/admin/a05-job-management.html" class="screen-card status-done">
+          <div class="num">A-05</div>
+          <div class="title" data-i18n-es="Gestión de empleos" data-i18n-en="Job management">Gestión de empleos</div>
+          <div class="desc" data-i18n-es="Todos los jobs de la plataforma. Acciones: pausar / remover." data-i18n-en="All jobs on the platform. Actions: pause / remove.">Todos los jobs de la plataforma. Acciones: pausar / remover.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/admin/a06-all-applications.html" class="screen-card status-done">
+          <div class="num">A-06</div>
+          <div class="title" data-i18n-es="Todas las aplicaciones" data-i18n-en="All applications">Todas las aplicaciones</div>
+          <div class="desc" data-i18n-es="Visión global de aplicaciones cruzadas. Filtros por status, empleador, candidato." data-i18n-en="Cross-platform view of applications. Filters by status, employer, candidate.">Visión global de aplicaciones cruzadas. Filtros por status, empleador, candidato.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/admin/a07-overdue.html" class="screen-card status-done">
+          <div class="num">A-07</div>
+          <div class="title" data-i18n-es="Aplicaciones vencidas" data-i18n-en="Overdue applications">Aplicaciones vencidas</div>
+          <div class="desc" data-i18n-es="Lista filtrada de apps con +14 días Under Review. Acción para empujar al empleador." data-i18n-en="Filtered list of +14 days Under Review apps. Action to nudge the employer.">Lista filtrada de apps con +14 días Under Review. Acción para empujar al empleador.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/admin/a08-hires.html" class="screen-card status-done">
+          <div class="num">A-08</div>
+          <div class="title" data-i18n-es="Hires & seguimiento de fee 1%" data-i18n-en="Hires & 1% fee follow-up">Hires & seguimiento de fee 1%</div>
+          <div class="desc" data-i18n-es="Lista de matches hired. Estado del cobro manual: pendiente, contactado, pagado." data-i18n-en="List of hired matches. Manual fee state: pending, contacted, paid.">Lista de matches hired. Estado del cobro manual: pendiente, contactado, pagado.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="screens/admin/a09-action-log.html" class="screen-card status-done">
+          <div class="num">A-09</div>
+          <div class="title" data-i18n-es="Log de acciones" data-i18n-en="Action log">Log de acciones</div>
+          <div class="desc" data-i18n-es="Auditoría de acciones admin: aprobaciones, rechazos, jobs pausados/removidos." data-i18n-en="Audit of admin actions: approvals, rejections, jobs paused/removed.">Auditoría de acciones admin: aprobaciones, rechazos, jobs pausados/removidos.</div>
+          <div class="footer"><span class="status-label"><span class="status-dot"></span><span data-i18n-es="Diseñado" data-i18n-en="Done">Diseñado</span></span><span class="arrow">→</span></div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="padding: 40px 0; text-align: center; color: var(--ink-500); font-size: 12px; border-top: 1px solid var(--ink-200); margin-top: 32px;">
+    <div>Miami Professional Network · UI Prototype v0.1</div>
+    <div class="mt-2" data-i18n-es="Diseñado a partir del brief de backend final" data-i18n-en="Designed from the final backend brief">Diseñado a partir del brief de backend final</div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/i18n.js"></script>
+</body>
+</html>

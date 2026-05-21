@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-01 · Admin Dashboard — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    @media (max-width: 1100px) { .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+    .metric-tile {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 18px;
+      display: flex; flex-direction: column; gap: 6px;
+      cursor: pointer; transition: border-color .12s, box-shadow .12s;
+      text-decoration: none; color: inherit;
+    }
+    .metric-tile:hover { border-color: var(--ink-300); box-shadow: var(--shadow-sm); text-decoration: none; }
+    .metric-tile .top { display: flex; align-items: center; justify-content: space-between; }
+    .metric-tile .lbl { font-size: 12px; color: var(--ink-600); font-weight: 500; }
+    .metric-tile .v { font-size: 28px; font-weight: 600; color: var(--ink-900); line-height: 1.1; letter-spacing: -0.02em; }
+    .metric-tile .delta { font-size: 12px; font-weight: 500; }
+    .metric-tile .delta.up   { color: var(--success); }
+    .metric-tile .delta.warn { color: var(--warning); }
+    .metric-tile .delta.danger { color: var(--danger); }
+    .metric-tile .ico {
+      width: 32px; height: 32px; border-radius: var(--r-md);
+      background: var(--ink-100); color: var(--ink-700);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .metric-tile.attention .ico { background: var(--warning-bg); color: var(--warning); }
+    .metric-tile.attention .v { color: var(--warning); }
+    .metric-tile.danger .ico { background: var(--danger-bg); color: var(--danger); }
+    .metric-tile.danger .v { color: var(--danger); }
+    .metric-tile.success .ico { background: var(--success-bg); color: var(--success); }
+
+    .grid-2-1 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; align-items: start; }
+    @media (max-width: 1100px) { .grid-2-1 { grid-template-columns: 1fr; } }
+
+    .panel { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--ink-200); }
+    .panel-body { padding: 8px 20px 16px; }
+
+    .activity-row {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 12px 0; border-bottom: 1px solid var(--ink-200);
+    }
+    .activity-row:last-child { border-bottom: 0; }
+    .activity-row .ico-cell {
+      width: 32px; height: 32px; border-radius: var(--r-md);
+      background: var(--ink-100); color: var(--ink-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .activity-row .ico-cell.green { background: var(--success-bg); color: var(--success); }
+    .activity-row .ico-cell.orange { background: var(--brand-orange-50); color: var(--brand-orange); }
+    .activity-row .ico-cell.violet { background: var(--violet-bg); color: var(--violet); }
+    .activity-row .body { flex: 1; min-width: 0; }
+    .activity-row .body .title { font-size: 14px; color: var(--ink-900); font-weight: 500; line-height: 1.4; }
+    .activity-row .body .time { font-size: 11px; color: var(--ink-500); margin-top: 2px; }
+
+    .approval-row {
+      display: flex; gap: 12px; align-items: center;
+      padding: 12px 0; border-bottom: 1px solid var(--ink-200);
+    }
+    .approval-row:last-child { border-bottom: 0; }
+    .approval-row .info { flex: 1; min-width: 0; }
+    .approval-row .name { font-weight: 600; font-size: 14px; color: var(--ink-900); }
+    .approval-row .meta { font-size: 12px; color: var(--ink-600); margin-top: 2px; }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="admin" data-active="dashboard">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Admin · Dashboard" data-i18n-en="Admin · Dashboard">Admin · Dashboard</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Centro de control" data-i18n-en="Control center">Centro de control</h1>
+          <div class="t-body-sm muted" data-i18n-es="Vista global de la plataforma · datos en tiempo real" data-i18n-en="Platform-wide view · live data">Vista global de la plataforma · datos en tiempo real</div>
+        </div>
+        <div class="row items-center gap-3">
+          <select class="select" style="width: auto; padding-right: 36px;">
+            <option data-i18n-es="Últimos 7 días" data-i18n-en="Last 7 days">Últimos 7 días</option>
+            <option data-i18n-es="Últimos 30 días" data-i18n-en="Last 30 days">Últimos 30 días</option>
+            <option data-i18n-es="Este mes" data-i18n-en="This month">Este mes</option>
+            <option data-i18n-es="Este año" data-i18n-en="This year">Este año</option>
+          </select>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action required alerts -->
+      <div class="alert alert-warning mb-6">
+        <div><i class='i' data-icon='alert-triangle'></i></div>
+        <div class="alert-body-wrap">
+          <div class="alert-title" data-i18n-es="8 acciones requieren tu atención" data-i18n-en="8 actions need your attention">8 acciones requieren tu atención</div>
+          <div class="alert-body" data-i18n-es="3 empleadores pendientes de aprobación · 4 aplicaciones vencidas · 1 hire pendiente de fee" data-i18n-en="3 employers pending approval · 4 overdue applications · 1 hire pending fee">3 empleadores pendientes de aprobación · 4 aplicaciones vencidas · 1 hire pendiente de fee</div>
+        </div>
+        <a href="a02-pending-approvals.html" class="btn btn-outline btn-sm" style="align-self:center;" data-i18n-es="Revisar" data-i18n-en="Review">Revisar</a>
+      </div>
+
+      <!-- 9 Metric tiles in a 4+4+1 grid -->
+      <div class="metrics-grid">
+        <a href="a04-candidate-management.html" class="metric-tile">
+          <div class="top"><span class="lbl" data-i18n-es="Candidatos totales" data-i18n-en="Total candidates">Candidatos totales</span><div class="ico"><i class="i" data-icon="users"></i></div></div>
+          <span class="v">1,284</span>
+          <span class="delta up">+24 <span data-i18n-es="esta semana" data-i18n-en="this week">esta semana</span></span>
+        </a>
+        <a href="a03-employer-detail.html" class="metric-tile">
+          <div class="top"><span class="lbl" data-i18n-es="Empleadores activos" data-i18n-en="Active employers">Empleadores activos</span><div class="ico"><i class="i" data-icon="building"></i></div></div>
+          <span class="v">147</span>
+          <span class="delta up">+3 <span data-i18n-es="este mes" data-i18n-en="this month">este mes</span></span>
+        </a>
+        <a href="a05-job-management.html" class="metric-tile">
+          <div class="top"><span class="lbl" data-i18n-es="Empleos activos" data-i18n-en="Active jobs">Empleos activos</span><div class="ico"><i class="i" data-icon="briefcase"></i></div></div>
+          <span class="v">218</span>
+          <span class="delta up">+12 <span data-i18n-es="esta semana" data-i18n-en="this week">esta semana</span></span>
+        </a>
+        <a href="a06-all-applications.html" class="metric-tile">
+          <div class="top"><span class="lbl" data-i18n-es="Aplicaciones totales" data-i18n-en="Total applications">Aplicaciones totales</span><div class="ico"><i class="i" data-icon="file-text"></i></div></div>
+          <span class="v">3,492</span>
+          <span class="delta up">+187 <span data-i18n-es="esta semana" data-i18n-en="this week">esta semana</span></span>
+        </a>
+
+        <a href="a02-pending-approvals.html" class="metric-tile attention">
+          <div class="top"><span class="lbl" data-i18n-es="Aprobaciones pendientes" data-i18n-en="Pending approvals">Aprobaciones pendientes</span><div class="ico"><i class="i" data-icon="user-check"></i></div></div>
+          <span class="v">3</span>
+          <span class="delta warn" data-i18n-es="Requiere acción" data-i18n-en="Action required">Requiere acción</span>
+        </a>
+        <a href="a06-all-applications.html" class="metric-tile attention">
+          <div class="top"><span class="lbl" data-i18n-es="Por revisar" data-i18n-en="To review">Por revisar</span><div class="ico"><i class="i" data-icon="eye"></i></div></div>
+          <span class="v">42</span>
+          <span class="delta warn" data-i18n-es="Empleadores con cola" data-i18n-en="Employers with backlog">Empleadores con cola</span>
+        </a>
+        <a href="a07-overdue.html" class="metric-tile danger">
+          <div class="top"><span class="lbl" data-i18n-es="Aplicaciones vencidas" data-i18n-en="Overdue applications">Aplicaciones vencidas</span><div class="ico"><i class="i" data-icon="alert-triangle"></i></div></div>
+          <span class="v">12</span>
+          <span class="delta danger" data-i18n-es="+14 días Under Review" data-i18n-en="+14 days Under Review">+14 días Under Review</span>
+        </a>
+        <a href="a08-hires.html" class="metric-tile success">
+          <div class="top"><span class="lbl" data-i18n-es="Ofertas extendidas" data-i18n-en="Offers extended">Ofertas extendidas</span><div class="ico"><i class="i" data-icon="gift"></i></div></div>
+          <span class="v">8</span>
+          <span class="delta up" data-i18n-es="Últimos 7 días" data-i18n-en="Last 7 days">Últimos 7 días</span>
+        </a>
+      </div>
+
+      <!-- Hires row (full width single tile) -->
+      <a href="a08-hires.html" class="metric-tile success mb-6" style="display: flex; flex-direction: row; align-items: center; gap: 24px; padding: 20px 24px;">
+        <div class="ico" style="width: 48px; height: 48px;"><i class="i" data-icon="award" style="font-size: 22px;"></i></div>
+        <div style="flex: 1;">
+          <div class="lbl" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;" data-i18n-es="Hires · Fee 1% pendiente de cobro" data-i18n-en="Hires · 1% fee pending collection">Hires · Fee 1% pendiente de cobro</div>
+          <div style="display: flex; gap: 40px; margin-top: 6px;">
+            <div><span class="v" style="font-size: 22px;">5</span> <span class="t-body-sm muted" data-i18n-es="hires este mes" data-i18n-en="hires this month">hires este mes</span></div>
+            <div><span class="v" style="font-size: 22px;">$4,250</span> <span class="t-body-sm muted" data-i18n-es="fee total pendiente" data-i18n-en="total fee pending">fee total pendiente</span></div>
+            <div><span class="v" style="font-size: 22px;">1</span> <span class="t-body-sm muted" data-i18n-es="no contactado aún" data-i18n-en="not yet contacted">no contactado aún</span></div>
+          </div>
+        </div>
+        <span class="badge"><span class="dot" style="background: var(--success);"></span><span data-i18n-es="Seguimiento manual" data-i18n-en="Manual follow-up">Seguimiento manual</span></span>
+      </a>
+
+      <!-- Two-column: activity + pending approvals -->
+      <div class="grid-2-1">
+
+        <!-- Recent activity -->
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="t-h4" data-i18n-es="Actividad reciente" data-i18n-en="Recent activity">Actividad reciente</div>
+              <div class="t-body-sm muted" data-i18n-es="Últimas 24h en la plataforma" data-i18n-en="Last 24h on the platform">Últimas 24h en la plataforma</div>
+            </div>
+            <a href="a09-action-log.html" class="t-body-sm" style="color: var(--ink-700);" data-i18n-es="Ver log →" data-i18n-en="View log →">Ver log →</a>
+          </div>
+          <div class="panel-body">
+
+            <div class="activity-row">
+              <div class="ico-cell green"><i class="i" data-icon="award"></i></div>
+              <div class="body">
+                <div class="title" data-i18n-es-html="<strong>Sunset Hotels Group</strong> marcó como Hired a María González en Hospitality Marketing Lead" data-i18n-en-html="<strong>Sunset Hotels Group</strong> marked María González as Hired in Hospitality Marketing Lead"><strong>Sunset Hotels Group</strong> marcó como Hired a María González en Hospitality Marketing Lead</div>
+                <div class="time" data-i18n-es="hace 2 horas · fee 1% pendiente de cobro" data-i18n-en="2h ago · 1% fee pending collection">hace 2 horas · fee 1% pendiente de cobro</div>
+              </div>
+              <a href="a08-hires.html" class="btn btn-ghost btn-sm" data-i18n-es="Ver" data-i18n-en="View">Ver</a>
+            </div>
+
+            <div class="activity-row">
+              <div class="ico-cell orange"><i class="i" data-icon="gift"></i></div>
+              <div class="body">
+                <div class="title" data-i18n-es-html="<strong>Brickell Build Co.</strong> extendió una oferta a Diego Pérez en Senior Product Designer" data-i18n-en-html="<strong>Brickell Build Co.</strong> extended an offer to Diego Pérez in Senior Product Designer"><strong>Brickell Build Co.</strong> extendió una oferta a Diego Pérez en Senior Product Designer</div>
+                <div class="time" data-i18n-es="hace 5 horas" data-i18n-en="5h ago">hace 5 horas</div>
+              </div>
+            </div>
+
+            <div class="activity-row">
+              <div class="ico-cell"><i class="i" data-icon="user-plus"></i></div>
+              <div class="body">
+                <div class="title" data-i18n-es-html="<strong>3 nuevos candidatos</strong> verificaron su correo y completaron perfil" data-i18n-en-html="<strong>3 new candidates</strong> verified email and completed profile"><strong>3 nuevos candidatos</strong> verificaron su correo y completaron perfil</div>
+                <div class="time" data-i18n-es="hace 7 horas" data-i18n-en="7h ago">hace 7 horas</div>
+              </div>
+            </div>
+
+            <div class="activity-row">
+              <div class="ico-cell"><i class="i" data-icon="briefcase"></i></div>
+              <div class="body">
+                <div class="title" data-i18n-es-html="<strong>Wynwood Health</strong> publicó 2 nuevos empleos" data-i18n-en-html="<strong>Wynwood Health</strong> posted 2 new jobs"><strong>Wynwood Health</strong> publicó 2 nuevos empleos</div>
+                <div class="time" data-i18n-es="ayer · 16:42" data-i18n-en="yesterday · 16:42">ayer · 16:42</div>
+              </div>
+            </div>
+
+            <div class="activity-row">
+              <div class="ico-cell" style="background: var(--danger-bg); color: var(--danger);"><i class="i" data-icon="alert-triangle"></i></div>
+              <div class="body">
+                <div class="title" data-i18n-es-html="<strong>2 aplicaciones</strong> marcadas como vencidas en Sunset Hotels Group" data-i18n-en-html="<strong>2 applications</strong> flagged overdue at Sunset Hotels Group"><strong>2 aplicaciones</strong> marcadas como vencidas en Sunset Hotels Group</div>
+                <div class="time" data-i18n-es="ayer · 09:01 · recordatorio enviado" data-i18n-en="yesterday · 09:01 · reminder sent">ayer · 09:01 · recordatorio enviado</div>
+              </div>
+              <a href="a07-overdue.html" class="btn btn-ghost btn-sm" data-i18n-es="Ver" data-i18n-en="View">Ver</a>
+            </div>
+
+            <div class="activity-row">
+              <div class="ico-cell violet"><i class="i" data-icon="user-check"></i></div>
+              <div class="body">
+                <div class="title" data-i18n-es-html="Aprobaste a <strong>Ocean Mirage Resort</strong> como empleador" data-i18n-en-html="You approved <strong>Ocean Mirage Resort</strong> as an employer">Aprobaste a <strong>Ocean Mirage Resort</strong> como empleador</div>
+                <div class="time" data-i18n-es="hace 2 días · Eduardo López" data-i18n-en="2 days ago · Eduardo López">hace 2 días · Eduardo López</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Pending approvals quick list -->
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="t-h4" data-i18n-es="Aprobaciones pendientes" data-i18n-en="Pending approvals">Aprobaciones pendientes</div>
+              <div class="t-body-sm muted">3 <span data-i18n-es="empresas" data-i18n-en="companies">empresas</span></div>
+            </div>
+            <a href="a02-pending-approvals.html" class="t-body-sm" style="color: var(--ink-700);" data-i18n-es="Ver todas →" data-i18n-en="View all →">Ver todas →</a>
+          </div>
+          <div class="panel-body">
+
+            <div class="approval-row">
+              <div class="avatar">PB</div>
+              <div class="info">
+                <div class="name">Palm Beach Studios</div>
+                <div class="meta">Marketing · 4 <span data-i18n-es="roles abiertos" data-i18n-en="open roles">roles abiertos</span></div>
+              </div>
+              <button class="btn btn-secondary btn-sm" data-i18n-es="Aprobar" data-i18n-en="Approve">Aprobar</button>
+              <button class="btn btn-ghost btn-sm" title="Reject"><i class="i" data-icon="x"></i></button>
+            </div>
+
+            <div class="approval-row">
+              <div class="avatar">CV</div>
+              <div class="info">
+                <div class="name">Coastal Ventures</div>
+                <div class="meta">Hospitality · 8 <span data-i18n-es="roles abiertos" data-i18n-en="open roles">roles abiertos</span></div>
+              </div>
+              <button class="btn btn-secondary btn-sm" data-i18n-es="Aprobar" data-i18n-en="Approve">Aprobar</button>
+              <button class="btn btn-ghost btn-sm" title="Reject"><i class="i" data-icon="x"></i></button>
+            </div>
+
+            <div class="approval-row">
+              <div class="avatar">DC</div>
+              <div class="info">
+                <div class="name">Doral Construction Co.</div>
+                <div class="meta">Construction · 12 <span data-i18n-es="roles abiertos" data-i18n-en="open roles">roles abiertos</span></div>
+              </div>
+              <button class="btn btn-secondary btn-sm" data-i18n-es="Aprobar" data-i18n-en="Approve">Aprobar</button>
+              <button class="btn btn-ghost btn-sm" title="Reject"><i class="i" data-icon="x"></i></button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

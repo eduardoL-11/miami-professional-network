@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C-02 · Mi perfil — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .layout { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
+    @media (max-width: 1100px) { .layout { grid-template-columns: 1fr; } }
+
+    .progress-banner {
+      background: linear-gradient(135deg, var(--brand-orange-50) 0%, #FFF7ED 100%);
+      border: 1px solid var(--brand-orange-100);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      display: flex; align-items: center; gap: 24px;
+      margin-bottom: 24px;
+    }
+    .progress-banner .ring {
+      width: 84px; height: 84px; flex-shrink: 0;
+      position: relative;
+    }
+    .progress-banner .ring svg { transform: rotate(-90deg); }
+    .progress-banner .ring .pct {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800; color: var(--brand-orange-700);
+    }
+    .progress-banner .copy { flex: 1; }
+    .progress-banner .copy h2 { margin: 0 0 4px; color: var(--brand-orange-700); }
+    .progress-banner .copy p { margin: 0; color: var(--ink-700); font-size: 14px; }
+
+    .section { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 24px; margin-bottom: 16px; scroll-margin-top: 24px; }
+    .section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .section-head h3 { margin: 0; }
+    .section-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: var(--r-full);
+      font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    }
+    .section-status.done { background: var(--success-bg); color: var(--success); }
+    .section-status.missing { background: var(--brand-orange-50); color: var(--brand-orange-700); }
+
+    .field-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    /* Photo upload */
+    .photo-row { display: flex; gap: 24px; align-items: center; }
+    .headshot-circle {
+      width: 120px; height: 120px; border-radius: 50%;
+      background: var(--brand-green); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 42px; font-weight: 700;
+      position: relative; overflow: hidden;
+      border: 4px solid var(--white); box-shadow: 0 0 0 2px var(--brand-green-100);
+    }
+    .headshot-circle .overlay {
+      position: absolute; inset: 0;
+      background: rgba(15,20,17,0.5); color: white;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .15s ease;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .headshot-circle:hover .overlay { opacity: 1; }
+
+    /* Resume row */
+    .resume-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px; background: var(--ink-50); border-radius: var(--r-md);
+      border: 1px solid var(--ink-200);
+    }
+    .resume-row .icon-box {
+      width: 48px; height: 48px; border-radius: var(--r-md);
+      background: var(--brand-orange-50); color: var(--brand-orange-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+
+    /* References dynamic */
+    .ref-item { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; padding: 14px 0; border-bottom: 1px dashed var(--ink-200); }
+    .ref-item:last-of-type { border-bottom: 0; }
+    .ref-row { display: flex; flex-direction: column; gap: 6px; }
+    .ref-remove { background: transparent; border: 0; color: var(--ink-500); cursor: pointer; padding: 8px; }
+    .ref-remove:hover { color: var(--danger); }
+
+    /* Edu */
+    .edu-item { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 12px; align-items: end; padding: 14px 0; border-bottom: 1px dashed var(--ink-200); }
+    .edu-item:last-of-type { border-bottom: 0; }
+
+    /* Side panel */
+    .side-col { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 24px; }
+
+    .checklist-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--ink-200);
+      font-size: 13px;
+    }
+    .checklist-item:last-child { border-bottom: 0; }
+    .checklist-item .mark {
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+    }
+    .checklist-item .mark.done { background: var(--success); color: white; }
+    .checklist-item .mark.todo { background: var(--ink-200); color: var(--ink-500); }
+    .checklist-item.is-todo a { color: var(--brand-orange-700); font-weight: 600; }
+    .checklist-item.is-done span { color: var(--ink-500); text-decoration: line-through; }
+
+    .sticky-actions {
+      position: sticky; bottom: 0; background: rgba(250,251,250,0.96); backdrop-filter: blur(8px);
+      border-top: 1px solid var(--ink-200);
+      padding: 16px 0; margin-top: 24px;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    }
+
+    .can-apply-card {
+      background: var(--brand-orange-50); border: 1px solid var(--brand-orange-100);
+      border-radius: var(--r-lg); padding: 18px; text-align: center;
+    }
+    .can-apply-card.ready { background: var(--success-bg); border-color: #BBF7D0; }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="candidate" data-active="profile">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Candidato · Mi perfil" data-i18n-en="Candidate · My profile">Candidato · Mi perfil</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Mi perfil" data-i18n-en="My profile">Mi perfil</h1>
+          <div class="t-body-sm muted" data-i18n-es="Mantén tu perfil al día. Los empleadores aprobados pueden verlo cuando aplicas." data-i18n-en="Keep your profile up to date. Approved employers see it when you apply.">Mantén tu perfil al día. Los empleadores aprobados pueden verlo cuando aplicas.</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="btn btn-outline btn-sm" data-i18n-es="Vista previa pública" data-i18n-en="Public preview">Vista previa pública</button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress banner -->
+      <div class="progress-banner">
+        <div class="ring">
+          <svg width="84" height="84" viewBox="0 0 84 84">
+            <circle cx="42" cy="42" r="36" fill="none" stroke="rgba(243,107,27,0.18)" stroke-width="8" />
+            <circle cx="42" cy="42" r="36" fill="none" stroke="var(--brand-orange)" stroke-width="8"
+                    stroke-dasharray="226.19" stroke-dashoffset="33.93" stroke-linecap="round" />
+          </svg>
+          <div class="pct">85%</div>
+        </div>
+        <div class="copy">
+          <h2 class="t-h3" data-i18n-es="Tu perfil está casi listo" data-i18n-en="Your profile is almost ready">Tu perfil está casi listo</h2>
+          <p data-i18n-es-html="Te falta: <strong>subir tu resume PDF</strong> y <strong>agregar una segunda referencia</strong>. Una vez al 100%, podrás aplicar a empleos." data-i18n-en-html="Missing: <strong>upload your resume PDF</strong> and <strong>add a second reference</strong>. Once at 100%, you'll be able to apply.">Te falta: <strong>subir tu resume PDF</strong> y <strong>agregar una segunda referencia</strong>. Una vez al 100%, podrás aplicar a empleos.</p>
+        </div>
+      </div>
+
+      <div class="layout">
+
+        <!-- LEFT: Form sections -->
+        <div>
+
+          <!-- Photo + Resume -->
+          <div class="section" id="files">
+            <div class="section-head">
+              <h3 class="t-h4" data-i18n-es="Foto y resume" data-i18n-en="Photo and resume">Foto y resume</h3>
+              <span class="section-status missing">! <span data-i18n-es="Resume pendiente" data-i18n-en="Resume missing">Resume pendiente</span></span>
+            </div>
+
+            <div class="photo-row">
+              <div class="headshot-circle">
+                MG
+                <a href="c03-upload.html" class="overlay" data-i18n-es="Cambiar foto" data-i18n-en="Change photo">Cambiar foto</a>
+              </div>
+              <div>
+                <div style="font-weight: 600; margin-bottom: 4px;" data-i18n-es="Headshot profesional" data-i18n-en="Professional headshot">Headshot profesional</div>
+                <div class="t-body-sm muted mb-4" data-i18n-es="JPG o PNG. Min. 400×400px. Idealmente fondo claro." data-i18n-en="JPG or PNG. Min 400×400px. Light background preferred.">JPG o PNG. Min. 400×400px. Idealmente fondo claro.</div>
+                <a href="c03-upload.html" class="btn btn-outline btn-sm" data-i18n-es="Reemplazar foto" data-i18n-en="Replace photo">Reemplazar foto</a>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px;">
+              <label class="label" data-i18n-es="Resume PDF" data-i18n-en="Resume PDF">Resume PDF <span class="req">*</span></label>
+              <a href="c03-upload.html" class="file-drop" style="text-decoration: none; display: block;">
+                <div style="font-size: 36px; line-height: 1;"><i class='i' data-icon='file-text'></i></div>
+                <div class="t-body mt-2" style="font-weight: 600; color: var(--ink-800);" data-i18n-es="Subir tu resume PDF" data-i18n-en="Upload your resume PDF">Subir tu resume PDF</div>
+                <div class="hint" data-i18n-es="Arrastra el archivo aquí o haz clic · Máx. 5 MB · PDF" data-i18n-en="Drop a file here or click · Max 5 MB · PDF">Arrastra el archivo aquí o haz clic · Máx. 5 MB · PDF</div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Basic info -->
+          <div class="section" id="basic">
+            <div class="section-head">
+              <h3 class="t-h4" data-i18n-es="Información básica" data-i18n-en="Basic information">Información básica</h3>
+              <span class="section-status done">✓ <span data-i18n-es="Completo" data-i18n-en="Complete">Completo</span></span>
+            </div>
+
+            <div class="stack-4">
+              <div class="field-grid-2">
+                <div>
+                  <label class="label" data-i18n-es="Nombre completo" data-i18n-en="Full name">Nombre completo <span class="req">*</span></label>
+                  <input class="input" value="María González" />
+                </div>
+                <div>
+                  <label class="label">Email <span class="req">*</span></label>
+                  <input class="input" value="m.gonzalez@gmail.com" />
+                </div>
+              </div>
+              <div class="field-grid-2">
+                <div>
+                  <label class="label" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono <span class="req">*</span></label>
+                  <input class="input" value="+1 (305) 555-2918" />
+                </div>
+                <div>
+                  <label class="label" data-i18n-es="Ciudad" data-i18n-en="City">Ciudad <span class="req">*</span></label>
+                  <input class="input" value="Miami, FL" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Professional info -->
+          <div class="section" id="professional">
+            <div class="section-head">
+              <h3 class="t-h4" data-i18n-es="Información profesional" data-i18n-en="Professional information">Información profesional</h3>
+              <span class="section-status done">✓ <span data-i18n-es="Completo" data-i18n-en="Complete">Completo</span></span>
+            </div>
+
+            <div class="stack-4">
+              <div class="field-grid-2">
+                <div>
+                  <label class="label" data-i18n-es="Puesto actual o más reciente" data-i18n-en="Current or most recent title">Puesto actual o más reciente <span class="req">*</span></label>
+                  <input class="input" value="Senior UX Designer" />
+                </div>
+                <div>
+                  <label class="label">Industry <span class="req">*</span></label>
+                  <select class="select">
+                    <option selected>Hospitality</option><option>Tech</option><option>Healthcare</option><option>Construction</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="label" data-i18n-es="Años de experiencia" data-i18n-en="Years of experience">Años de experiencia <span class="req">*</span></label>
+                <select class="select" style="max-width: 200px;">
+                  <option>0–2</option><option>3–5</option><option selected>6–10</option><option>10+</option>
+                </select>
+              </div>
+              <div>
+                <label class="label" data-i18n-es="Bio corta" data-i18n-en="Short bio">Bio corta <span class="req">*</span></label>
+                <textarea class="textarea">Senior UX Designer con 7 años creando productos digitales y experiencias físicas para marcas de hospitalidad de lujo. Especialista en research de usuarios y diseño cross-channel. Bilingüe (ES/EN), basada en Miami.</textarea>
+                <div class="hint"><span id="bio-count">187</span> / 500 <span data-i18n-es="caracteres" data-i18n-en="characters">caracteres</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Education -->
+          <div class="section" id="education">
+            <div class="section-head">
+              <h3 class="t-h4" data-i18n-es="Educación" data-i18n-en="Education">Educación</h3>
+              <span class="section-status done">✓ <span data-i18n-es="2 entradas" data-i18n-en="2 entries">2 entradas</span></span>
+            </div>
+
+            <div class="edu-item">
+              <div class="ref-row">
+                <label class="label" data-i18n-es="Institución" data-i18n-en="School">Institución</label>
+                <input class="input" value="School of Visual Arts" />
+              </div>
+              <div class="ref-row">
+                <label class="label" data-i18n-es="Grado" data-i18n-en="Degree">Grado</label>
+                <input class="input" value="MA Experience Design" />
+              </div>
+              <div class="ref-row">
+                <label class="label" data-i18n-es="Año" data-i18n-en="Year">Año</label>
+                <input class="input" value="2020" />
+              </div>
+              <button class="ref-remove" title="Remove"><i class='i' data-icon='trash'></i></button>
+            </div>
+
+            <div class="edu-item">
+              <div class="ref-row">
+                <label class="label" data-i18n-es="Institución" data-i18n-en="School">Institución</label>
+                <input class="input" value="Universidad de los Andes" />
+              </div>
+              <div class="ref-row">
+                <label class="label" data-i18n-es="Grado" data-i18n-en="Degree">Grado</label>
+                <input class="input" value="BA Visual Communication" />
+              </div>
+              <div class="ref-row">
+                <label class="label" data-i18n-es="Año" data-i18n-en="Year">Año</label>
+                <input class="input" value="2014" />
+              </div>
+              <button class="ref-remove" title="Remove"><i class='i' data-icon='trash'></i></button>
+            </div>
+
+            <button class="btn btn-outline btn-sm mt-4" data-i18n-es="＋ Agregar educación" data-i18n-en="＋ Add education">＋ Agregar educación</button>
+          </div>
+
+          <!-- References -->
+          <div class="section" id="references">
+            <div class="section-head">
+              <h3 class="t-h4" data-i18n-es="Referencias profesionales" data-i18n-en="Professional references">Referencias profesionales</h3>
+              <span class="section-status missing">! <span data-i18n-es="Faltan referencias" data-i18n-en="More needed">Faltan referencias</span></span>
+            </div>
+
+            <div class="t-body-sm muted mb-4" data-i18n-es="Mínimo 2 referencias. Los empleadores las verán cuando apliques." data-i18n-en="Minimum 2 references. Employers see them when you apply.">Mínimo 2 referencias. Los empleadores las verán cuando apliques.</div>
+
+            <div class="ref-item">
+              <div class="ref-row">
+                <label class="label" data-i18n-es="Nombre" data-i18n-en="Name">Nombre</label>
+                <input class="input" value="Roberto Mendoza" />
+              </div>
+              <div class="ref-row">
+                <label class="label" data-i18n-es="Relación / Cargo" data-i18n-en="Relation / Title">Relación / Cargo</label>
+                <input class="input" value="Ex-Manager · Marriott International" />
+              </div>
+              <button class="ref-remove" title="Remove"><i class='i' data-icon='trash'></i></button>
+            </div>
+
+            <div class="ref-item">
+              <div class="ref-row">
+                <label class="label">Email</label>
+                <input class="input" value="r.mendoza@marriott.com" />
+              </div>
+              <div class="ref-row">
+                <label class="label" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</label>
+                <input class="input" value="+1 (305) 555-1024" />
+              </div>
+              <span style="width: 32px;"></span>
+            </div>
+
+            <div class="alert alert-warning mt-4">
+              <div>!</div>
+              <div>
+                <div class="alert-title" data-i18n-es="Agrega una segunda referencia" data-i18n-en="Add a second reference">Agrega una segunda referencia</div>
+                <div class="alert-body" data-i18n-es="Tu perfil llegará al 100% una vez que tengas 2 referencias." data-i18n-en="Your profile will reach 100% once you have 2 references.">Tu perfil llegará al 100% una vez que tengas 2 referencias.</div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-sm mt-4" data-i18n-es="＋ Agregar referencia" data-i18n-en="＋ Add reference">＋ Agregar referencia</button>
+          </div>
+
+          <!-- Sticky bottom actions -->
+          <div class="sticky-actions">
+            <div class="t-body-sm muted" data-i18n-es="✓ Guardado automáticamente · hace 12s" data-i18n-en="✓ Auto-saved · 12s ago">✓ Guardado automáticamente · hace 12s</div>
+            <div class="row gap-2">
+              <a href="c04-jobs.html" class="btn btn-ghost" data-i18n-es="Continuar después" data-i18n-en="Continue later">Continuar después</a>
+              <button class="btn btn-primary" data-i18n-es="Guardar cambios" data-i18n-en="Save changes">Guardar cambios</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Checklist + Can apply -->
+        <aside class="side-col">
+
+          <div class="section" style="margin-bottom: 0;">
+            <h3 class="t-h4 mb-4" data-i18n-es="Lista de verificación" data-i18n-en="Checklist">Lista de verificación</h3>
+
+            <div class="checklist-item is-done">
+              <span class="mark done">✓</span>
+              <a href="#files" style="color: var(--ink-500);"><span data-i18n-es="Foto de perfil" data-i18n-en="Profile photo">Foto de perfil</span></a>
+            </div>
+            <div class="checklist-item is-todo">
+              <span class="mark todo">○</span>
+              <a href="#files" data-i18n-es="Subir resume PDF" data-i18n-en="Upload resume PDF">Subir resume PDF</a>
+            </div>
+            <div class="checklist-item is-done">
+              <span class="mark done">✓</span>
+              <span data-i18n-es="Información básica" data-i18n-en="Basic info">Información básica</span>
+            </div>
+            <div class="checklist-item is-done">
+              <span class="mark done">✓</span>
+              <span data-i18n-es="Puesto e industria" data-i18n-en="Title and industry">Puesto e industria</span>
+            </div>
+            <div class="checklist-item is-done">
+              <span class="mark done">✓</span>
+              <span data-i18n-es="Bio profesional" data-i18n-en="Professional bio">Bio profesional</span>
+            </div>
+            <div class="checklist-item is-done">
+              <span class="mark done">✓</span>
+              <span data-i18n-es="Educación" data-i18n-en="Education">Educación</span>
+            </div>
+            <div class="checklist-item is-todo">
+              <span class="mark todo">○</span>
+              <a href="#references" data-i18n-es="2+ referencias" data-i18n-en="2+ references">2+ referencias</a>
+            </div>
+          </div>
+
+          <div class="can-apply-card">
+            <div style="font-size: 28px; margin-bottom: 8px;"><i class='i' data-icon='lock'></i></div>
+            <div style="font-weight: 700; font-size: 14px; color: var(--brand-orange-700); margin-bottom: 4px;" data-i18n-es="Aplicaciones bloqueadas" data-i18n-en="Applications blocked">Aplicaciones bloqueadas</div>
+            <div class="t-body-sm" style="color: var(--ink-700);" data-i18n-es="Completa los 2 ítems pendientes para empezar a aplicar." data-i18n-en="Complete the 2 pending items to start applying.">Completa los 2 ítems pendientes para empezar a aplicar.</div>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

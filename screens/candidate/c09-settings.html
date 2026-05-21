@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C-09 · Configuración — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .layout { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+    /* Sidebar nav within settings */
+    .settings-nav { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 24px; }
+    .settings-nav a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: var(--r-md);
+      font-size: 14px; font-weight: 500; color: var(--ink-700);
+      text-decoration: none;
+    }
+    .settings-nav a:hover { background: var(--ink-100); color: var(--ink-900); text-decoration: none; }
+    .settings-nav a.active {
+      background: var(--brand-green-50); color: var(--brand-green-700);
+      font-weight: 600;
+    }
+    .settings-nav a.danger:hover { background: var(--danger-bg); color: var(--danger); }
+    .settings-nav a.active.danger { background: var(--danger-bg); color: var(--danger); }
+
+    .section { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 24px; margin-bottom: 16px; scroll-margin-top: 24px; }
+    .section h3 { margin: 0 0 4px; }
+    .section .sec-desc { margin: 0 0 16px; font-size: 13px; color: var(--ink-600); }
+
+    .field-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* Switch (reused) */
+    .switch { position: relative; width: 40px; height: 22px; display: inline-block; }
+    .switch input { display: none; }
+    .switch .slider { position: absolute; inset: 0; background: var(--ink-300); border-radius: 999px; cursor: pointer; transition: background .15s; }
+    .switch .slider::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+    .switch input:checked + .slider { background: var(--brand-green); }
+    .switch input:checked + .slider::after { transform: translateX(18px); }
+
+    /* Notification row */
+    .notif-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 0; border-bottom: 1px solid var(--ink-200);
+      gap: 16px;
+    }
+    .notif-row:last-of-type { border-bottom: 0; }
+    .notif-row .info .title { font-weight: 600; font-size: 14px; color: var(--ink-900); }
+    .notif-row .info .desc { font-size: 12px; color: var(--ink-600); margin-top: 2px; }
+    .notif-controls { display: flex; gap: 24px; align-items: center; flex-shrink: 0; }
+    .notif-controls label { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-500); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; }
+
+    .danger-zone { background: var(--danger-bg); border-color: #FECACA; }
+    .danger-zone h3 { color: var(--danger); }
+
+    .password-strength {
+      height: 4px; background: var(--ink-200); border-radius: var(--r-full); overflow: hidden;
+      margin-top: 6px; display: flex; gap: 2px;
+    }
+    .password-strength > div { flex: 1; }
+    .password-strength > div.on { background: var(--success); }
+    .password-strength > div.warn { background: var(--warning); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="candidate" data-active="settings">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Candidato · Configuración" data-i18n-en="Candidate · Settings">Candidato · Configuración</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Configuración" data-i18n-en="Settings">Configuración</h1>
+          <div class="t-body-sm muted" data-i18n-es="Gestiona tu cuenta, notificaciones y privacidad" data-i18n-en="Manage your account, notifications and privacy">Gestiona tu cuenta, notificaciones y privacidad</div>
+        </div>
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+        <div class="lang-toggle">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <div class="layout">
+
+        <!-- LEFT: Nav -->
+        <aside>
+          <nav class="settings-nav">
+            <a href="#account" class="active"><i class='i' data-icon='user'></i> <span data-i18n-es="Cuenta" data-i18n-en="Account">Cuenta</span></a>
+            <a href="#notifications"><i class='i' data-icon='bell'></i> <span data-i18n-es="Notificaciones" data-i18n-en="Notifications">Notificaciones</span></a>
+            <a href="#privacy"><i class='i' data-icon='lock'></i> <span data-i18n-es="Privacidad" data-i18n-en="Privacy">Privacidad</span></a>
+            <a href="#security"><i class='i' data-icon='key'></i> <span data-i18n-es="Seguridad" data-i18n-en="Security">Seguridad</span></a>
+            <a href="#language"><i class='i' data-icon='globe'></i> <span data-i18n-es="Idioma" data-i18n-en="Language">Idioma</span></a>
+            <a href="#danger" class="danger"><i class='i' data-icon='alert-triangle'></i> <span data-i18n-es="Eliminar cuenta" data-i18n-en="Delete account">Eliminar cuenta</span></a>
+          </nav>
+        </aside>
+
+        <!-- RIGHT: Sections -->
+        <div>
+
+          <!-- Account -->
+          <section class="section" id="account">
+            <h3 class="t-h4" data-i18n-es="Cuenta" data-i18n-en="Account">Cuenta</h3>
+            <p class="sec-desc" data-i18n-es="Tu información básica de acceso." data-i18n-en="Your basic login info.">Tu información básica de acceso.</p>
+
+            <div class="stack-4">
+              <div class="field-grid-2">
+                <div>
+                  <label class="label" data-i18n-es="Nombre completo" data-i18n-en="Full name">Nombre completo</label>
+                  <input class="input" value="María González" />
+                </div>
+                <div>
+                  <label class="label">Email</label>
+                  <input class="input" value="m.gonzalez@gmail.com" />
+                  <div class="hint" style="color: var(--success);">✓ <span data-i18n-es="Verificado" data-i18n-en="Verified">Verificado</span></div>
+                </div>
+              </div>
+              <div class="field-grid-2">
+                <div>
+                  <label class="label" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</label>
+                  <input class="input" value="+1 (305) 555-2918" />
+                </div>
+                <div>
+                  <label class="label" data-i18n-es="Zona horaria" data-i18n-en="Timezone">Zona horaria</label>
+                  <select class="select">
+                    <option selected>America/New_York (EST/EDT)</option>
+                    <option>America/Chicago (CST/CDT)</option>
+                    <option>America/Los_Angeles (PST/PDT)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row justify-end gap-2 mt-6" style="display: flex;">
+              <button class="btn btn-ghost" data-i18n-es="Cancelar" data-i18n-en="Cancel">Cancelar</button>
+              <button class="btn btn-primary" data-i18n-es="Guardar cambios" data-i18n-en="Save changes">Guardar cambios</button>
+            </div>
+          </section>
+
+          <!-- Notifications -->
+          <section class="section" id="notifications">
+            <h3 class="t-h4" data-i18n-es="Notificaciones" data-i18n-en="Notifications">Notificaciones</h3>
+            <p class="sec-desc" data-i18n-es="Elige cómo y cuándo quieres recibir alertas." data-i18n-en="Choose how and when to receive alerts.">Elige cómo y cuándo quieres recibir alertas.</p>
+
+            <div class="row" style="justify-content: flex-end; gap: 24px; padding: 0 0 12px 0; border-bottom: 1px solid var(--ink-200);">
+              <span class="t-caption" style="font-weight: 700; color: var(--ink-600); width: 50px; text-align: center;">EMAIL</span>
+              <span class="t-caption" style="font-weight: 700; color: var(--ink-600); width: 50px; text-align: center;">PUSH</span>
+            </div>
+
+            <div class="notif-row">
+              <div class="info">
+                <div class="title" data-i18n-es="Cambio de status en mis aplicaciones" data-i18n-en="Status change on my applications">Cambio de status en mis aplicaciones</div>
+                <div class="desc" data-i18n-es="Te avisamos cuando un empleador actualiza el status de tu aplicación." data-i18n-en="We notify you when an employer updates your application status.">Te avisamos cuando un empleador actualiza el status de tu aplicación.</div>
+              </div>
+              <div class="notif-controls">
+                <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+                <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+              </div>
+            </div>
+
+            <div class="notif-row">
+              <div class="info">
+                <div class="title" data-i18n-es="Nuevas ofertas" data-i18n-en="New offers">Nuevas ofertas</div>
+                <div class="desc" data-i18n-es="Alerta prioritaria cuando recibes una oferta de un empleador." data-i18n-en="Priority alert when you receive an offer from an employer.">Alerta prioritaria cuando recibes una oferta de un empleador.</div>
+              </div>
+              <div class="notif-controls">
+                <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+                <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+              </div>
+            </div>
+
+            <div class="notif-row">
+              <div class="info">
+                <div class="title" data-i18n-es="Empleos recomendados" data-i18n-en="Job recommendations">Empleos recomendados</div>
+                <div class="desc" data-i18n-es="Resumen semanal con nuevos empleos según tu perfil e historial." data-i18n-en="Weekly digest of new jobs based on your profile and history.">Resumen semanal con nuevos empleos según tu perfil e historial.</div>
+              </div>
+              <div class="notif-controls">
+                <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+                <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+              </div>
+            </div>
+
+            <div class="notif-row">
+              <div class="info">
+                <div class="title" data-i18n-es="Empleos guardados que cierran pronto" data-i18n-en="Saved jobs closing soon">Empleos guardados que cierran pronto</div>
+                <div class="desc" data-i18n-es="Recordatorio 3 días antes del cierre de empleos que guardaste." data-i18n-en="Reminder 3 days before saved jobs close.">Recordatorio 3 días antes del cierre de empleos que guardaste.</div>
+              </div>
+              <div class="notif-controls">
+                <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+                <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+              </div>
+            </div>
+
+            <div class="notif-row">
+              <div class="info">
+                <div class="title" data-i18n-es="Noticias y producto" data-i18n-en="News and product">Noticias y producto</div>
+                <div class="desc" data-i18n-es="Tips de carrera, nuevas funcionalidades y noticias de Miami Professional Network." data-i18n-en="Career tips, new features and Miami Professional Network news.">Tips de carrera, nuevas funcionalidades y noticias de Miami Professional Network.</div>
+              </div>
+              <div class="notif-controls">
+                <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+                <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+              </div>
+            </div>
+          </section>
+
+          <!-- Privacy -->
+          <section class="section" id="privacy">
+            <h3 class="t-h4" data-i18n-es="Privacidad" data-i18n-en="Privacy">Privacidad</h3>
+            <p class="sec-desc" data-i18n-es="Controla qué información comparten contigo y los empleadores." data-i18n-en="Control what information you and employers share.">Controla qué información comparten contigo y los empleadores.</p>
+
+            <div class="notif-row">
+              <div class="info">
+                <div class="title" data-i18n-es="Visibilidad del perfil" data-i18n-en="Profile visibility">Visibilidad del perfil</div>
+                <div class="desc" data-i18n-es="Tu perfil solo es visible para empleadores aprobados a los que has aplicado. Esta política es fija y no se puede modificar." data-i18n-en="Your profile is only visible to approved employers you've applied to. This policy is fixed and cannot be changed.">Tu perfil solo es visible para empleadores aprobados a los que has aplicado. Esta política es fija y no se puede modificar.</div>
+              </div>
+              <span class="badge badge-success"><i class='i' data-icon='lock'></i> <span data-i18n-es="Política fija" data-i18n-en="Fixed policy">Política fija</span></span>
+            </div>
+
+            <div class="notif-row">
+              <div class="info">
+                <div class="title" data-i18n-es="Permitir contacto fuera de plataforma" data-i18n-en="Allow off-platform contact">Permitir contacto fuera de plataforma</div>
+                <div class="desc" data-i18n-es="Los empleadores podrán ver tu teléfono y email cuando apliques. Si lo desactivas, solo podrán contactarte por la plataforma." data-i18n-en="Employers will see your phone and email when you apply. If off, they can only contact you through the platform.">Los empleadores podrán ver tu teléfono y email cuando apliques. Si lo desactivas, solo podrán contactarte por la plataforma.</div>
+              </div>
+              <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+
+            <div class="notif-row">
+              <div class="info">
+                <div class="title" data-i18n-es="Compartir datos para mejorar el producto" data-i18n-en="Share data to improve the product">Compartir datos para mejorar el producto</div>
+                <div class="desc" data-i18n-es="Datos anónimos sobre cómo usas la plataforma. Nunca compartimos datos personales." data-i18n-en="Anonymous data about how you use the platform. We never share personal data.">Datos anónimos sobre cómo usas la plataforma. Nunca compartimos datos personales.</div>
+              </div>
+              <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+
+            <div style="margin-top: 16px;">
+              <a href="#" class="t-body-sm" data-i18n-es="<i class='i' data-icon='file-text'></i> Descargar mis datos (GDPR)" data-i18n-en="<i class='i' data-icon='file-text'></i> Download my data (GDPR)"><i class='i' data-icon='file-text'></i> Descargar mis datos (GDPR)</a>
+            </div>
+          </section>
+
+          <!-- Security -->
+          <section class="section" id="security">
+            <h3 class="t-h4" data-i18n-es="Seguridad" data-i18n-en="Security">Seguridad</h3>
+            <p class="sec-desc" data-i18n-es="Mantén tu cuenta segura." data-i18n-en="Keep your account safe.">Mantén tu cuenta segura.</p>
+
+            <div class="stack-4">
+              <div>
+                <label class="label" data-i18n-es="Contraseña actual" data-i18n-en="Current password">Contraseña actual</label>
+                <input class="input" type="password" value="••••••••" />
+              </div>
+              <div class="field-grid-2">
+                <div>
+                  <label class="label" data-i18n-es="Nueva contraseña" data-i18n-en="New password">Nueva contraseña</label>
+                  <input class="input" type="password" />
+                  <div class="password-strength">
+                    <div class="on"></div><div class="on"></div><div class="warn"></div><div></div>
+                  </div>
+                  <div class="hint" data-i18n-es="Media · agrega un número o símbolo" data-i18n-en="Medium · add a number or symbol">Media · agrega un número o símbolo</div>
+                </div>
+                <div>
+                  <label class="label" data-i18n-es="Confirmar contraseña" data-i18n-en="Confirm password">Confirmar contraseña</label>
+                  <input class="input" type="password" />
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--ink-200);">
+              <div class="flex justify-between items-center">
+                <div>
+                  <div style="font-weight: 600; font-size: 14px;" data-i18n-es="Verificación en dos pasos (2FA)" data-i18n-en="Two-factor authentication (2FA)">Verificación en dos pasos (2FA)</div>
+                  <div class="t-body-sm muted" data-i18n-es="Protege tu cuenta con un código adicional al iniciar sesión." data-i18n-en="Protect your account with an extra code at login.">Protege tu cuenta con un código adicional al iniciar sesión.</div>
+                </div>
+                <button class="btn btn-outline btn-sm" data-i18n-es="Activar 2FA" data-i18n-en="Enable 2FA">Activar 2FA</button>
+              </div>
+            </div>
+
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--ink-200);">
+              <div class="flex justify-between items-center">
+                <div>
+                  <div style="font-weight: 600; font-size: 14px;" data-i18n-es="Sesiones activas" data-i18n-en="Active sessions">Sesiones activas</div>
+                  <div class="t-body-sm muted" data-i18n-es="3 dispositivos · Última: Safari (Mac) · hace 2 min" data-i18n-en="3 devices · Last: Safari (Mac) · 2 min ago">3 dispositivos · Última: Safari (Mac) · hace 2 min</div>
+                </div>
+                <button class="btn btn-ghost btn-sm" data-i18n-es="Ver sesiones" data-i18n-en="View sessions">Ver sesiones</button>
+              </div>
+            </div>
+
+            <div class="row justify-end gap-2 mt-6" style="display: flex;">
+              <button class="btn btn-primary" data-i18n-es="Actualizar contraseña" data-i18n-en="Update password">Actualizar contraseña</button>
+            </div>
+          </section>
+
+          <!-- Language -->
+          <section class="section" id="language">
+            <h3 class="t-h4" data-i18n-es="Idioma" data-i18n-en="Language">Idioma</h3>
+            <p class="sec-desc" data-i18n-es="Idioma de la plataforma y de las notificaciones." data-i18n-en="Platform and notifications language.">Idioma de la plataforma y de las notificaciones.</p>
+
+            <div class="field-grid-2">
+              <div>
+                <label class="label" data-i18n-es="Idioma de interfaz" data-i18n-en="Interface language">Idioma de interfaz</label>
+                <select class="select">
+                  <option selected>Español</option>
+                  <option>English</option>
+                </select>
+              </div>
+              <div>
+                <label class="label" data-i18n-es="Idioma de notificaciones" data-i18n-en="Notifications language">Idioma de notificaciones</label>
+                <select class="select">
+                  <option selected>Español</option>
+                  <option>English</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- Danger zone -->
+          <section class="section danger-zone" id="danger">
+            <h3 class="t-h4" data-i18n-es="Eliminar cuenta" data-i18n-en="Delete account">Eliminar cuenta</h3>
+            <p class="sec-desc" data-i18n-es="Esta acción es permanente." data-i18n-en="This action is permanent.">Esta acción es permanente.</p>
+
+            <div class="alert alert-danger mb-6">
+              <div><i class='i' data-icon='alert-triangle'></i></div>
+              <div>
+                <div class="alert-title" data-i18n-es="¿Qué pasa si eliminas tu cuenta?" data-i18n-en="What happens if you delete your account?">¿Qué pasa si eliminas tu cuenta?</div>
+                <div class="alert-body" data-i18n-es-html="• Tu perfil, resume y headshot se eliminan en 30 días.<br/>• Las aplicaciones activas se cancelan y los empleadores son notificados.<br/>• Las aplicaciones marcadas como Hired se conservan por requisitos legales (1 año)." data-i18n-en-html="• Your profile, resume and headshot are deleted in 30 days.<br/>• Active applications are canceled and employers notified.<br/>• Applications marked as Hired are kept for legal compliance (1 year).">• Tu perfil, resume y headshot se eliminan en 30 días.<br/>• Las aplicaciones activas se cancelan y los empleadores son notificados.<br/>• Las aplicaciones marcadas como Hired se conservan por requisitos legales (1 año).</div>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+              <div>
+                <div style="font-weight: 600; font-size: 14px;" data-i18n-es="Pausar cuenta temporalmente" data-i18n-en="Temporarily pause account">Pausar cuenta temporalmente</div>
+                <div class="t-body-sm muted" data-i18n-es="Oculta tu perfil de empleadores sin perder tus datos." data-i18n-en="Hide your profile from employers without losing your data.">Oculta tu perfil de empleadores sin perder tus datos.</div>
+              </div>
+              <button class="btn btn-outline btn-sm" data-i18n-es="Pausar cuenta" data-i18n-en="Pause account">Pausar cuenta</button>
+            </div>
+
+            <div class="flex justify-between items-center" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(220,38,38,0.15);">
+              <div>
+                <div style="font-weight: 600; font-size: 14px; color: var(--danger);" data-i18n-es="Eliminar mi cuenta permanentemente" data-i18n-en="Delete my account permanently">Eliminar mi cuenta permanentemente</div>
+                <div class="t-body-sm" style="color: var(--ink-700);" data-i18n-es="Confirmación adicional requerida." data-i18n-en="Additional confirmation required.">Confirmación adicional requerida.</div>
+              </div>
+              <button class="btn btn-danger btn-sm" data-i18n-es="Eliminar cuenta" data-i18n-en="Delete account">Eliminar cuenta</button>
+            </div>
+          </section>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

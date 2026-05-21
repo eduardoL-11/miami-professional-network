@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-01 · Pending approval — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 20% 10%, rgba(243,107,27,0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 90%, rgba(41,94,36,0.10) 0%, transparent 40%),
+        var(--ink-50);
+      min-height: 100vh;
+    }
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 32px; max-width: 1200px; margin: 0 auto;
+    }
+    .top-bar .brand { display:flex; align-items:center; gap:12px; }
+    .top-bar .brand img { height: 36px; }
+    .top-bar .brand span { font-weight: 700; color: var(--ink-800); }
+
+    .center {
+      max-width: 640px; margin: 0 auto; padding: 24px 24px 64px;
+    }
+
+    .pending-icon {
+      width: 96px; height: 96px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: var(--brand-orange-50);
+      border: 2px solid var(--brand-orange-100);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 44px;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(243,107,27,0.18); }
+      50%      { transform: scale(1.04); box-shadow: 0 0 0 14px rgba(243,107,27,0); }
+    }
+
+    .step-list { list-style: none; padding: 0; margin: 0; }
+    .step-list li {
+      display: flex; gap: 12px; padding: 10px 0;
+      font-size: 14px;
+    }
+    .step-list .check {
+      width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+    .check.done { background: var(--success-bg); color: var(--success); }
+    .check.now  { background: var(--brand-orange-50); color: var(--brand-orange); border: 2px solid var(--brand-orange); }
+    .check.todo { background: var(--ink-100); color: var(--ink-400); }
+
+    .summary-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--ink-200); font-size: 13px; }
+    .summary-row:last-child { border-bottom: 0; }
+    .summary-row .lbl { color: var(--ink-600); }
+    .summary-row .val { color: var(--ink-900); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <header class="top-bar">
+    <a href="../../index.html" class="brand">
+      <img src="../../assets/logo-fullcolor.png" alt="" />
+      <span>Miami Professional Network</span>
+    </a>
+    <div class="row items-center gap-3">
+      <a href="#" class="t-body-sm muted" data-i18n-es="Cerrar sesión" data-i18n-en="Log out">Cerrar sesión</a>
+      <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+      <div class="lang-toggle">
+        <button data-lang="es">ES</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="center">
+
+    <div class="text-center">
+      <div class="pending-icon"><i class='i' data-icon='hourglass'></i></div>
+      <div class="t-overline muted mb-2" data-i18n-es="Empleador · E-01" data-i18n-en="Employer · E-01">Empleador · E-01</div>
+      <h1 class="t-h1" data-i18n-es="Tu cuenta está en revisión" data-i18n-en="Your account is under review">Tu cuenta está en revisión</h1>
+      <p class="t-body mt-2 muted" style="max-width: 460px; margin: 12px auto 0;" data-i18n-es="Estamos validando la información de tu empresa. Te enviaremos un correo en cuanto tu cuenta sea aprobada." data-i18n-en="We're validating your company information. We'll email you as soon as your account is approved.">Estamos validando la información de tu empresa. Te enviaremos un correo en cuanto tu cuenta sea aprobada.</p>
+    </div>
+
+    <div class="card card-lg mt-8">
+      <div class="t-h4 mb-4" data-i18n-es="Estado de tu solicitud" data-i18n-en="Application status">Estado de tu solicitud</div>
+      <ul class="step-list">
+        <li>
+          <span class="check done">✓</span>
+          <div>
+            <div style="font-weight:600;" data-i18n-es="Solicitud enviada" data-i18n-en="Application submitted">Solicitud enviada</div>
+            <div class="t-body-sm muted">18 May 2026 · 14:22</div>
+          </div>
+        </li>
+        <li>
+          <span class="check now">●</span>
+          <div>
+            <div style="font-weight:600;" data-i18n-es="En revisión por el equipo" data-i18n-en="Under team review">En revisión por el equipo</div>
+            <div class="t-body-sm muted" data-i18n-es="Tiempo típico: 1–2 días hábiles" data-i18n-en="Typical wait: 1–2 business days">Tiempo típico: 1–2 días hábiles</div>
+          </div>
+        </li>
+        <li>
+          <span class="check todo">○</span>
+          <div>
+            <div style="font-weight:600; color: var(--ink-500);" data-i18n-es="Decisión y notificación" data-i18n-en="Decision & notification">Decisión y notificación</div>
+            <div class="t-body-sm subtle" data-i18n-es="Recibirás un correo con el resultado" data-i18n-en="You'll receive an email with the outcome">Recibirás un correo con el resultado</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card mt-6">
+      <div class="t-h4 mb-4" data-i18n-es="Información enviada" data-i18n-en="Submitted information">Información enviada</div>
+      <div class="summary-row"><span class="lbl" data-i18n-es="Empresa" data-i18n-en="Company">Empresa</span><span class="val">Sunset Hotels Group</span></div>
+      <div class="summary-row"><span class="lbl" data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</span><span class="val">Carlos Rivera</span></div>
+      <div class="summary-row"><span class="lbl">Email</span><span class="val">carlos@sunset.com</span></div>
+      <div class="summary-row"><span class="lbl" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</span><span class="val">+1 (305) 555-0142</span></div>
+      <div class="summary-row"><span class="lbl">Industry</span><span class="val">Hospitality</span></div>
+      <div class="summary-row"><span class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</span><span class="val">5</span></div>
+    </div>
+
+    <div class="alert alert-info mt-6">
+      <div><i class='i' data-icon='lightbulb'></i></div>
+      <div>
+        <div class="alert-title" data-i18n-es="Mientras esperas" data-i18n-en="While you wait">Mientras esperas</div>
+        <div class="alert-body" data-i18n-es="Si necesitas urgencia o tienes preguntas, contáctanos en hello@miamipn.com. No podrás publicar empleos hasta recibir aprobación." data-i18n-en="If you need urgency or have questions, reach out at hello@miamipn.com. You can't post jobs until approved.">Si necesitas urgencia o tienes preguntas, contáctanos en hello@miamipn.com. No podrás publicar empleos hasta recibir aprobación.</div>
+      </div>
+    </div>
+
+    <div class="text-center mt-6">
+      <a href="#" class="t-body-sm muted" data-i18n-es="Editar información enviada" data-i18n-en="Edit submitted information">Editar información enviada</a>
+    </div>
+
+  </main>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+</body>
+</html>

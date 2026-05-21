@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P-02 · Crear cuenta de candidato — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <link rel="stylesheet" href="../../css/auth.css" />
+  <style>
+    .pw-strength { height: 3px; background: var(--ink-200); border-radius: var(--r-full); overflow: hidden; margin-top: 6px; display: flex; gap: 2px; }
+    .pw-strength > div { flex: 1; }
+    .pw-strength > div.on { background: var(--success); }
+    .pw-strength > div.warn { background: var(--warning); }
+  </style>
+</head>
+<body class="auth">
+
+  <header class="auth-top">
+    <a href="../../index.html" class="brand">
+      <img src="../../assets/logo-fullcolor.png" alt="" />
+      <span>Miami Professional Network</span>
+    </a>
+    <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+    <div class="lang-toggle">
+      <button data-lang="es">ES</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <main class="auth-shell">
+    <div class="auth-card">
+
+      <div class="t-overline muted mb-2" data-i18n-es="P-02 · Candidato" data-i18n-en="P-02 · Candidate">P-02 · Candidato</div>
+      <h1 data-i18n-es="Crea tu cuenta" data-i18n-en="Create your account">Crea tu cuenta</h1>
+      <p class="sub" data-i18n-es="Empieza a aplicar a los mejores empleos de Miami." data-i18n-en="Start applying to the best jobs in Miami.">Empieza a aplicar a los mejores empleos de Miami.</p>
+
+      <div class="role-tabs">
+        <button class="active" data-i18n-es="Soy candidato" data-i18n-en="I'm a candidate">Soy candidato</button>
+        <button onclick="window.location='p03-employer-signup.html'" data-i18n-es="Soy empleador" data-i18n-en="I'm an employer">Soy empleador</button>
+      </div>
+
+      <form class="auth-form" onsubmit="event.preventDefault();">
+
+        <div class="field-row">
+          <div>
+            <label class="label" data-i18n-es="Nombre" data-i18n-en="First name">Nombre <span class="req">*</span></label>
+            <input class="input" placeholder="María" />
+          </div>
+          <div>
+            <label class="label" data-i18n-es="Apellido" data-i18n-en="Last name">Apellido <span class="req">*</span></label>
+            <input class="input" placeholder="González" />
+          </div>
+        </div>
+
+        <div>
+          <label class="label">Email <span class="req">*</span></label>
+          <input class="input" type="email" placeholder="maria@ejemplo.com" />
+          <div class="hint" data-i18n-es="Te enviaremos un correo de verificación." data-i18n-en="We'll send you a verification email.">Te enviaremos un correo de verificación.</div>
+        </div>
+
+        <div>
+          <label class="label" data-i18n-es="Contraseña" data-i18n-en="Password">Contraseña <span class="req">*</span></label>
+          <input class="input" type="password" placeholder="••••••••" />
+          <div class="pw-strength"><div class="on"></div><div class="on"></div><div class="warn"></div><div></div></div>
+          <div class="hint" data-i18n-es="Mínimo 8 caracteres, una mayúscula y un número." data-i18n-en="At least 8 characters, one uppercase and one number.">Mínimo 8 caracteres, una mayúscula y un número.</div>
+        </div>
+
+        <label class="row gap-2 items-start" style="cursor: pointer; font-size: 13px; color: var(--ink-700); margin-top: 6px;">
+          <input type="checkbox" style="margin-top: 3px;" />
+          <span data-i18n-es-html="Acepto los <a href='#'>Términos de servicio</a> y la <a href='#'>Política de privacidad</a>." data-i18n-en-html="I accept the <a href='#'>Terms of Service</a> and <a href='#'>Privacy Policy</a>.">Acepto los <a href="#">Términos de servicio</a> y la <a href="#">Política de privacidad</a>.</span>
+        </label>
+
+        <a href="p05-email-verification.html" class="btn btn-primary btn-lg w-full mt-2" style="display: flex; justify-content: center;" data-i18n-es="Crear cuenta" data-i18n-en="Create account">Crear cuenta</a>
+
+      </form>
+
+      <div class="auth-foot">
+        <span data-i18n-es="¿Ya tienes cuenta?" data-i18n-en="Already have an account?">¿Ya tienes cuenta?</span>
+        <a href="p04-login.html" data-i18n-es="Iniciar sesión" data-i18n-en="Sign in">Iniciar sesión</a>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+</body>
+</html>

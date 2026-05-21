@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-04 · Gestión de candidatos — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .filter-bar {
+      background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-md);
+      padding: 6px; display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .search-wrap { position: relative; flex: 1; min-width: 280px; }
+    .search-wrap .input { padding-left: 36px; border: 0; }
+    .search-wrap .search-i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-500); font-size: 14px; pointer-events: none; }
+    .filter-bar .select { width: auto; min-width: 130px; border: 0; }
+    .filter-bar > .divider { width: 1px; align-self: stretch; background: var(--ink-200); }
+
+    .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+    @media (max-width: 900px) { .stats-strip { grid-template-columns: repeat(2, 1fr); } }
+    .mini-stat {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-md); padding: 14px 16px;
+    }
+    .mini-stat .l { font-size: 11px; color: var(--ink-600); font-weight: 500; letter-spacing: 0; }
+    .mini-stat .n { font-size: 20px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.015em; margin-top: 2px; }
+    .mini-stat .delta { font-size: 11px; color: var(--success); font-weight: 500; margin-top: 2px; }
+
+    .table-wrap { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); overflow: hidden; }
+    .ctable { width: 100%; border-collapse: collapse; }
+    .ctable th {
+      background: var(--ink-50); color: var(--ink-600); font-weight: 600; font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--ink-200);
+    }
+    .ctable td { padding: 14px 16px; font-size: 13px; vertical-align: middle; }
+    .ctable tbody tr { border-top: 1px solid var(--ink-200); transition: background .12s; }
+    .ctable tbody tr:first-child { border-top: 0; }
+    .ctable tbody tr:hover { background: var(--ink-50); }
+    .ctable tbody tr td:first-child { padding-left: 20px; }
+    .ctable tbody tr td:last-child { padding-right: 20px; }
+
+    .name-cell { display: flex; align-items: center; gap: 10px; }
+    .name-cell .who { display: flex; flex-direction: column; gap: 1px; }
+    .name-cell .name { font-weight: 600; color: var(--ink-900); }
+    .name-cell .role { font-size: 11px; color: var(--ink-600); }
+
+    .pct-cell { display: flex; align-items: center; gap: 8px; min-width: 110px; }
+    .pct-cell .bar { flex: 1; height: 4px; background: var(--ink-200); border-radius: var(--r-full); overflow: hidden; }
+    .pct-cell .bar > div { height: 100%; background: var(--success); }
+    .pct-cell .bar > div.warn { background: var(--warning); }
+    .pct-cell .v { font-size: 12px; font-weight: 600; color: var(--ink-900); }
+
+    .pagination { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: var(--ink-50); border-top: 1px solid var(--ink-200); }
+    .pagination .pages { display: flex; gap: 4px; }
+    .pagination .pages a { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--r-sm); font-size: 13px; color: var(--ink-700); text-decoration: none; }
+    .pagination .pages a.active { background: var(--ink-900); color: var(--white); font-weight: 600; }
+    .pagination .pages a:hover:not(.active) { background: var(--ink-100); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="admin" data-active="candidates">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Admin · Candidatos" data-i18n-en="Admin · Candidates">Admin · Candidatos</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Gestión de candidatos" data-i18n-en="Candidate management">Gestión de candidatos</h1>
+          <div class="t-body-sm muted" data-i18n-es="1,284 candidatos registrados · 1,127 con perfil completo" data-i18n-en="1,284 registered candidates · 1,127 with complete profile">1,284 candidatos registrados · 1,127 con perfil completo</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="btn btn-outline btn-sm"><i class="i" data-icon="download"></i> <span data-i18n-es="Exportar CSV" data-i18n-en="Export CSV">Exportar CSV</span></button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-strip">
+        <div class="mini-stat">
+          <div class="l" data-i18n-es="Candidatos totales" data-i18n-en="Total candidates">Candidatos totales</div>
+          <div class="n">1,284</div>
+          <div class="delta">+24 <span data-i18n-es="esta semana" data-i18n-en="this week">esta semana</span></div>
+        </div>
+        <div class="mini-stat">
+          <div class="l" data-i18n-es="Perfil 100%" data-i18n-en="100% profile">Perfil 100%</div>
+          <div class="n">1,127 <span style="font-size: 12px; color: var(--ink-500); font-weight: 500;">/ 87.8%</span></div>
+          <div class="delta">+18</div>
+        </div>
+        <div class="mini-stat">
+          <div class="l" data-i18n-es="Aplicaron este mes" data-i18n-en="Applied this month">Aplicaron este mes</div>
+          <div class="n">486</div>
+          <div class="delta">+12% MoM</div>
+        </div>
+        <div class="mini-stat">
+          <div class="l" data-i18n-es="Hired este año" data-i18n-en="Hired this year">Hired este año</div>
+          <div class="n">98</div>
+          <div class="delta">7.6% <span data-i18n-es="tasa" data-i18n-en="rate">tasa</span></div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <i class="i search-i" data-icon="search"></i>
+          <input class="input" data-i18n-es-placeholder="Buscar por nombre, email, ciudad, título…" data-i18n-en-placeholder="Search by name, email, city, title…" placeholder="Buscar por nombre, email, ciudad, título…" />
+        </div>
+        <div class="divider"></div>
+        <select class="select">
+          <option data-i18n-es="Toda la industria" data-i18n-en="All industries">Toda la industria</option>
+          <option>Hospitality</option><option>Tech</option><option>Healthcare</option><option>Construction</option>
+        </select>
+        <select class="select">
+          <option data-i18n-es="Toda experiencia" data-i18n-en="All experience">Toda experiencia</option>
+          <option>0–2</option><option>3–5</option><option>6–10</option><option>10+</option>
+        </select>
+        <select class="select">
+          <option data-i18n-es="Cualquier perfil" data-i18n-en="Any profile">Cualquier perfil</option>
+          <option data-i18n-es="100% completo" data-i18n-en="100% complete">100% completo</option>
+          <option data-i18n-es="Incompleto" data-i18n-en="Incomplete">Incompleto</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table class="ctable">
+          <thead>
+            <tr>
+              <th data-i18n-es="Candidato" data-i18n-en="Candidate">Candidato</th>
+              <th data-i18n-es="Ubicación" data-i18n-en="Location">Ubicación</th>
+              <th>Industry</th>
+              <th data-i18n-es="Experiencia" data-i18n-en="Experience">Experiencia</th>
+              <th data-i18n-es="Perfil" data-i18n-en="Profile">Perfil</th>
+              <th data-i18n-es="Aplicaciones" data-i18n-en="Applications">Aplicaciones</th>
+              <th data-i18n-es="Status" data-i18n-en="Status">Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td><div class="name-cell">
+                <div class="avatar">MG</div>
+                <div class="who"><span class="name">María González</span><span class="role">Senior UX Designer · m.gonzalez@gmail.com</span></div>
+              </div></td>
+              <td>Miami, FL</td>
+              <td>Hospitality</td>
+              <td>7 <span class="muted">yrs</span></td>
+              <td><div class="pct-cell"><div class="bar"><div style="width: 100%;"></div></div><span class="v">100%</span></div></td>
+              <td><strong>4</strong></td>
+              <td><span class="badge"><span class="dot" style="background: var(--success);"></span><span data-i18n-es="Hired" data-i18n-en="Hired">Hired</span></span></td>
+              <td><a href="../candidate/c02-profile.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell">
+                <div class="avatar">JR</div>
+                <div class="who"><span class="name">Jonathan Reyes</span><span class="role">Operations Manager · j.reyes@gmail.com</span></div>
+              </div></td>
+              <td>Hialeah, FL</td>
+              <td>Hospitality</td>
+              <td>9 <span class="muted">yrs</span></td>
+              <td><div class="pct-cell"><div class="bar"><div style="width: 100%;"></div></div><span class="v">100%</span></div></td>
+              <td><strong>3</strong></td>
+              <td><span class="badge"><span class="dot" style="background: var(--violet);"></span>Interviewing</span></td>
+              <td><a href="../candidate/c02-profile.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell">
+                <div class="avatar">AL</div>
+                <div class="who"><span class="name">Andrea López</span><span class="role">Front Desk Supervisor · a.lopez@gmail.com</span></div>
+              </div></td>
+              <td>Miami, FL</td>
+              <td>Hospitality</td>
+              <td>5 <span class="muted">yrs</span></td>
+              <td><div class="pct-cell"><div class="bar"><div style="width: 100%;"></div></div><span class="v">100%</span></div></td>
+              <td><strong>2</strong></td>
+              <td><span class="badge"><span class="dot" style="background: var(--violet);"></span>Interviewing</span></td>
+              <td><a href="../candidate/c02-profile.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell">
+                <div class="avatar">DP</div>
+                <div class="who"><span class="name">Diego Pérez</span><span class="role">Hotel Operations Lead · d.perez@gmail.com</span></div>
+              </div></td>
+              <td>Miami Beach, FL</td>
+              <td>Hospitality</td>
+              <td>8 <span class="muted">yrs</span></td>
+              <td><div class="pct-cell"><div class="bar"><div style="width: 100%;"></div></div><span class="v">100%</span></div></td>
+              <td><strong>1</strong></td>
+              <td><span class="badge"><span class="dot" style="background: var(--info);"></span>Under Review</span></td>
+              <td><a href="../candidate/c02-profile.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell">
+                <div class="avatar">CT</div>
+                <div class="who"><span class="name">Carolina Torres</span><span class="role">Marketing Manager · c.torres@gmail.com</span></div>
+              </div></td>
+              <td>Coral Gables, FL</td>
+              <td>Marketing</td>
+              <td>6 <span class="muted">yrs</span></td>
+              <td><div class="pct-cell"><div class="bar"><div class="warn" style="width: 85%;"></div></div><span class="v" style="color: var(--warning);">85%</span></div></td>
+              <td><strong>0</strong></td>
+              <td><span class="badge"><span class="dot" style="background: var(--ink-400);"></span><span data-i18n-es="Bloqueado" data-i18n-en="Blocked">Bloqueado</span></span></td>
+              <td><a href="../candidate/c02-profile.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell">
+                <div class="avatar">SK</div>
+                <div class="who"><span class="name">Samantha Kim</span><span class="role">Concierge Lead · s.kim@gmail.com</span></div>
+              </div></td>
+              <td>Miami, FL</td>
+              <td>Hospitality</td>
+              <td>4 <span class="muted">yrs</span></td>
+              <td><div class="pct-cell"><div class="bar"><div style="width: 100%;"></div></div><span class="v">100%</span></div></td>
+              <td><strong>2</strong></td>
+              <td><span class="badge"><span class="dot" style="background: var(--brand-orange);"></span>Offer</span></td>
+              <td><a href="../candidate/c02-profile.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell">
+                <div class="avatar">DV</div>
+                <div class="who"><span class="name">Daniel Vargas</span><span class="role">Maintenance Tech · d.vargas@gmail.com</span></div>
+              </div></td>
+              <td>Brickell, FL</td>
+              <td>Construction</td>
+              <td>12 <span class="muted">yrs</span></td>
+              <td><div class="pct-cell"><div class="bar"><div style="width: 100%;"></div></div><span class="v">100%</span></div></td>
+              <td><strong>1</strong></td>
+              <td><span class="badge"><span class="dot" style="background: var(--success);"></span>Hired</span></td>
+              <td><a href="../candidate/c02-profile.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell">
+                <div class="avatar">RH</div>
+                <div class="who"><span class="name">Rodrigo Hernández</span><span class="role">Brand Designer · r.hernandez@gmail.com</span></div>
+              </div></td>
+              <td>Wynwood, FL</td>
+              <td>Marketing</td>
+              <td>3 <span class="muted">yrs</span></td>
+              <td><div class="pct-cell"><div class="bar"><div class="warn" style="width: 62%;"></div></div><span class="v" style="color: var(--warning);">62%</span></div></td>
+              <td><strong>0</strong></td>
+              <td><span class="badge"><span class="dot" style="background: var(--ink-400);"></span><span data-i18n-es="Bloqueado" data-i18n-en="Blocked">Bloqueado</span></span></td>
+              <td><a href="../candidate/c02-profile.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <div class="pagination">
+          <div class="t-body-sm muted"><span data-i18n-es="Mostrando 1–8 de 1,284 candidatos" data-i18n-en="Showing 1–8 of 1,284 candidates">Mostrando 1–8 de 1,284 candidatos</span></div>
+          <div class="pages">
+            <a href="#"><i class="i" data-icon="chevron-left"></i></a>
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">…</a>
+            <a href="#">161</a>
+            <a href="#"><i class="i" data-icon="chevron-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

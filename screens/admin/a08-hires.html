@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-08 · Hires & Fee 1% — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .summary-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    @media (max-width: 900px) { .summary-strip { grid-template-columns: repeat(2, 1fr); } }
+    .summary-card {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 18px 20px;
+    }
+    .summary-card .l { font-size: 11px; color: var(--ink-600); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .summary-card .n { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink-900); margin-top: 4px; line-height: 1.1; }
+    .summary-card .delta { font-size: 12px; margin-top: 4px; color: var(--ink-500); font-weight: 500; }
+    .summary-card.highlight { background: var(--surface-dark); border-color: var(--surface-dark); }
+    .summary-card.highlight .l { color: rgba(255,255,255,0.6); }
+    .summary-card.highlight .n { color: var(--white); }
+    .summary-card.highlight .delta { color: rgba(255,255,255,0.6); }
+
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--ink-200); margin-bottom: 16px; }
+    .tabs a {
+      padding: 10px 14px; font-size: 14px; font-weight: 600;
+      color: var(--ink-600); border-bottom: 2px solid transparent;
+      margin-bottom: -1px; text-decoration: none;
+    }
+    .tabs a:hover { color: var(--ink-900); text-decoration: none; }
+    .tabs a.active { color: var(--ink-900); border-bottom-color: var(--ink-900); }
+    .tabs a .count { display: inline-block; min-width: 18px; padding: 1px 6px; background: var(--ink-100); color: var(--ink-700); border-radius: var(--r-full); font-size: 11px; margin-left: 6px; }
+
+    .hire-card {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 20px;
+      margin-bottom: 12px; display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 20px; align-items: center;
+    }
+    .hire-card .duo {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hire-card .name { font-weight: 600; font-size: 15px; color: var(--ink-900); }
+    .hire-card .position { font-size: 13px; color: var(--ink-700); margin-top: 2px; }
+    .hire-card .meta-row {
+      display: flex; gap: 18px; margin-top: 8px;
+      font-size: 12px; color: var(--ink-600); flex-wrap: wrap;
+    }
+    .hire-card .meta-row span { display: inline-flex; align-items: center; gap: 4px; }
+
+    .fee-block {
+      text-align: right;
+    }
+    .fee-block .amount { font-size: 20px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.015em; line-height: 1; }
+    .fee-block .label { font-size: 11px; color: var(--ink-500); margin-top: 4px; }
+
+    .actions-block { display: flex; flex-direction: column; gap: 6px; min-width: 140px; }
+
+    .fee-step {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 10px; border-radius: var(--r-full);
+      font-size: 11px; font-weight: 600; letter-spacing: -0.005em;
+    }
+    .fee-step.pending  { background: var(--warning-bg); color: var(--warning); }
+    .fee-step.contacted { background: var(--info-bg); color: var(--info); }
+    .fee-step.invoiced { background: var(--violet-bg); color: var(--violet); }
+    .fee-step.paid     { background: var(--success-bg); color: var(--success); }
+
+    .fee-pipeline {
+      display: flex; gap: 4px; margin-top: 12px;
+    }
+    .fee-pipeline .step {
+      flex: 1; padding: 6px 10px; border-radius: var(--r-sm);
+      background: var(--ink-100); color: var(--ink-500);
+      font-size: 11px; font-weight: 600; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+    }
+    .fee-pipeline .step.done { background: var(--ink-900); color: var(--white); }
+    .fee-pipeline .step.now  { background: var(--brand-orange-50); color: var(--brand-orange-700); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="admin" data-active="hires">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Admin · Hires & Fee" data-i18n-en="Admin · Hires & Fee">Admin · Hires & Fee</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Contrataciones y fee 1%" data-i18n-en="Hires & 1% fee">Contrataciones y fee 1%</h1>
+          <div class="t-body-sm muted" data-i18n-es="Seguimiento manual del cobro · sin Stripe · cobro al confirmar contratación" data-i18n-en="Manual billing tracking · no Stripe · billed on confirmed hire">Seguimiento manual del cobro · sin Stripe · cobro al confirmar contratación</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="btn btn-outline btn-sm"><i class="i" data-icon="download"></i> <span data-i18n-es="Exportar facturación" data-i18n-en="Export billing">Exportar facturación</span></button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary strip -->
+      <div class="summary-strip">
+        <div class="summary-card highlight">
+          <div class="l" data-i18n-es="Fee pendiente · este mes" data-i18n-en="Pending fee · this month">Fee pendiente · este mes</div>
+          <div class="n">$4,250</div>
+          <div class="delta">5 hires · <span data-i18n-es="1 sin contactar" data-i18n-en="1 not contacted">1 sin contactar</span></div>
+        </div>
+        <div class="summary-card">
+          <div class="l" data-i18n-es="Cobrado · este mes" data-i18n-en="Collected · this month">Cobrado · este mes</div>
+          <div class="n">$2,800</div>
+          <div class="delta" style="color: var(--success);">+$1,200 vs <span data-i18n-es="mes anterior" data-i18n-en="last month">mes anterior</span></div>
+        </div>
+        <div class="summary-card">
+          <div class="l" data-i18n-es="Hires totales · 2026" data-i18n-en="Total hires · 2026">Hires totales · 2026</div>
+          <div class="n">98</div>
+          <div class="delta">+15 <span data-i18n-es="vs Q1" data-i18n-en="vs Q1">vs Q1</span></div>
+        </div>
+        <div class="summary-card">
+          <div class="l" data-i18n-es="Revenue acumulado" data-i18n-en="Revenue YTD">Revenue acumulado</div>
+          <div class="n">$78,420</div>
+          <div class="delta">62% <span data-i18n-es="del target anual" data-i18n-en="of annual target">del target anual</span></div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <a href="#" class="active" data-i18n-es="Pendientes" data-i18n-en="Pending">Pendientes<span class="count">5</span></a>
+        <a href="#" data-i18n-es="Contactados" data-i18n-en="Contacted">Contactados<span class="count">3</span></a>
+        <a href="#" data-i18n-es="Facturados" data-i18n-en="Invoiced">Facturados<span class="count">2</span></a>
+        <a href="#" data-i18n-es="Pagados" data-i18n-en="Paid">Pagados<span class="count">88</span></a>
+        <a href="#" data-i18n-es="Disputas" data-i18n-en="Disputes">Disputas<span class="count">0</span></a>
+      </div>
+
+      <!-- Hire cards -->
+
+      <article class="hire-card">
+        <div class="duo">
+          <div class="avatar avatar-lg">MG</div>
+          <div>
+            <div class="name">María González <span class="muted" style="font-size: 12px; font-weight: 400;">→</span> <span style="font-weight: 600;">Sunset Hotels Group</span></div>
+            <div class="position">Hospitality Marketing Lead</div>
+            <div class="meta-row">
+              <span><i class="i" data-icon="calendar"></i> <span data-i18n-es="Hired el 19 May" data-i18n-en="Hired May 19">Hired el 19 May</span></span>
+              <span><i class="i" data-icon="dollar-sign"></i> <span data-i18n-es="Salario: $95,000/año" data-i18n-en="Salary: $95,000/yr">Salario: $95,000/año</span></span>
+              <span><i class="i" data-icon="user"></i> <span data-i18n-es="Contacto: carlos@sunset.com" data-i18n-en="Contact: carlos@sunset.com">Contacto: carlos@sunset.com</span></span>
+            </div>
+            <div class="fee-pipeline">
+              <div class="step done">1. <span data-i18n-es="Hired" data-i18n-en="Hired">Hired</span></div>
+              <div class="step now"><span class="fee-step pending" style="padding: 0;"></span> 2. <span data-i18n-es="Contactar" data-i18n-en="Contact">Contactar</span></div>
+              <div class="step">3. <span data-i18n-es="Facturar" data-i18n-en="Invoice">Facturar</span></div>
+              <div class="step">4. <span data-i18n-es="Cobrar" data-i18n-en="Collect">Cobrar</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="fee-block">
+          <div class="amount">$950</div>
+          <div class="label" data-i18n-es="1% · pendiente" data-i18n-en="1% · pending">1% · pendiente</div>
+        </div>
+        <div class="actions-block">
+          <button class="btn btn-primary btn-sm" data-i18n-es="Marcar contactado" data-i18n-en="Mark contacted">Marcar contactado</button>
+          <button class="btn btn-ghost btn-sm" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</button>
+        </div>
+      </article>
+
+      <article class="hire-card">
+        <div class="duo">
+          <div class="avatar avatar-lg">DV</div>
+          <div>
+            <div class="name">Daniel Vargas <span class="muted" style="font-size: 12px; font-weight: 400;">→</span> <span style="font-weight: 600;">Sunset Hotels Group</span></div>
+            <div class="position">Building Engineer</div>
+            <div class="meta-row">
+              <span><i class="i" data-icon="calendar"></i> <span data-i18n-es="Hired el 02 May" data-i18n-en="Hired May 2">Hired el 02 May</span></span>
+              <span><i class="i" data-icon="dollar-sign"></i> <span data-i18n-es="Salario: $68,000/año" data-i18n-en="Salary: $68,000/yr">Salario: $68,000/año</span></span>
+              <span><i class="i" data-icon="user"></i> carlos@sunset.com</span>
+            </div>
+            <div class="fee-pipeline">
+              <div class="step done">1. Hired</div>
+              <div class="step done">2. Contactar</div>
+              <div class="step now">3. Facturar</div>
+              <div class="step">4. Cobrar</div>
+            </div>
+          </div>
+        </div>
+        <div class="fee-block">
+          <div class="amount">$680</div>
+          <div class="label" data-i18n-es="1% · contactado 03 May" data-i18n-en="1% · contacted May 3">1% · contactado 03 May</div>
+        </div>
+        <div class="actions-block">
+          <button class="btn btn-primary btn-sm" data-i18n-es="Enviar factura" data-i18n-en="Send invoice">Enviar factura</button>
+          <button class="btn btn-ghost btn-sm" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</button>
+        </div>
+      </article>
+
+      <article class="hire-card">
+        <div class="duo">
+          <div class="avatar avatar-lg">LR</div>
+          <div>
+            <div class="name">Luis Ramírez <span class="muted" style="font-size: 12px; font-weight: 400;">→</span> <span style="font-weight: 600;">Brickell Build Co.</span></div>
+            <div class="position">Senior Engineer</div>
+            <div class="meta-row">
+              <span><i class="i" data-icon="calendar"></i> <span data-i18n-es="Hired el 28 Apr" data-i18n-en="Hired Apr 28">Hired el 28 Apr</span></span>
+              <span><i class="i" data-icon="dollar-sign"></i> <span data-i18n-es="Salario: $115,000/año" data-i18n-en="Salary: $115,000/yr">Salario: $115,000/año</span></span>
+              <span><i class="i" data-icon="user"></i> ana@brickell.co</span>
+            </div>
+            <div class="fee-pipeline">
+              <div class="step done">1. Hired</div>
+              <div class="step done">2. Contactar</div>
+              <div class="step done">3. Facturar</div>
+              <div class="step now">4. Cobrar</div>
+            </div>
+          </div>
+        </div>
+        <div class="fee-block">
+          <div class="amount">$1,150</div>
+          <div class="label" data-i18n-es="1% · factura enviada 05 May" data-i18n-en="1% · invoice sent May 5">1% · factura enviada 05 May</div>
+        </div>
+        <div class="actions-block">
+          <button class="btn btn-secondary btn-sm" data-i18n-es="Marcar pagado" data-i18n-en="Mark paid">Marcar pagado</button>
+          <button class="btn btn-ghost btn-sm" data-i18n-es="Recordatorio" data-i18n-en="Reminder">Recordatorio</button>
+        </div>
+      </article>
+
+      <article class="hire-card">
+        <div class="duo">
+          <div class="avatar avatar-lg">VF</div>
+          <div>
+            <div class="name">Verónica Flores <span class="muted" style="font-size: 12px; font-weight: 400;">→</span> <span style="font-weight: 600;">Wynwood Health</span></div>
+            <div class="position">Clinic Operations Manager</div>
+            <div class="meta-row">
+              <span><i class="i" data-icon="calendar"></i> <span data-i18n-es="Hired el 22 Apr" data-i18n-en="Hired Apr 22">Hired el 22 Apr</span></span>
+              <span><i class="i" data-icon="dollar-sign"></i> <span data-i18n-es="Salario: $82,000/año" data-i18n-en="Salary: $82,000/yr">Salario: $82,000/año</span></span>
+              <span><i class="i" data-icon="user"></i> dr.lopez@wynh.com</span>
+            </div>
+            <div class="fee-pipeline">
+              <div class="step done">1. Hired</div>
+              <div class="step now">2. Contactar</div>
+              <div class="step">3. Facturar</div>
+              <div class="step">4. Cobrar</div>
+            </div>
+          </div>
+        </div>
+        <div class="fee-block">
+          <div class="amount">$820</div>
+          <div class="label" data-i18n-es="1% · sin contactar" data-i18n-en="1% · not contacted">1% · sin contactar</div>
+        </div>
+        <div class="actions-block">
+          <button class="btn btn-primary btn-sm" data-i18n-es="Marcar contactado" data-i18n-en="Mark contacted">Marcar contactado</button>
+          <button class="btn btn-ghost btn-sm" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</button>
+        </div>
+      </article>
+
+      <article class="hire-card">
+        <div class="duo">
+          <div class="avatar avatar-lg">EM</div>
+          <div>
+            <div class="name">Eduardo Mora <span class="muted" style="font-size: 12px; font-weight: 400;">→</span> <span style="font-weight: 600;">Mango Republic</span></div>
+            <div class="position">Brand Designer</div>
+            <div class="meta-row">
+              <span><i class="i" data-icon="calendar"></i> <span data-i18n-es="Hired el 15 Apr" data-i18n-en="Hired Apr 15">Hired el 15 Apr</span></span>
+              <span><i class="i" data-icon="dollar-sign"></i> <span data-i18n-es="Salario: $65,000/año" data-i18n-en="Salary: $65,000/yr">Salario: $65,000/año</span></span>
+              <span><i class="i" data-icon="user"></i> ana@mango.co</span>
+            </div>
+            <div class="fee-pipeline">
+              <div class="step done">1. Hired</div>
+              <div class="step now">2. Contactar</div>
+              <div class="step">3. Facturar</div>
+              <div class="step">4. Cobrar</div>
+            </div>
+          </div>
+        </div>
+        <div class="fee-block">
+          <div class="amount">$650</div>
+          <div class="label" style="color: var(--danger);" data-i18n-es="1% · 34d sin contactar" data-i18n-en="1% · 34d not contacted">1% · 34d sin contactar</div>
+        </div>
+        <div class="actions-block">
+          <button class="btn btn-primary btn-sm" data-i18n-es="Marcar contactado" data-i18n-en="Mark contacted">Marcar contactado</button>
+          <button class="btn btn-ghost btn-sm" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</button>
+        </div>
+      </article>
+
+      <!-- Helper tip -->
+      <div class="alert alert-info mt-6">
+        <div><i class="i" data-icon="info"></i></div>
+        <div class="alert-body-wrap">
+          <div class="alert-title" data-i18n-es="Flujo del fee 1% (Fase 1 — sin Stripe)" data-i18n-en="1% fee flow (Phase 1 — no Stripe)">Flujo del fee 1% (Fase 1 — sin Stripe)</div>
+          <div class="alert-body" data-i18n-es="1) Empleador marca Hired → 2) Admin recibe alerta y contacta al empleador → 3) Admin envía factura por email → 4) Empleador transfiere y admin marca como Pagado. Todo el flujo es manual hasta integración con Stripe en Fase 2." data-i18n-en="1) Employer marks Hired → 2) Admin receives alert and contacts employer → 3) Admin sends invoice via email → 4) Employer transfers and admin marks as Paid. All flow is manual until Stripe integration in Phase 2.">1) Empleador marca Hired → 2) Admin recibe alerta y contacta al empleador → 3) Admin envía factura por email → 4) Empleador transfiere y admin marca como Pagado. Todo el flujo es manual hasta integración con Stripe en Fase 2.</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

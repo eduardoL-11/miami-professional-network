@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-04 · Edit Job — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .form-layout { display: grid; grid-template-columns: 1fr 320px; gap: 28px; align-items: start; }
+    @media (max-width: 1000px) { .form-layout { grid-template-columns: 1fr; } }
+
+    .form-section { margin-bottom: 28px; }
+    .form-section h3 { margin: 0 0 4px; }
+    .form-section .sec-desc { margin: 0 0 16px; font-size: 13px; color: var(--ink-600); }
+
+    .field-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .switch { position: relative; width: 40px; height: 22px; display: inline-block; }
+    .switch input { display: none; }
+    .switch .slider { position: absolute; inset: 0; background: var(--ink-300); border-radius: 999px; cursor: pointer; transition: background .15s; }
+    .switch .slider::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+    .switch input:checked + .slider { background: var(--brand-green); }
+    .switch input:checked + .slider::after { transform: translateX(18px); }
+
+    .sticky-side { position: sticky; top: 24px; }
+
+    .sticky-actions {
+      position: sticky; bottom: 0; background: rgba(250,251,250,0.96); backdrop-filter: blur(8px);
+      border-top: 1px solid var(--ink-200);
+      padding: 16px 0; margin-top: 24px;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    }
+
+    .salary-range { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: center; }
+
+    .req-input { display: flex; gap: 8px; }
+    .req-input .input { flex: 1; }
+
+    .chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: var(--brand-green-50); color: var(--brand-green-700); border-radius: var(--r-full); font-size: 13px; font-weight: 500; }
+    .chip button { background: transparent; border: 0; cursor: pointer; color: inherit; font-size: 14px; line-height: 1; padding: 0 0 0 4px; }
+
+    .job-meta {
+      display: flex; gap: 24px; padding: 14px 0;
+      border-top: 1px solid var(--ink-200); border-bottom: 1px solid var(--ink-200);
+      margin-bottom: 24px;
+    }
+    .meta-item .lbl { font-size: 11px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .meta-item .val { font-size: 14px; color: var(--ink-900); font-weight: 600; margin-top: 2px; }
+
+    .danger-zone { border: 1px solid var(--danger-bg); background: var(--danger-bg); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="employer" data-active="jobs">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div style="flex:1;">
+          <div class="row items-center gap-3">
+            <a href="e05-manage-jobs.html" class="t-body-sm muted">← <span data-i18n-es="Volver a Mis empleos" data-i18n-en="Back to My jobs">Volver a Mis empleos</span></a>
+          </div>
+          <div class="row items-center gap-3" style="margin-top: 6px;">
+            <h1 class="t-h2" style="margin: 0;">Hospitality Marketing Lead</h1>
+            <span class="badge badge-success"><span class="dot"></span>Active</span>
+          </div>
+          <div class="t-body-sm muted mt-2" data-i18n-es="Última edición hace 2 días por Carlos Rivera" data-i18n-en="Last edited 2 days ago by Carlos Rivera">Última edición hace 2 días por Carlos Rivera</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="btn btn-outline btn-sm" data-i18n-es="Pausar" data-i18n-en="Pause"><i class='i' data-icon='pause'></i> Pausar</button>
+          <button class="btn btn-outline btn-sm" data-i18n-es="Cerrar empleo" data-i18n-en="Close job">Cerrar empleo</button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick metrics -->
+      <div class="job-meta">
+        <div class="meta-item">
+          <div class="lbl" data-i18n-es="Aplicantes" data-i18n-en="Applicants">Aplicantes</div>
+          <div class="val">24</div>
+        </div>
+        <div class="meta-item">
+          <div class="lbl" data-i18n-es="Por revisar" data-i18n-en="To review">Por revisar</div>
+          <div class="val" style="color: var(--brand-orange);">6</div>
+        </div>
+        <div class="meta-item">
+          <div class="lbl" data-i18n-es="Entrevistas" data-i18n-en="Interviews">Entrevistas</div>
+          <div class="val">3</div>
+        </div>
+        <div class="meta-item">
+          <div class="lbl" data-i18n-es="Publicado" data-i18n-en="Posted">Publicado</div>
+          <div class="val">16 May 2026</div>
+        </div>
+        <div class="meta-item">
+          <div class="lbl" data-i18n-es="Fecha límite" data-i18n-en="Deadline">Fecha límite</div>
+          <div class="val">30 Jun 2026</div>
+        </div>
+        <div class="meta-item" style="margin-left: auto;">
+          <a href="e06-applicants.html" class="btn btn-secondary btn-sm" data-i18n-es="Ver aplicantes →" data-i18n-en="View applicants →">Ver aplicantes →</a>
+        </div>
+      </div>
+
+      <div class="form-layout">
+
+        <!-- LEFT: Form -->
+        <div>
+
+          <!-- Section: Basics -->
+          <div class="card form-section">
+            <h3 class="t-h4" data-i18n-es="Información básica" data-i18n-en="Basic information">Información básica</h3>
+            <p class="sec-desc" data-i18n-es="Cómo aparece el empleo en la lista pública." data-i18n-en="How the job appears in the public listing.">Cómo aparece el empleo en la lista pública.</p>
+
+            <div class="stack-4">
+              <div>
+                <label class="label" data-i18n-es="Título del puesto" data-i18n-en="Job title">Título del puesto <span class="req">*</span></label>
+                <input class="input" value="Hospitality Marketing Lead" />
+              </div>
+
+              <div class="field-grid-2">
+                <div>
+                  <label class="label" data-i18n-es="Empresa" data-i18n-en="Company">Empresa</label>
+                  <input class="input" value="Sunset Hotels Group" readonly style="background: var(--ink-100); color: var(--ink-600);" />
+                </div>
+                <div>
+                  <label class="label" data-i18n-es="Ubicación" data-i18n-en="Location">Ubicación <span class="req">*</span></label>
+                  <input class="input" value="Miami, FL" />
+                </div>
+              </div>
+
+              <div class="field-grid-2">
+                <div>
+                  <label class="label">Industry <span class="req">*</span></label>
+                  <select class="select">
+                    <option selected>Hospitality</option><option>Tech</option><option>Healthcare</option><option>Construction</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label" data-i18n-es="Tipo de empleo" data-i18n-en="Employment type">Tipo de empleo <span class="req">*</span></label>
+                  <select class="select">
+                    <option selected>Full-time</option><option>Part-time</option><option>Contract</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Compensation -->
+          <div class="card form-section">
+            <h3 class="t-h4" data-i18n-es="Compensación" data-i18n-en="Compensation">Compensación</h3>
+            <p class="sec-desc" data-i18n-es="Opcional." data-i18n-en="Optional.">Opcional.</p>
+
+            <div class="stack-4">
+              <div>
+                <label class="label" data-i18n-es="Rango salarial anual (USD)" data-i18n-en="Annual salary range (USD)">Rango salarial anual (USD)</label>
+                <div class="salary-range">
+                  <input class="input" type="number" value="80000" />
+                  <input class="input" type="number" value="110000" />
+                  <select class="select" style="width: 100px;"><option selected>USD</option></select>
+                </div>
+              </div>
+
+              <div class="flex justify-between items-center" style="padding: 14px; background: var(--ink-100); border-radius: var(--r-md);">
+                <div>
+                  <div style="font-weight: 600; font-size: 14px;" data-i18n-es="Mostrar salario a candidatos" data-i18n-en="Show salary to candidates">Mostrar salario a candidatos</div>
+                  <div class="t-body-sm muted" data-i18n-es="Actualmente visible en la lista pública." data-i18n-en="Currently visible in the public listing.">Actualmente visible en la lista pública.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Description -->
+          <div class="card form-section">
+            <h3 class="t-h4" data-i18n-es="Descripción del puesto" data-i18n-en="Job description">Descripción del puesto</h3>
+            <textarea class="textarea" style="min-height: 180px;">El Hospitality Marketing Lead diseñará y ejecutará estrategias de marca para nuestra cartera de hoteles boutique en Miami. Trabajará cross-funcional con operaciones, F&B y digital para crear experiencias memorables para huéspedes y elevar la presencia de la marca en mercados clave.</textarea>
+          </div>
+
+          <!-- Section: Requirements -->
+          <div class="card form-section">
+            <h3 class="t-h4" data-i18n-es="Requisitos y deseables" data-i18n-en="Requirements & nice-to-haves">Requisitos y deseables</h3>
+
+            <div class="stack-4">
+              <div>
+                <label class="label" data-i18n-es="Requisitos" data-i18n-en="Requirements">Requisitos <span class="req">*</span></label>
+                <div class="req-input">
+                  <input class="input" placeholder="Agregar requisito…" />
+                  <button class="btn btn-outline btn-sm" data-i18n-es="Agregar" data-i18n-en="Add">Agregar</button>
+                </div>
+                <div class="chip-list">
+                  <span class="chip">5+ <span data-i18n-es="años en marketing hospitality" data-i18n-en="years in hospitality marketing">años en marketing hospitality</span><button>×</button></span>
+                  <span class="chip" data-i18n-es="Inglés y español nativo" data-i18n-en="Native English and Spanish">Inglés y español nativo<button>×</button></span>
+                  <span class="chip" data-i18n-es="Liderazgo de equipos" data-i18n-en="Team leadership">Liderazgo de equipos<button>×</button></span>
+                  <span class="chip" data-i18n-es="Manejo de presupuesto $500k+" data-i18n-en="Budget management $500k+">Manejo de presupuesto $500k+<button>×</button></span>
+                </div>
+              </div>
+
+              <div>
+                <label class="label" data-i18n-es="Deseables (nice-to-haves)" data-i18n-en="Nice-to-haves">Deseables (nice-to-haves)</label>
+                <div class="req-input">
+                  <input class="input" placeholder="Agregar deseable…" />
+                  <button class="btn btn-outline btn-sm" data-i18n-es="Agregar" data-i18n-en="Add">Agregar</button>
+                </div>
+                <div class="chip-list">
+                  <span class="chip" data-i18n-es="Experiencia en marca de lujo" data-i18n-en="Luxury brand experience">Experiencia en marca de lujo<button>×</button></span>
+                  <span class="chip" data-i18n-es="Portugués" data-i18n-en="Portuguese">Portugués<button>×</button></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Settings -->
+          <div class="card form-section">
+            <h3 class="t-h4" data-i18n-es="Configuración" data-i18n-en="Settings">Configuración</h3>
+
+            <div class="field-grid-2">
+              <div>
+                <label class="label" data-i18n-es="Fecha límite de aplicación" data-i18n-en="Application deadline">Fecha límite de aplicación</label>
+                <input class="input" type="date" value="2026-06-30" />
+              </div>
+              <div>
+                <label class="label" data-i18n-es="Estado del empleo" data-i18n-en="Job status">Estado del empleo</label>
+                <select class="select">
+                  <option selected data-i18n-es="Activo (visible)" data-i18n-en="Active (visible)">Activo (visible)</option>
+                  <option data-i18n-es="Pausado (oculto)" data-i18n-en="Paused (hidden)">Pausado (oculto)</option>
+                  <option data-i18n-es="Cerrado" data-i18n-en="Closed">Cerrado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger zone -->
+          <div class="card danger-zone form-section">
+            <h3 class="t-h4" style="color: var(--danger);" data-i18n-es="Zona crítica" data-i18n-en="Danger zone">Zona crítica</h3>
+            <p class="sec-desc" data-i18n-es="Estas acciones afectan el empleo y a los aplicantes." data-i18n-en="These actions affect the job and its applicants.">Estas acciones afectan el empleo y a los aplicantes.</p>
+
+            <div class="stack-4">
+              <div class="flex justify-between items-center">
+                <div>
+                  <div style="font-weight: 600; font-size: 14px;" data-i18n-es="Cerrar empleo" data-i18n-en="Close job">Cerrar empleo</div>
+                  <div class="t-body-sm muted" data-i18n-es="Deja de aceptar nuevas aplicaciones. Los aplicantes activos no se ven afectados." data-i18n-en="Stop accepting new applications. Active applicants are unaffected.">Deja de aceptar nuevas aplicaciones. Los aplicantes activos no se ven afectados.</div>
+                </div>
+                <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: var(--danger);" data-i18n-es="Cerrar" data-i18n-en="Close">Cerrar</button>
+              </div>
+              <div class="flex justify-between items-center" style="padding-top: 14px; border-top: 1px solid rgba(220,38,38,0.15);">
+                <div>
+                  <div style="font-weight: 600; font-size: 14px;" data-i18n-es="Eliminar empleo" data-i18n-en="Delete job">Eliminar empleo</div>
+                  <div class="t-body-sm muted" data-i18n-es="Esto borra el empleo y todas las aplicaciones asociadas. Acción irreversible." data-i18n-en="This deletes the job and all associated applications. Irreversible.">Esto borra el empleo y todas las aplicaciones asociadas. Acción irreversible.</div>
+                </div>
+                <button class="btn btn-danger btn-sm" data-i18n-es="Eliminar" data-i18n-en="Delete">Eliminar</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sticky bottom actions -->
+          <div class="sticky-actions">
+            <a href="e05-manage-jobs.html" class="btn btn-ghost" data-i18n-es="Descartar cambios" data-i18n-en="Discard changes">Descartar cambios</a>
+            <div class="row gap-2">
+              <button class="btn btn-outline" data-i18n-es="Ver versión publicada" data-i18n-en="View live version">Ver versión publicada</button>
+              <button class="btn btn-primary" data-i18n-es="Guardar cambios" data-i18n-en="Save changes">Guardar cambios</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Activity sidebar -->
+        <aside class="sticky-side stack-4">
+
+          <div class="card">
+            <div class="t-h4 mb-4" data-i18n-es="Actividad reciente" data-i18n-en="Recent activity">Actividad reciente</div>
+            <div class="timeline">
+              <div class="timeline-item active">
+                <div class="t-body-sm" style="font-weight: 600;" data-i18n-es="Nueva aplicación" data-i18n-en="New application">Nueva aplicación</div>
+                <div class="t-caption muted">María González · <span data-i18n-es="hace 2 horas" data-i18n-en="2h ago">hace 2 horas</span></div>
+              </div>
+              <div class="timeline-item done">
+                <div class="t-body-sm" style="font-weight: 600;" data-i18n-es="Status actualizado a Interviewing" data-i18n-en="Status updated to Interviewing">Status actualizado a Interviewing</div>
+                <div class="t-caption muted">Andrea López · <span data-i18n-es="ayer" data-i18n-en="yesterday">ayer</span></div>
+              </div>
+              <div class="timeline-item done">
+                <div class="t-body-sm" style="font-weight: 600;" data-i18n-es="Job publicado" data-i18n-en="Job published">Job publicado</div>
+                <div class="t-caption muted">16 May 2026</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="background: var(--brand-green-50); border-color: var(--brand-green-100);">
+            <div class="t-h4 mb-2" style="color: var(--brand-green-700);" data-i18n-es="Rendimiento" data-i18n-en="Performance">Rendimiento</div>
+            <div class="stack-2">
+              <div class="flex justify-between"><span class="t-body-sm">Views <span data-i18n-es="(7d)" data-i18n-en="(7d)">(7d)</span></span><strong>284</strong></div>
+              <div class="flex justify-between"><span class="t-body-sm" data-i18n-es="Aplicaciones (7d)" data-i18n-en="Applications (7d)">Aplicaciones (7d)</span><strong>11</strong></div>
+              <div class="flex justify-between"><span class="t-body-sm" data-i18n-es="Tasa de conversión" data-i18n-en="Conversion rate">Tasa de conversión</span><strong>3.9%</strong></div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

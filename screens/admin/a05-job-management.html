@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-05 · Gestión de empleos — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--ink-200); margin-bottom: 16px; }
+    .tabs a {
+      padding: 10px 14px; font-size: 14px; font-weight: 600;
+      color: var(--ink-600); border-bottom: 2px solid transparent;
+      margin-bottom: -1px; text-decoration: none;
+    }
+    .tabs a:hover { color: var(--ink-900); text-decoration: none; }
+    .tabs a.active { color: var(--ink-900); border-bottom-color: var(--ink-900); }
+    .tabs a .count { display: inline-block; min-width: 18px; padding: 1px 6px; background: var(--ink-100); color: var(--ink-700); border-radius: var(--r-full); font-size: 11px; margin-left: 6px; }
+
+    .filter-bar {
+      background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-md);
+      padding: 6px; display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .search-wrap { position: relative; flex: 1; min-width: 240px; }
+    .search-wrap .input { padding-left: 36px; border: 0; }
+    .search-wrap .search-i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-500); font-size: 14px; pointer-events: none; }
+    .filter-bar .select { width: auto; min-width: 130px; border: 0; }
+    .filter-bar > .divider { width: 1px; align-self: stretch; background: var(--ink-200); }
+
+    .table-wrap { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); overflow: hidden; }
+    .jtable { width: 100%; border-collapse: collapse; }
+    .jtable th {
+      background: var(--ink-50); color: var(--ink-600); font-weight: 600; font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--ink-200);
+    }
+    .jtable td { padding: 14px 16px; font-size: 13px; vertical-align: middle; }
+    .jtable tbody tr { border-top: 1px solid var(--ink-200); }
+    .jtable tbody tr:first-child { border-top: 0; }
+    .jtable tbody tr:hover { background: var(--ink-50); }
+    .jtable tbody tr td:first-child { padding-left: 20px; }
+    .jtable tbody tr td:last-child { padding-right: 20px; }
+
+    .job-cell { display: flex; flex-direction: column; gap: 2px; }
+    .job-cell .name { font-weight: 600; color: var(--ink-900); }
+    .job-cell .meta { font-size: 11px; color: var(--ink-600); }
+
+    .company-cell { display: flex; align-items: center; gap: 8px; }
+    .company-cell .lg {
+      width: 28px; height: 28px; border-radius: var(--r-sm);
+      background: var(--ink-100); color: var(--ink-700);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 11px;
+    }
+    .company-cell .nm { font-weight: 500; color: var(--ink-800); }
+
+    .row-actions { display: flex; gap: 2px; justify-content: flex-end; }
+
+    .pagination { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: var(--ink-50); border-top: 1px solid var(--ink-200); }
+    .pagination .pages { display: flex; gap: 4px; }
+    .pagination .pages a { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--r-sm); font-size: 13px; color: var(--ink-700); text-decoration: none; }
+    .pagination .pages a.active { background: var(--ink-900); color: var(--white); font-weight: 600; }
+    .pagination .pages a:hover:not(.active) { background: var(--ink-100); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="admin" data-active="jobs">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Admin · Empleos" data-i18n-en="Admin · Jobs">Admin · Empleos</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Gestión de empleos" data-i18n-en="Job management">Gestión de empleos</h1>
+          <div class="t-body-sm muted" data-i18n-es="Vista global de todos los empleos publicados en la plataforma" data-i18n-en="Platform-wide view of all posted jobs">Vista global de todos los empleos publicados en la plataforma</div>
+        </div>
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+        <div class="lang-toggle">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <a href="#" class="active" data-i18n-es="Todos" data-i18n-en="All">Todos<span class="count">412</span></a>
+        <a href="#" data-i18n-es="Activos" data-i18n-en="Active">Activos<span class="count">218</span></a>
+        <a href="#" data-i18n-es="Pausados" data-i18n-en="Paused">Pausados<span class="count">38</span></a>
+        <a href="#" data-i18n-es="Cerrados" data-i18n-en="Closed">Cerrados<span class="count">156</span></a>
+        <a href="#" data-i18n-es="Reportados" data-i18n-en="Reported">Reportados<span class="count">2</span></a>
+      </div>
+
+      <!-- Filter -->
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <i class="i search-i" data-icon="search"></i>
+          <input class="input" data-i18n-es-placeholder="Buscar por título, empresa, ubicación…" data-i18n-en-placeholder="Search by title, company, location…" placeholder="Buscar por título, empresa, ubicación…" />
+        </div>
+        <div class="divider"></div>
+        <select class="select">
+          <option data-i18n-es="Todas las empresas" data-i18n-en="All companies">Todas las empresas</option>
+          <option>Sunset Hotels Group</option><option>Brickell Build Co.</option><option>Wynwood Health</option>
+        </select>
+        <select class="select">
+          <option data-i18n-es="Toda la industria" data-i18n-en="All industries">Toda la industria</option>
+          <option>Hospitality</option><option>Tech</option><option>Healthcare</option>
+        </select>
+        <select class="select">
+          <option data-i18n-es="Ordenar: Más recientes" data-i18n-en="Sort: Most recent">Ordenar: Más recientes</option>
+          <option data-i18n-es="Más aplicantes" data-i18n-en="Most applicants">Más aplicantes</option>
+          <option data-i18n-es="Salario alto" data-i18n-en="Highest salary">Salario alto</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table class="jtable">
+          <thead>
+            <tr>
+              <th data-i18n-es="Empleo" data-i18n-en="Job">Empleo</th>
+              <th data-i18n-es="Empresa" data-i18n-en="Company">Empresa</th>
+              <th>Status</th>
+              <th class="text-center" data-i18n-es="Aplicantes" data-i18n-en="Applicants">Aplicantes</th>
+              <th data-i18n-es="Salario" data-i18n-en="Salary">Salario</th>
+              <th data-i18n-es="Publicado" data-i18n-en="Posted">Publicado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td><div class="job-cell"><span class="name">Hospitality Marketing Lead</span><span class="meta">Miami, FL · Full-time · Hospitality</span></div></td>
+              <td><div class="company-cell"><div class="lg">SH</div><span class="nm">Sunset Hotels Group</span></div></td>
+              <td><span class="badge"><span class="dot" style="background: var(--success);"></span>Active</span></td>
+              <td class="text-center"><strong>24</strong></td>
+              <td>$80k–$110k</td>
+              <td><div class="t-body-sm">16 May 2026</div></td>
+              <td><div class="row-actions">
+                <button class="btn-icon" title="View"><i class="i" data-icon="eye"></i></button>
+                <button class="btn-icon" title="Pause"><i class="i" data-icon="pause"></i></button>
+                <button class="btn-icon danger" title="Remove"><i class="i" data-icon="trash"></i></button>
+              </div></td>
+            </tr>
+
+            <tr>
+              <td><div class="job-cell"><span class="name">Senior Product Designer</span><span class="meta">Miami, FL · Full-time · Tech</span></div></td>
+              <td><div class="company-cell"><div class="lg">BB</div><span class="nm">Brickell Build Co.</span></div></td>
+              <td><span class="badge"><span class="dot" style="background: var(--success);"></span>Active</span></td>
+              <td class="text-center"><strong>31</strong></td>
+              <td>$95k–$130k</td>
+              <td><div class="t-body-sm">14 May 2026</div></td>
+              <td><div class="row-actions">
+                <button class="btn-icon" title="View"><i class="i" data-icon="eye"></i></button>
+                <button class="btn-icon" title="Pause"><i class="i" data-icon="pause"></i></button>
+                <button class="btn-icon danger" title="Remove"><i class="i" data-icon="trash"></i></button>
+              </div></td>
+            </tr>
+
+            <tr>
+              <td><div class="job-cell"><span class="name">UX Researcher</span><span class="meta">Miami, FL · Remoto · Healthcare</span></div></td>
+              <td><div class="company-cell"><div class="lg">WH</div><span class="nm">Wynwood Health</span></div></td>
+              <td><span class="badge"><span class="dot" style="background: var(--success);"></span>Active</span></td>
+              <td class="text-center"><strong>6</strong></td>
+              <td>$75k–$100k</td>
+              <td><div class="t-body-sm">17 May 2026</div></td>
+              <td><div class="row-actions">
+                <button class="btn-icon" title="View"><i class="i" data-icon="eye"></i></button>
+                <button class="btn-icon" title="Pause"><i class="i" data-icon="pause"></i></button>
+                <button class="btn-icon danger" title="Remove"><i class="i" data-icon="trash"></i></button>
+              </div></td>
+            </tr>
+
+            <tr>
+              <td><div class="job-cell"><span class="name">Front Office Manager</span><span class="meta">Miami Beach, FL · Full-time · Hospitality</span></div></td>
+              <td><div class="company-cell"><div class="lg">SH</div><span class="nm">Sunset Hotels Group</span></div></td>
+              <td><span class="badge"><span class="dot" style="background: var(--success);"></span>Active</span></td>
+              <td class="text-center"><strong>18</strong></td>
+              <td>$65k–$85k</td>
+              <td><div class="t-body-sm">11 May 2026</div></td>
+              <td><div class="row-actions">
+                <button class="btn-icon" title="View"><i class="i" data-icon="eye"></i></button>
+                <button class="btn-icon" title="Pause"><i class="i" data-icon="pause"></i></button>
+                <button class="btn-icon danger" title="Remove"><i class="i" data-icon="trash"></i></button>
+              </div></td>
+            </tr>
+
+            <tr>
+              <td><div class="job-cell"><span class="name">Concierge Specialist</span><span class="meta">Miami, FL · Full-time · Hospitality</span></div></td>
+              <td><div class="company-cell"><div class="lg">SH</div><span class="nm">Sunset Hotels Group</span></div></td>
+              <td><span class="badge"><span class="dot" style="background: var(--warning);"></span>Paused</span></td>
+              <td class="text-center"><strong>31</strong></td>
+              <td>$48k–$62k</td>
+              <td><div class="t-body-sm">04 May 2026</div></td>
+              <td><div class="row-actions">
+                <button class="btn-icon" title="View"><i class="i" data-icon="eye"></i></button>
+                <button class="btn-icon" style="color: var(--success);" title="Resume"><i class="i" data-icon="play"></i></button>
+                <button class="btn-icon danger" title="Remove"><i class="i" data-icon="trash"></i></button>
+              </div></td>
+            </tr>
+
+            <tr style="background: var(--danger-bg);">
+              <td><div class="job-cell"><span class="name">Earn $5K from home, no experience!</span><span class="meta" style="color: var(--danger);"><i class="i" data-icon="alert-triangle"></i> <span data-i18n-es="Reportado por 3 usuarios · spam" data-i18n-en="Reported by 3 users · spam">Reportado por 3 usuarios · spam</span></span></div></td>
+              <td><div class="company-cell"><div class="lg">??</div><span class="nm" style="color: var(--danger);">QuickCash Inc.</span></div></td>
+              <td><span class="badge"><span class="dot" style="background: var(--danger);"></span><span data-i18n-es="Reportado" data-i18n-en="Reported">Reportado</span></span></td>
+              <td class="text-center"><strong>0</strong></td>
+              <td class="muted">—</td>
+              <td><div class="t-body-sm">19 May 2026</div></td>
+              <td><div class="row-actions">
+                <button class="btn-icon" title="View"><i class="i" data-icon="eye"></i></button>
+                <button class="btn btn-danger btn-sm" data-i18n-es="Eliminar" data-i18n-en="Remove">Eliminar</button>
+              </div></td>
+            </tr>
+
+            <tr>
+              <td><div class="job-cell"><span class="name">Service Designer (Hospitality)</span><span class="meta">Miami Beach, FL · Full-time · Hospitality</span></div></td>
+              <td><div class="company-cell"><div class="lg">OM</div><span class="nm">Ocean Mirage Resort</span></div></td>
+              <td><span class="badge"><span class="dot" style="background: var(--success);"></span>Active</span></td>
+              <td class="text-center"><strong>32</strong></td>
+              <td class="muted" data-i18n-es="No mostrado" data-i18n-en="Not shown">No mostrado</td>
+              <td><div class="t-body-sm">10 May 2026</div></td>
+              <td><div class="row-actions">
+                <button class="btn-icon" title="View"><i class="i" data-icon="eye"></i></button>
+                <button class="btn-icon" title="Pause"><i class="i" data-icon="pause"></i></button>
+                <button class="btn-icon danger" title="Remove"><i class="i" data-icon="trash"></i></button>
+              </div></td>
+            </tr>
+
+            <tr>
+              <td><div class="job-cell"><span class="name">Bell Captain</span><span class="meta">Miami Beach, FL · Full-time · Hospitality</span></div></td>
+              <td><div class="company-cell"><div class="lg">BC</div><span class="nm">Beach Club Miami</span></div></td>
+              <td><span class="badge"><span class="dot" style="background: var(--ink-400);"></span>Closed</span></td>
+              <td class="text-center"><strong>42</strong></td>
+              <td>$42k–$55k</td>
+              <td><div class="t-body-sm">02 Apr 2026</div></td>
+              <td><div class="row-actions">
+                <button class="btn-icon" title="View"><i class="i" data-icon="eye"></i></button>
+                <button class="btn-icon" title="Duplicate"><i class="i" data-icon="copy"></i></button>
+              </div></td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <div class="pagination">
+          <div class="t-body-sm muted"><span data-i18n-es="Mostrando 1–8 de 412 empleos" data-i18n-en="Showing 1–8 of 412 jobs">Mostrando 1–8 de 412 empleos</span></div>
+          <div class="pages">
+            <a href="#"><i class="i" data-icon="chevron-left"></i></a>
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">…</a>
+            <a href="#">52</a>
+            <a href="#"><i class="i" data-icon="chevron-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

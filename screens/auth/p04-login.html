@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P-04 · Iniciar sesión — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    html, body { height: 100%; }
+    body { background: var(--ink-50); }
+
+    .login-split {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 900px) { .login-split { grid-template-columns: 1fr; } }
+
+    /* === LEFT: Miami night scene === */
+    .left-panel {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(5,8,16,0.25) 0%, rgba(5,8,16,0.50) 60%, rgba(5,8,16,0.80) 100%),
+        url("../../assets/miami-night.jpg") center/cover no-repeat,
+        #050810;
+      color: #FFFFFF;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    @media (max-width: 900px) {
+      .left-panel { min-height: 320px; padding: 24px; }
+    }
+
+    .left-top {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    }
+
+    .glass {
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      background: rgba(20, 24, 22, 0.45);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: var(--r-lg);
+      padding: 24px;
+      color: #FFFFFF;
+      max-width: 440px;
+    }
+    .glass.brand-card { display: flex; align-items: center; gap: 12px; }
+    .glass.brand-card img { height: 28px; }
+    .glass.brand-card span { font-size: 13px; font-weight: 600; letter-spacing: -0.005em; }
+
+    .welcome-card {
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      background: rgba(20, 24, 22, 0.40);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: var(--r-lg);
+      padding: 28px;
+      color: #FFFFFF;
+      max-width: 440px;
+    }
+    .welcome-card .eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
+      color: rgba(255,255,255,0.65); margin-bottom: 12px;
+    }
+    .welcome-card h1 {
+      font-size: 32px; line-height: 1.05; letter-spacing: -0.025em;
+      font-weight: 600; color: #FFFFFF; margin: 0 0 12px;
+    }
+    .welcome-card p {
+      font-size: 14px; color: rgba(255,255,255,0.70); line-height: 1.55; margin: 0 0 16px;
+    }
+    .welcome-card .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--r-full);
+      font-size: 12px; color: rgba(255,255,255,0.85);
+    }
+    .welcome-card .chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brand-orange-500); }
+
+    .left-foot {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      color: rgba(255,255,255,0.55); font-size: 12px;
+    }
+    .left-foot .copy { letter-spacing: -0.005em; }
+    .left-foot .city { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; }
+
+    /* === RIGHT: Form === */
+    .right-panel {
+      display: flex; align-items: center; justify-content: center;
+      padding: 32px;
+      position: relative;
+    }
+    .right-top {
+      position: absolute; top: 24px; right: 24px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .form-stack {
+      width: 100%; max-width: 380px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    .form-stack .eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--ink-500); margin-bottom: 4px;
+    }
+    .form-stack h2 {
+      font-size: 24px; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--ink-900); margin: 0 0 4px;
+    }
+    .form-stack .sub {
+      font-size: 14px; color: var(--ink-600); margin: 0 0 16px;
+    }
+
+    .form-stack .pwd-row {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
+    }
+    .form-stack .pwd-row .label { margin: 0; }
+    .form-stack .pwd-row a { font-size: 12px; color: var(--ink-700); }
+
+    .signup-foot {
+      margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--ink-200);
+      text-align: center; font-size: 13px; color: var(--ink-600);
+    }
+    .signup-foot a { color: var(--ink-900); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="login-split">
+
+    <!-- LEFT: Brickell at night with glass cards -->
+    <aside class="left-panel">
+
+      <div class="left-top">
+        <div class="glass brand-card">
+          <img src="../../assets/logo-white.png" alt="" />
+          <span>Miami Professional Network</span>
+        </div>
+      </div>
+
+      <div class="welcome-card">
+        <div class="eyebrow" data-i18n-es="Bienvenido de vuelta" data-i18n-en="Welcome back">Bienvenido de vuelta</div>
+        <h1 data-i18n-es="Tu próximo paso profesional, en Miami." data-i18n-en="Your next career step, in Miami.">Tu próximo paso profesional, en Miami.</h1>
+        <p data-i18n-es="Ingresa para acceder a tus aplicaciones, ofertas y empleos guardados." data-i18n-en="Sign in to access your applications, offers, and saved jobs.">Ingresa para acceder a tus aplicaciones, ofertas y empleos guardados.</p>
+        <span class="chip"><span class="dot"></span><span data-i18n-es="Plataforma curada — empleadores verificados" data-i18n-en="Curated platform — verified employers">Plataforma curada — empleadores verificados</span></span>
+      </div>
+
+      <div class="left-foot">
+        <span class="copy">© 2026 Miami Professional Network</span>
+        <span class="city">Brickell · Miami, FL</span>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT: Form -->
+    <section class="right-panel">
+
+      <div class="right-top">
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+          <i class="i" data-icon="moon" data-theme-icon="dark"></i>
+          <i class="i" data-icon="sun" data-theme-icon="light"></i>
+        </button>
+        <div class="lang-toggle">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <form class="form-stack" onsubmit="event.preventDefault();">
+        <div>
+          <div class="eyebrow" data-i18n-es="P-04 · Login" data-i18n-en="P-04 · Login">P-04 · Login</div>
+          <h2 data-i18n-es="Iniciar sesión" data-i18n-en="Sign in">Iniciar sesión</h2>
+          <p class="sub" data-i18n-es="Accede a tu cuenta para continuar." data-i18n-en="Access your account to continue.">Accede a tu cuenta para continuar.</p>
+        </div>
+
+        <div>
+          <label class="label" for="login-email">Email</label>
+          <input class="input" type="email" id="login-email" placeholder="maria@ejemplo.com" />
+        </div>
+
+        <div>
+          <div class="pwd-row">
+            <label class="label" for="login-pass" data-i18n-es="Contraseña" data-i18n-en="Password">Contraseña</label>
+            <a href="p06-forgot-password.html" data-i18n-es="¿Olvidaste tu contraseña?" data-i18n-en="Forgot password?">¿Olvidaste tu contraseña?</a>
+          </div>
+          <input class="input" type="password" id="login-pass" placeholder="••••••••" />
+        </div>
+
+        <label class="row gap-2 items-center" style="cursor: pointer; font-size: 13px; color: var(--ink-700); margin-top: 2px;">
+          <input type="checkbox" /> <span data-i18n-es="Mantener sesión iniciada" data-i18n-en="Keep me signed in">Mantener sesión iniciada</span>
+        </label>
+
+        <button class="btn btn-primary btn-lg w-full mt-2" style="display: flex; justify-content: center;" data-i18n-es="Iniciar sesión" data-i18n-en="Sign in">Iniciar sesión</button>
+
+        <div class="signup-foot">
+          <span data-i18n-es="¿Aún no tienes cuenta?" data-i18n-en="Don't have an account yet?">¿Aún no tienes cuenta?</span>
+          <a href="p02-candidate-signup.html" data-i18n-es="Regístrate como candidato" data-i18n-en="Sign up as candidate">Regístrate como candidato</a>
+          <span style="color: var(--ink-400);"> · </span>
+          <a href="p03-employer-signup.html" data-i18n-es="o como empleador" data-i18n-en="or as employer">o como empleador</a>
+        </div>
+      </form>
+
+    </section>
+
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+</body>
+</html>

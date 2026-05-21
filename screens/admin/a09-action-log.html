@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-09 · Log de acciones — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .filter-bar {
+      background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-md);
+      padding: 6px; display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .search-wrap { position: relative; flex: 1; min-width: 240px; }
+    .search-wrap .input { padding-left: 36px; border: 0; }
+    .search-wrap .search-i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-500); font-size: 14px; pointer-events: none; }
+    .filter-bar .select { width: auto; min-width: 130px; border: 0; }
+    .filter-bar > .divider { width: 1px; align-self: stretch; background: var(--ink-200); }
+
+    .log-wrap { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); overflow: hidden; }
+
+    .log-row {
+      display: grid; grid-template-columns: auto 1fr auto auto auto;
+      gap: 16px; align-items: center;
+      padding: 14px 20px; border-bottom: 1px solid var(--ink-200);
+      transition: background .12s;
+    }
+    .log-row:hover { background: var(--ink-50); }
+    .log-row:last-child { border-bottom: 0; }
+
+    .log-row .ico-cell {
+      width: 28px; height: 28px; border-radius: var(--r-sm);
+      background: var(--ink-100); color: var(--ink-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+    }
+    .log-row .ico-cell.green { background: var(--success-bg); color: var(--success); }
+    .log-row .ico-cell.orange { background: var(--brand-orange-50); color: var(--brand-orange); }
+    .log-row .ico-cell.violet { background: var(--violet-bg); color: var(--violet); }
+    .log-row .ico-cell.danger { background: var(--danger-bg); color: var(--danger); }
+    .log-row .ico-cell.info { background: var(--info-bg); color: var(--info); }
+
+    .log-row .desc { font-size: 13px; color: var(--ink-800); line-height: 1.45; }
+    .log-row .desc strong { color: var(--ink-900); font-weight: 600; }
+    .log-row .desc .object { color: var(--ink-700); font-style: normal; background: var(--ink-100); padding: 1px 6px; border-radius: var(--r-xs); font-family: var(--font-mono); font-size: 11px; margin: 0 2px; }
+
+    .log-row .actor {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--ink-600); white-space: nowrap;
+    }
+    .log-row .actor .avatar { width: 22px; height: 22px; font-size: 10px; }
+
+    .log-row .ts { font-size: 12px; color: var(--ink-500); white-space: nowrap; font-family: var(--font-mono); }
+
+    .log-row .severity {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 2px 6px; border-radius: var(--r-xs);
+    }
+    .severity.info { background: var(--info-bg); color: var(--info); }
+    .severity.warn { background: var(--warning-bg); color: var(--warning); }
+    .severity.crit { background: var(--danger-bg); color: var(--danger); }
+
+    .date-divider {
+      padding: 8px 20px; background: var(--ink-50);
+      border-bottom: 1px solid var(--ink-200);
+      font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--ink-600);
+    }
+
+    .pagination { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: var(--ink-50); border-top: 1px solid var(--ink-200); }
+    .pagination .pages { display: flex; gap: 4px; }
+    .pagination .pages a { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--r-sm); font-size: 13px; color: var(--ink-700); text-decoration: none; }
+    .pagination .pages a.active { background: var(--ink-900); color: var(--white); font-weight: 600; }
+    .pagination .pages a:hover:not(.active) { background: var(--ink-100); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="admin" data-active="log">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Admin · Log" data-i18n-en="Admin · Log">Admin · Log</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Log de acciones" data-i18n-en="Action log">Log de acciones</h1>
+          <div class="t-body-sm muted" data-i18n-es="Auditoría completa de acciones admin · retención 365 días" data-i18n-en="Full audit of admin actions · 365-day retention">Auditoría completa de acciones admin · retención 365 días</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="btn btn-outline btn-sm"><i class="i" data-icon="download"></i> <span data-i18n-es="Exportar log" data-i18n-en="Export log">Exportar log</span></button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <i class="i search-i" data-icon="search"></i>
+          <input class="input" data-i18n-es-placeholder="Buscar por acción, usuario, objeto…" data-i18n-en-placeholder="Search by action, user, object…" placeholder="Buscar por acción, usuario, objeto…" />
+        </div>
+        <div class="divider"></div>
+        <select class="select">
+          <option data-i18n-es="Todos los tipos" data-i18n-en="All types">Todos los tipos</option>
+          <option data-i18n-es="Aprobaciones" data-i18n-en="Approvals">Aprobaciones</option>
+          <option data-i18n-es="Empleos" data-i18n-en="Jobs">Empleos</option>
+          <option data-i18n-es="Aplicaciones" data-i18n-en="Applications">Aplicaciones</option>
+          <option data-i18n-es="Fees" data-i18n-en="Fees">Fees</option>
+        </select>
+        <select class="select">
+          <option data-i18n-es="Todos los admins" data-i18n-en="All admins">Todos los admins</option>
+          <option>Eduardo López</option>
+          <option data-i18n-es="Sistema" data-i18n-en="System">Sistema</option>
+        </select>
+        <select class="select">
+          <option data-i18n-es="Últimos 7 días" data-i18n-en="Last 7 days">Últimos 7 días</option>
+          <option data-i18n-es="Últimos 30 días" data-i18n-en="Last 30 days">Últimos 30 días</option>
+          <option data-i18n-es="Este año" data-i18n-en="This year">Este año</option>
+        </select>
+      </div>
+
+      <!-- Log -->
+      <div class="log-wrap">
+
+        <div class="date-divider" data-i18n-es="HOY · 19 May 2026" data-i18n-en="TODAY · May 19, 2026">HOY · 19 May 2026</div>
+
+        <div class="log-row">
+          <div class="ico-cell green"><i class="i" data-icon="award"></i></div>
+          <div class="desc" data-i18n-es-html="Hire confirmado: <strong>María González</strong> contratada por <strong>Sunset Hotels Group</strong> en <span class='object'>job_2841</span>. Fee 1% pendiente." data-i18n-en-html="Hire confirmed: <strong>María González</strong> hired by <strong>Sunset Hotels Group</strong> on <span class='object'>job_2841</span>. 1% fee pending.">Hire confirmado: <strong>María González</strong> contratada por <strong>Sunset Hotels Group</strong> en <span class="object">job_2841</span>. Fee 1% pendiente.</div>
+          <span class="severity info"><span data-i18n-es="Sistema" data-i18n-en="System">Sistema</span></span>
+          <div class="actor"><div class="avatar" style="background: var(--ink-100);">SY</div><span data-i18n-es="auto" data-i18n-en="auto">auto</span></div>
+          <div class="ts">14:08:22</div>
+        </div>
+
+        <div class="log-row">
+          <div class="ico-cell"><i class="i" data-icon="user-check"></i></div>
+          <div class="desc" data-i18n-es-html="Empleador <strong>Ocean Mirage Resort</strong> aprobado. Email de bienvenida enviado a <span class='object'>info@oceanmirage.com</span>." data-i18n-en-html="Employer <strong>Ocean Mirage Resort</strong> approved. Welcome email sent to <span class='object'>info@oceanmirage.com</span>.">Empleador <strong>Ocean Mirage Resort</strong> aprobado. Email de bienvenida enviado a <span class="object">info@oceanmirage.com</span>.</div>
+          <span class="severity info">Action</span>
+          <div class="actor"><div class="avatar">EL</div>Eduardo López</div>
+          <div class="ts">11:42:01</div>
+        </div>
+
+        <div class="log-row">
+          <div class="ico-cell orange"><i class="i" data-icon="send"></i></div>
+          <div class="desc" data-i18n-es-html="Recordatorio enviado a <strong>Sunset Hotels Group</strong> por <strong>2 aplicaciones</strong> vencidas (+14 días)." data-i18n-en-html="Reminder sent to <strong>Sunset Hotels Group</strong> for <strong>2 applications</strong> overdue (+14 days).">Recordatorio enviado a <strong>Sunset Hotels Group</strong> por <strong>2 aplicaciones</strong> vencidas (+14 días).</div>
+          <span class="severity warn">Auto</span>
+          <div class="actor"><div class="avatar" style="background: var(--ink-100);">SY</div><span data-i18n-es="auto" data-i18n-en="auto">auto</span></div>
+          <div class="ts">09:00:00</div>
+        </div>
+
+        <div class="date-divider" data-i18n-es="AYER · 18 May 2026" data-i18n-en="YESTERDAY · May 18, 2026">AYER · 18 May 2026</div>
+
+        <div class="log-row">
+          <div class="ico-cell danger"><i class="i" data-icon="trash"></i></div>
+          <div class="desc" data-i18n-es-html="Empleo <span class='object'>job_2789</span> eliminado por spam reportado. Razón: <em>'Trabajo desde casa $5K sin experiencia'</em>." data-i18n-en-html="Job <span class='object'>job_2789</span> removed for reported spam. Reason: <em>'Work from home $5K no experience'</em>.">Empleo <span class="object">job_2789</span> eliminado por spam reportado. Razón: <em>'Trabajo desde casa $5K sin experiencia'</em>.</div>
+          <span class="severity crit">Critical</span>
+          <div class="actor"><div class="avatar">EL</div>Eduardo López</div>
+          <div class="ts">16:42:18</div>
+        </div>
+
+        <div class="log-row">
+          <div class="ico-cell"><i class="i" data-icon="briefcase"></i></div>
+          <div class="desc" data-i18n-es-html="<strong>Wynwood Health</strong> publicó <strong>2 nuevos empleos</strong>: <span class='object'>UX Researcher</span>, <span class='object'>Patient Coordinator</span>." data-i18n-en-html="<strong>Wynwood Health</strong> posted <strong>2 new jobs</strong>: <span class='object'>UX Researcher</span>, <span class='object'>Patient Coordinator</span>."><strong>Wynwood Health</strong> publicó <strong>2 nuevos empleos</strong>: <span class="object">UX Researcher</span>, <span class="object">Patient Coordinator</span>.</div>
+          <span class="severity info">Event</span>
+          <div class="actor"><div class="avatar" style="background: var(--ink-100);">SY</div><span data-i18n-es="auto" data-i18n-en="auto">auto</span></div>
+          <div class="ts">14:30:00</div>
+        </div>
+
+        <div class="log-row">
+          <div class="ico-cell info"><i class="i" data-icon="dollar-sign"></i></div>
+          <div class="desc" data-i18n-es-html="Factura enviada a <strong>Brickell Build Co.</strong> por <strong>$1,150</strong> (fee 1% de hire <span class='object'>hire_1142</span>)." data-i18n-en-html="Invoice sent to <strong>Brickell Build Co.</strong> for <strong>$1,150</strong> (1% fee for hire <span class='object'>hire_1142</span>).">Factura enviada a <strong>Brickell Build Co.</strong> por <strong>$1,150</strong> (fee 1% de hire <span class="object">hire_1142</span>).</div>
+          <span class="severity info">Action</span>
+          <div class="actor"><div class="avatar">EL</div>Eduardo López</div>
+          <div class="ts">11:18:42</div>
+        </div>
+
+        <div class="log-row">
+          <div class="ico-cell"><i class="i" data-icon="user-x"></i></div>
+          <div class="desc" data-i18n-es-html="Empleador <strong>QuickCash Inc.</strong> rechazado. Razón: <em>'Empresa no verificada, dominio sospechoso, descripción genérica'</em>." data-i18n-en-html="Employer <strong>QuickCash Inc.</strong> rejected. Reason: <em>'Unverified company, suspicious domain, generic description'</em>.">Empleador <strong>QuickCash Inc.</strong> rechazado. Razón: <em>'Empresa no verificada, dominio sospechoso, descripción genérica'</em>.</div>
+          <span class="severity warn">Action</span>
+          <div class="actor"><div class="avatar">EL</div>Eduardo López</div>
+          <div class="ts">10:02:15</div>
+        </div>
+
+        <div class="log-row">
+          <div class="ico-cell green"><i class="i" data-icon="check-circle"></i></div>
+          <div class="desc" data-i18n-es-html="Fee de hire <span class='object'>hire_1138</span> marcado como <strong>Pagado</strong>. Monto: $880. Empleador: Mango Republic." data-i18n-en-html="Fee for hire <span class='object'>hire_1138</span> marked as <strong>Paid</strong>. Amount: $880. Employer: Mango Republic.">Fee de hire <span class="object">hire_1138</span> marcado como <strong>Pagado</strong>. Monto: $880. Empleador: Mango Republic.</div>
+          <span class="severity info">Action</span>
+          <div class="actor"><div class="avatar">EL</div>Eduardo López</div>
+          <div class="ts">09:30:55</div>
+        </div>
+
+        <div class="date-divider" data-i18n-es="17 MAY 2026" data-i18n-en="MAY 17, 2026">17 MAY 2026</div>
+
+        <div class="log-row">
+          <div class="ico-cell violet"><i class="i" data-icon="user-plus"></i></div>
+          <div class="desc" data-i18n-es-html="<strong>3 nuevos candidatos</strong> verificaron su correo y completaron perfil al 100%." data-i18n-en-html="<strong>3 new candidates</strong> verified email and completed 100% profile."><strong>3 nuevos candidatos</strong> verificaron su correo y completaron perfil al 100%.</div>
+          <span class="severity info">Event</span>
+          <div class="actor"><div class="avatar" style="background: var(--ink-100);">SY</div><span data-i18n-es="auto" data-i18n-en="auto">auto</span></div>
+          <div class="ts">18:24:33</div>
+        </div>
+
+        <div class="log-row">
+          <div class="ico-cell"><i class="i" data-icon="pause"></i></div>
+          <div class="desc" data-i18n-es-html="Empleo <span class='object'>job_2654</span> (Concierge Specialist) pausado manualmente por inactividad prolongada." data-i18n-en-html="Job <span class='object'>job_2654</span> (Concierge Specialist) manually paused due to prolonged inactivity.">Empleo <span class="object">job_2654</span> (Concierge Specialist) pausado manualmente por inactividad prolongada.</div>
+          <span class="severity warn">Action</span>
+          <div class="actor"><div class="avatar">EL</div>Eduardo López</div>
+          <div class="ts">15:08:12</div>
+        </div>
+
+        <div class="log-row">
+          <div class="ico-cell"><i class="i" data-icon="settings"></i></div>
+          <div class="desc" data-i18n-es-html="Configuración cambiada: SLA de revisión de empleadores aumentado de <span class='object'>24h</span> a <span class='object'>48h</span>." data-i18n-en-html="Setting changed: employer review SLA raised from <span class='object'>24h</span> to <span class='object'>48h</span>.">Configuración cambiada: SLA de revisión de empleadores aumentado de <span class="object">24h</span> a <span class="object">48h</span>.</div>
+          <span class="severity warn">Config</span>
+          <div class="actor"><div class="avatar">EL</div>Eduardo López</div>
+          <div class="ts">11:00:01</div>
+        </div>
+
+        <div class="pagination">
+          <div class="t-body-sm muted"><span data-i18n-es="Mostrando 11 eventos de los últimos 3 días · 4,218 totales" data-i18n-en="Showing 11 events from the last 3 days · 4,218 total">Mostrando 11 eventos de los últimos 3 días · 4,218 totales</span></div>
+          <div class="pages">
+            <a href="#"><i class="i" data-icon="chevron-left"></i></a>
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">…</a>
+            <a href="#">422</a>
+            <a href="#"><i class="i" data-icon="chevron-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

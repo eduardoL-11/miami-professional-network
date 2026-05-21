@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C-01 · Bienvenida — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 18% 12%, rgba(243,107,27,0.10) 0%, transparent 45%),
+        radial-gradient(circle at 82% 88%, rgba(41,94,36,0.10) 0%, transparent 45%),
+        var(--ink-50);
+      min-height: 100vh;
+    }
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 32px; max-width: 1200px; margin: 0 auto;
+    }
+    .top-bar .brand { display:flex; align-items:center; gap:12px; }
+    .top-bar .brand img { height: 36px; }
+    .top-bar .brand span { font-weight: 700; color: var(--ink-800); }
+
+    .hero-wrap { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+
+    .welcome-card {
+      background: var(--white); border-radius: var(--r-xl);
+      box-shadow: var(--shadow-md); border: 1px solid var(--ink-200);
+      overflow: hidden;
+    }
+    .welcome-banner {
+      background: var(--surface-dark);
+      color: white; padding: 48px 48px 40px;
+      text-align: center; position: relative; overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .welcome-banner::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(41,94,36,0.22) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .welcome-banner > * { position: relative; z-index: 1; }
+    .welcome-banner h1 { color: white; margin: 0 0 8px; font-weight: 600; letter-spacing: -0.02em; }
+    .welcome-banner p  { margin: 0; color: rgba(255,255,255,0.7); font-size: 15px; }
+
+    .welcome-body { padding: 40px 48px; }
+
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      margin: 32px 0;
+    }
+    .step {
+      background: var(--ink-50); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 24px;
+      position: relative; transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .step:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .step .num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--brand-orange); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px;
+      position: absolute; top: -16px; left: 24px;
+      box-shadow: 0 2px 8px rgba(243,107,27,0.3);
+    }
+    .step .icon {
+      width: 44px; height: 44px; border-radius: var(--r-md);
+      background: var(--brand-green-50); color: var(--brand-green-700);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 22px; margin: 6px 0 14px;
+    }
+    .step .h { font-size: 16px; font-weight: 700; color: var(--ink-900); margin-bottom: 6px; }
+    .step .d { font-size: 13px; color: var(--ink-600); line-height: 1.5; }
+
+    .rule-callout {
+      background: var(--brand-orange-50); border: 1px solid var(--brand-orange-100);
+      border-left: 4px solid var(--brand-orange);
+      border-radius: var(--r-md);
+      padding: 18px 20px;
+      display: flex; gap: 14px; align-items: flex-start;
+      margin: 24px 0;
+    }
+    .rule-callout .icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--brand-orange); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .rule-callout strong { color: var(--brand-orange-700); }
+
+    .cta-row { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--ink-200); }
+
+    .dots { display: flex; gap: 6px; }
+    .dot-step { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-300); }
+    .dot-step.active { background: var(--brand-orange); width: 24px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+  <header class="top-bar">
+    <a href="../../index.html" class="brand">
+      <img src="../../assets/logo-fullcolor.png" alt="" />
+      <span>Miami Professional Network</span>
+    </a>
+    <div class="row items-center gap-3">
+      <a href="#" class="t-body-sm muted" data-i18n-es="Saltar por ahora" data-i18n-en="Skip for now">Saltar por ahora</a>
+      <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+      <div class="lang-toggle">
+        <button data-lang="es">ES</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="hero-wrap">
+
+    <div class="welcome-card">
+
+      <div class="welcome-banner">
+        <div class="t-overline" style="opacity:0.7; margin-bottom: 12px;" data-i18n-es="Candidato · C-01 · Bienvenida" data-i18n-en="Candidate · C-01 · Welcome">Candidato · C-01 · Bienvenida</div>
+        <h1 class="t-display" style="font-size: 40px;" data-i18n-es="¡Hola, María! <i class='i' data-icon='sparkles'></i>" data-i18n-en="Hi, María! <i class='i' data-icon='sparkles'></i>">¡Hola, María! <i class='i' data-icon='sparkles'></i></h1>
+        <p data-i18n-es="Bienvenida a Miami Professional Network. Vamos a configurar tu perfil para que encuentres tu próximo paso profesional." data-i18n-en="Welcome to Miami Professional Network. Let's set up your profile so you can find your next career step.">Bienvenida a Miami Professional Network. Vamos a configurar tu perfil para que encuentres tu próximo paso profesional.</p>
+      </div>
+
+      <div class="welcome-body">
+
+        <div class="t-h3 text-center" data-i18n-es="Tres pasos para empezar" data-i18n-en="Three steps to get started">Tres pasos para empezar</div>
+        <div class="t-body muted text-center mt-2" style="max-width: 540px; margin-left: auto; margin-right: auto;" data-i18n-es="Te tomará unos 10–15 minutos completar tu perfil. Puedes guardar y volver más tarde." data-i18n-en="It will take 10–15 minutes to complete your profile. You can save and come back later.">Te tomará unos 10–15 minutos completar tu perfil. Puedes guardar y volver más tarde.</div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="num">1</div>
+            <div class="icon"><i class="i" data-icon="file-text"></i></div>
+            <div class="h" data-i18n-es="Completa tu perfil" data-i18n-en="Complete your profile">Completa tu perfil</div>
+            <div class="d" data-i18n-es="Datos básicos, experiencia, educación y referencias. Sube tu foto y resume PDF." data-i18n-en="Basic info, experience, education and references. Upload your headshot and resume PDF.">Datos básicos, experiencia, educación y referencias. Sube tu foto y resume PDF.</div>
+          </div>
+
+          <div class="step">
+            <div class="num">2</div>
+            <div class="icon"><i class='i' data-icon='search'></i></div>
+            <div class="h" data-i18n-es="Explora empleos" data-i18n-en="Browse jobs">Explora empleos</div>
+            <div class="d" data-i18n-es="Busca por industria, ubicación o tipo. Guarda los que te interesen para revisar después." data-i18n-en="Search by industry, location or type. Save the ones you like for later.">Busca por industria, ubicación o tipo. Guarda los que te interesen para revisar después.</div>
+          </div>
+
+          <div class="step">
+            <div class="num">3</div>
+            <div class="icon"><i class='i' data-icon='send'></i></div>
+            <div class="h" data-i18n-es="Aplica y haz seguimiento" data-i18n-en="Apply and track">Aplica y haz seguimiento</div>
+            <div class="d" data-i18n-es="Postúlate con un click. Sigue el progreso de cada aplicación en tu dashboard." data-i18n-en="Apply with one click. Track each application's progress from your dashboard.">Postúlate con un click. Sigue el progreso de cada aplicación en tu dashboard.</div>
+          </div>
+
+        </div>
+
+        <div class="rule-callout">
+          <div class="icon">!</div>
+          <div>
+            <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;" data-i18n-es="Regla importante" data-i18n-en="Important rule">Regla importante</div>
+            <div class="t-body" style="color: var(--ink-700);" data-i18n-es-html="Para poder <strong>aplicar a cualquier empleo</strong>, tu perfil debe estar al <strong>100% completo</strong>. Esto nos ayuda a presentarte de la mejor manera ante los empleadores." data-i18n-en-html="To <strong>apply to any job</strong>, your profile must be <strong>100% complete</strong>. This helps us present you to employers in the best way possible.">Para poder <strong>aplicar a cualquier empleo</strong>, tu perfil debe estar al <strong>100% completo</strong>. Esto nos ayuda a presentarte de la mejor manera ante los empleadores.</div>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <div class="dots" aria-hidden="true">
+            <span class="dot-step active"></span>
+            <span class="dot-step"></span>
+            <span class="dot-step"></span>
+          </div>
+          <a href="c02-profile.html" class="btn btn-primary btn-lg" data-i18n-es="Empezar mi perfil →" data-i18n-en="Start my profile →">Empezar mi perfil →</a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="text-center mt-6">
+      <div class="t-body-sm muted" data-i18n-es="¿Necesitas ayuda? Escríbenos a hello@miamipn.com" data-i18n-en="Need help? Write to hello@miamipn.com">¿Necesitas ayuda? Escríbenos a hello@miamipn.com</div>
+    </div>
+
+  </main>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-06 · Applicants — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .layout { display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start; }
+    @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+
+    /* Left filter panel */
+    .filter-panel { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 20px; position: sticky; top: 24px; }
+    .filter-group + .filter-group { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--ink-200); }
+    .filter-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-700); margin-bottom: 10px; }
+    .filter-list { display: flex; flex-direction: column; gap: 8px; }
+    .filter-list label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: var(--ink-700); }
+    .filter-list label .count { margin-left: auto; font-size: 11px; color: var(--ink-500); }
+    .filter-list label:hover { color: var(--ink-900); }
+
+    /* Right: applicants grid */
+    .right-col { display: flex; flex-direction: column; gap: 16px; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .toolbar-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 300px; }
+    .search-wrap { position: relative; flex: 1; }
+    .search-wrap .input { padding-left: 36px; }
+    .search-wrap .search-i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-500); font-size: 13px; pointer-events: none; }
+
+    .applicant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 1280px) { .applicant-grid { grid-template-columns: 1fr; } }
+
+    .applicant-card {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 18px; transition: border-color .12s, box-shadow .12s;
+      display: flex; flex-direction: column; gap: 12px;
+      position: relative;
+    }
+    .applicant-card:hover { border-color: var(--ink-300); box-shadow: var(--shadow-sm); }
+    .applicant-card.overdue { border-color: var(--ink-300); }
+    .applicant-card.overdue::before {
+      content: ''; position: absolute; top: -1px; left: 12px; right: 12px;
+      height: 2px; background: var(--warning); border-radius: 0 0 var(--r-full) var(--r-full);
+    }
+    .applicant-card .head { display: flex; gap: 14px; align-items: flex-start; }
+    .applicant-card .info { flex: 1; min-width: 0; }
+    .applicant-card .name { font-weight: 700; font-size: 16px; }
+    .applicant-card .title-line { font-size: 13px; color: var(--ink-700); }
+    .applicant-card .job-tag { font-size: 12px; color: var(--ink-600); margin-top: 4px; }
+    .applicant-card .meta-row { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--ink-600); padding-top: 12px; border-top: 1px solid var(--ink-200); }
+    .applicant-card .meta-row span { display: inline-flex; align-items: center; gap: 4px; }
+    .applicant-card .actions { display: flex; gap: 8px; align-items: center; }
+    .applicant-card .actions select { padding: 6px 28px 6px 10px; font-size: 13px; }
+
+    .checkbox-cell { padding-top: 2px; }
+    .group-count { background: var(--ink-100); color: var(--ink-700); padding: 2px 8px; border-radius: var(--r-full); font-size: 12px; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="employer" data-active="applicants">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Empleador · Aplicantes" data-i18n-en="Employer · Applicants">Empleador · Aplicantes</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Aplicantes" data-i18n-en="Applicants">Aplicantes</h1>
+          <div class="t-body-sm muted" data-i18n-es="42 aplicantes activos en tus empleos" data-i18n-en="42 active applicants across your jobs">42 aplicantes activos en tus empleos</div>
+        </div>
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+        <div class="lang-toggle">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <!-- Overdue alert -->
+      <div class="alert alert-warning mb-6">
+        <div><i class='i' data-icon='alert-triangle'></i></div>
+        <div style="flex:1;">
+          <div class="alert-title" data-i18n-es="2 aplicaciones requieren actualización" data-i18n-en="2 applications need an update">2 aplicaciones requieren actualización</div>
+          <div class="alert-body" data-i18n-es="Llevan más de 14 días en Under Review." data-i18n-en="They've been in Under Review for more than 14 days.">Llevan más de 14 días en Under Review.</div>
+        </div>
+        <a href="e10-overdue.html" class="btn btn-outline btn-sm" style="align-self:center;" data-i18n-es="Ver vencidas" data-i18n-en="View overdue">Ver vencidas</a>
+      </div>
+
+      <div class="layout">
+
+        <!-- LEFT: Filter panel -->
+        <aside class="filter-panel">
+
+          <div class="filter-group">
+            <div class="filter-title" data-i18n-es="Empleo" data-i18n-en="Job">Empleo</div>
+            <div class="filter-list">
+              <label><input type="radio" name="job" checked /><span data-i18n-es="Todos los empleos" data-i18n-en="All jobs">Todos los empleos</span><span class="count">42</span></label>
+              <label><input type="radio" name="job" /><span>Hospitality Marketing Lead</span><span class="count">24</span></label>
+              <label><input type="radio" name="job" /><span>Front Office Manager</span><span class="count">18</span></label>
+              <label><input type="radio" name="job" /><span>Concierge Specialist</span><span class="count">31</span></label>
+              <label><input type="radio" name="job" /><span>Building Engineer</span><span class="count">12</span></label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-title">Status</div>
+            <div class="filter-list">
+              <label><input type="checkbox" checked /><span class="badge badge-neutral" style="padding: 2px 8px;">Applied</span><span class="count">14</span></label>
+              <label><input type="checkbox" checked /><span class="badge badge-info" style="padding: 2px 8px;">Under Review</span><span class="count">9</span></label>
+              <label><input type="checkbox" checked /><span class="badge badge-violet" style="padding: 2px 8px;">Interviewing</span><span class="count">5</span></label>
+              <label><input type="checkbox" /><span class="badge badge-orange" style="padding: 2px 8px;">Offer Extended</span><span class="count">2</span></label>
+              <label><input type="checkbox" /><span class="badge badge-success" style="padding: 2px 8px;">Hired</span><span class="count">8</span></label>
+              <label><input type="checkbox" /><span class="badge badge-danger" style="padding: 2px 8px;">Not Selected</span><span class="count">4</span></label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-title" data-i18n-es="Años de experiencia" data-i18n-en="Years of experience">Años de experiencia</div>
+            <div class="filter-list">
+              <label><input type="checkbox" /><span>0–2</span></label>
+              <label><input type="checkbox" /><span>3–5</span></label>
+              <label><input type="checkbox" /><span>6–10</span></label>
+              <label><input type="checkbox" /><span>10+</span></label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-title" data-i18n-es="Aplicaciones vencidas" data-i18n-en="Overdue">Aplicaciones vencidas</div>
+            <div class="filter-list">
+              <label><input type="checkbox" /><span data-i18n-es="Solo +14 días Under Review" data-i18n-en="Only +14 days Under Review">Solo +14 días Under Review</span></label>
+            </div>
+          </div>
+
+          <button class="btn btn-ghost btn-sm w-full mt-6" data-i18n-es="Limpiar filtros" data-i18n-en="Clear filters">Limpiar filtros</button>
+
+        </aside>
+
+        <!-- RIGHT: Applicants -->
+        <div class="right-col">
+
+          <!-- Toolbar -->
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <div class="search-wrap">
+                <i class="i search-i" data-icon="search"></i>
+                <input class="input" data-i18n-es-placeholder="Buscar por nombre, ciudad, título…" data-i18n-en-placeholder="Search by name, city, title…" placeholder="Buscar por nombre, ciudad, título…" />
+              </div>
+            </div>
+            <div class="row gap-2 items-center">
+              <select class="select" style="width: auto; padding-right: 36px;">
+                <option data-i18n-es="Ordenar: Más recientes" data-i18n-en="Sort: Most recent">Ordenar: Más recientes</option>
+                <option data-i18n-es="Ordenar: Más años exp." data-i18n-en="Sort: Most years exp.">Ordenar: Más años exp.</option>
+                <option data-i18n-es="Ordenar: Vencidas primero" data-i18n-en="Sort: Overdue first">Ordenar: Vencidas primero</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Group: To review -->
+          <div class="flex justify-between items-center mt-4">
+            <div class="t-h4">
+              <span data-i18n-es="Por revisar" data-i18n-en="To review">Por revisar</span>
+              <span class="group-count">9</span>
+            </div>
+            <a href="#" class="t-body-sm muted" data-i18n-es="Marcar todos como revisados" data-i18n-en="Mark all as reviewed">Marcar todos como revisados</a>
+          </div>
+
+          <div class="applicant-grid">
+
+            <!-- Card 1: Overdue -->
+            <div class="applicant-card overdue">
+              <div class="head">
+                <div class="avatar avatar-lg">MG</div>
+                <div class="info">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <div class="name">María González</div>
+                      <div class="title-line">Senior UX Designer</div>
+                      <div class="job-tag" data-i18n-es="Aplicó a:" data-i18n-en="Applied to:">Aplicó a: <strong>Hospitality Marketing Lead</strong></div>
+                    </div>
+                    <span class="badge badge-warning" style="font-weight:700;"><i class='i' data-icon='alert-triangle'></i> Overdue</span>
+                  </div>
+                </div>
+              </div>
+              <div class="meta-row">
+                <span><i class='i' data-icon='map-pin'></i> Miami, FL</span>
+                <span><i class='i' data-icon='briefcase'></i> 7 <span data-i18n-es="años exp." data-i18n-en="yrs exp.">años exp.</span></span>
+                <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicó 28 Abr" data-i18n-en="Applied Apr 28">Aplicó 28 Abr</span></span>
+                <span style="color: var(--warning); font-weight: 600;"><i class='i' data-icon='clock'></i> 18d <span data-i18n-es="en revisión" data-i18n-en="in review">en revisión</span></span>
+              </div>
+              <div class="actions">
+                <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" style="flex:1;" data-i18n-es="Ver perfil" data-i18n-en="View profile">Ver perfil</a>
+                <select class="select" style="width: auto;">
+                  <option>Under Review</option><option>Interviewing</option><option>Offer Extended</option><option>Hired</option><option>Not Selected</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Card 2: Overdue -->
+            <div class="applicant-card overdue">
+              <div class="head">
+                <div class="avatar avatar-lg">JR</div>
+                <div class="info">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <div class="name">Jonathan Reyes</div>
+                      <div class="title-line">Operations Manager</div>
+                      <div class="job-tag" data-i18n-es="Aplicó a:" data-i18n-en="Applied to:">Aplicó a: <strong>Front Office Manager</strong></div>
+                    </div>
+                    <span class="badge badge-warning" style="font-weight:700;"><i class='i' data-icon='alert-triangle'></i> Overdue</span>
+                  </div>
+                </div>
+              </div>
+              <div class="meta-row">
+                <span><i class='i' data-icon='map-pin'></i> Hialeah, FL</span>
+                <span><i class='i' data-icon='briefcase'></i> 9 <span data-i18n-es="años exp." data-i18n-en="yrs exp.">años exp.</span></span>
+                <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicó 02 May" data-i18n-en="Applied May 2">Aplicó 02 May</span></span>
+                <span style="color: var(--warning); font-weight: 600;"><i class='i' data-icon='clock'></i> 16d <span data-i18n-es="en revisión" data-i18n-en="in review">en revisión</span></span>
+              </div>
+              <div class="actions">
+                <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" style="flex:1;" data-i18n-es="Ver perfil" data-i18n-en="View profile">Ver perfil</a>
+                <select class="select" style="width: auto;">
+                  <option>Under Review</option><option>Interviewing</option><option>Offer Extended</option><option>Hired</option><option>Not Selected</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Card 3: Applied -->
+            <div class="applicant-card">
+              <div class="head">
+                <div class="avatar avatar-lg">CT</div>
+                <div class="info">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <div class="name">Carolina Torres</div>
+                      <div class="title-line">Marketing Manager</div>
+                      <div class="job-tag" data-i18n-es="Aplicó a:" data-i18n-en="Applied to:">Aplicó a: <strong>Hospitality Marketing Lead</strong></div>
+                    </div>
+                    <span class="badge badge-neutral"><span class="dot"></span>Applied</span>
+                  </div>
+                </div>
+              </div>
+              <div class="meta-row">
+                <span><i class='i' data-icon='map-pin'></i> Coral Gables, FL</span>
+                <span><i class='i' data-icon='briefcase'></i> 6 <span data-i18n-es="años exp." data-i18n-en="yrs exp.">años exp.</span></span>
+                <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicó hoy" data-i18n-en="Applied today">Aplicó hoy</span></span>
+              </div>
+              <div class="actions">
+                <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" style="flex:1;" data-i18n-es="Ver perfil" data-i18n-en="View profile">Ver perfil</a>
+                <select class="select" style="width: auto;">
+                  <option>Update status…</option><option>Under Review</option><option>Interviewing</option><option>Not Selected</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Card 4: Applied -->
+            <div class="applicant-card">
+              <div class="head">
+                <div class="avatar avatar-lg">DP</div>
+                <div class="info">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <div class="name">Diego Pérez</div>
+                      <div class="title-line">Hotel Operations Lead</div>
+                      <div class="job-tag" data-i18n-es="Aplicó a:" data-i18n-en="Applied to:">Aplicó a: <strong>Front Office Manager</strong></div>
+                    </div>
+                    <span class="badge badge-neutral"><span class="dot"></span>Applied</span>
+                  </div>
+                </div>
+              </div>
+              <div class="meta-row">
+                <span><i class='i' data-icon='map-pin'></i> Miami Beach, FL</span>
+                <span><i class='i' data-icon='briefcase'></i> 8 <span data-i18n-es="años exp." data-i18n-en="yrs exp.">años exp.</span></span>
+                <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicó ayer" data-i18n-en="Applied yesterday">Aplicó ayer</span></span>
+              </div>
+              <div class="actions">
+                <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" style="flex:1;" data-i18n-es="Ver perfil" data-i18n-en="View profile">Ver perfil</a>
+                <select class="select" style="width: auto;">
+                  <option>Update status…</option><option>Under Review</option><option>Interviewing</option><option>Not Selected</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Group: In progress -->
+          <div class="flex justify-between items-center mt-6">
+            <div class="t-h4">
+              <span data-i18n-es="En progreso" data-i18n-en="In progress">En progreso</span>
+              <span class="group-count">5</span>
+            </div>
+          </div>
+
+          <div class="applicant-grid">
+
+            <div class="applicant-card">
+              <div class="head">
+                <div class="avatar avatar-lg">AL</div>
+                <div class="info">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <div class="name">Andrea López</div>
+                      <div class="title-line">Front Desk Supervisor</div>
+                      <div class="job-tag" data-i18n-es="Aplicó a:" data-i18n-en="Applied to:">Aplicó a: <strong>Front Office Manager</strong></div>
+                    </div>
+                    <span class="badge badge-violet"><span class="dot"></span>Interviewing</span>
+                  </div>
+                </div>
+              </div>
+              <div class="meta-row">
+                <span><i class='i' data-icon='map-pin'></i> Miami, FL</span>
+                <span><i class='i' data-icon='briefcase'></i> 5 <span data-i18n-es="años exp." data-i18n-en="yrs exp.">años exp.</span></span>
+                <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicó 06 May" data-i18n-en="Applied May 6">Aplicó 06 May</span></span>
+                <span style="color: var(--violet); font-weight: 600;"><i class='i' data-icon='phone'></i> <span data-i18n-es="Entrevista 28 May" data-i18n-en="Interview May 28">Entrevista 28 May</span></span>
+              </div>
+              <div class="actions">
+                <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" style="flex:1;" data-i18n-es="Ver perfil" data-i18n-en="View profile">Ver perfil</a>
+                <select class="select" style="width: auto;">
+                  <option>Interviewing</option><option>Offer Extended</option><option>Hired</option><option>Not Selected</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="applicant-card">
+              <div class="head">
+                <div class="avatar avatar-lg">SK</div>
+                <div class="info">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <div class="name">Samantha Kim</div>
+                      <div class="title-line">Concierge Lead</div>
+                      <div class="job-tag" data-i18n-es="Aplicó a:" data-i18n-en="Applied to:">Aplicó a: <strong>Concierge Specialist</strong></div>
+                    </div>
+                    <span class="badge badge-orange"><span class="dot"></span>Offer Extended</span>
+                  </div>
+                </div>
+              </div>
+              <div class="meta-row">
+                <span><i class='i' data-icon='map-pin'></i> Miami, FL</span>
+                <span><i class='i' data-icon='briefcase'></i> 4 <span data-i18n-es="años exp." data-i18n-en="yrs exp.">años exp.</span></span>
+                <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicó 28 Abr" data-i18n-en="Applied Apr 28">Aplicó 28 Abr</span></span>
+                <span style="color: var(--brand-orange); font-weight: 600;"><i class='i' data-icon='mail'></i> <span data-i18n-es="Oferta enviada 22 May" data-i18n-en="Offer sent May 22">Oferta enviada 22 May</span></span>
+              </div>
+              <div class="actions">
+                <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" style="flex:1;" data-i18n-es="Ver perfil" data-i18n-en="View profile">Ver perfil</a>
+                <select class="select" style="width: auto;">
+                  <option>Offer Extended</option><option>Hired</option><option>Not Selected</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

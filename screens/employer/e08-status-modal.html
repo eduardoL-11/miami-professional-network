@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-08 · Update Status Modal — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    /* Page behind the modal (frozen state of applicant detail) */
+    .page-bg {
+      filter: blur(2px); pointer-events: none; user-select: none;
+      opacity: 0.7;
+    }
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(15, 20, 17, 0.55);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100; padding: 24px;
+    }
+    .modal {
+      background: var(--white); border-radius: var(--r-xl);
+      width: 100%; max-width: 540px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+      overflow: hidden;
+      animation: pop .2s ease-out;
+    }
+    @keyframes pop {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-head {
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid var(--ink-200);
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .modal-body { padding: 24px; }
+    .modal-foot {
+      padding: 16px 24px; background: var(--ink-50);
+      border-top: 1px solid var(--ink-200);
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    .close-x {
+      width: 32px; height: 32px; border-radius: var(--r-md); border: 0;
+      background: transparent; color: var(--ink-600); cursor: pointer;
+      font-size: 20px; line-height: 1;
+    }
+    .close-x:hover { background: var(--ink-100); }
+
+    .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .status-option {
+      display: flex; flex-direction: column; gap: 4px;
+      padding: 14px; border: 2px solid var(--ink-200); border-radius: var(--r-md);
+      cursor: pointer; transition: border-color .12s, background .12s;
+      position: relative;
+    }
+    .status-option:hover { border-color: var(--ink-400); background: var(--ink-50); }
+    .status-option input { position: absolute; opacity: 0; pointer-events: none; }
+    .status-option input:checked + .so-content { color: var(--ink-900); }
+    .status-option:has(input:checked) { border-color: var(--brand-green); background: var(--brand-green-50); }
+    .status-option .so-row { display: flex; align-items: center; justify-content: space-between; }
+    .status-option .so-row .badge { padding: 3px 9px; font-size: 11px; }
+    .status-option .so-desc { font-size: 11px; color: var(--ink-600); }
+    .status-option:has(input:checked) .check-mark { display: flex; }
+    .check-mark {
+      display: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--brand-green); color: white;
+      align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+
+    .from-to {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: var(--ink-50); border-radius: var(--r-md);
+      margin-bottom: 18px;
+    }
+    .from-to .arrow { color: var(--ink-400); font-size: 18px; }
+
+    .email-preview {
+      background: var(--ink-50); border-radius: var(--r-md); padding: 12px 14px;
+      font-size: 12px; color: var(--ink-700); line-height: 1.5; margin-top: 10px;
+      border-left: 3px solid var(--brand-orange);
+    }
+
+    /* Background snippet (faked detail page header) */
+    .bg-mini {
+      max-width: 1200px; margin: 0 auto; padding: 32px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Faded-out background hint -->
+  <div class="page-bg">
+    <div class="bg-mini">
+      <div style="background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 32px; display: flex; gap: 24px;">
+        <div class="avatar avatar-lg" style="width: 96px; height: 96px; font-size: 32px;">MG</div>
+        <div>
+          <h1 class="t-h2" style="margin: 0;">María González</h1>
+          <div class="t-body muted" style="margin-top: 4px;">Senior UX Designer · Hospitality Marketing Lead</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop">
+    <div class="modal">
+
+      <div class="modal-head">
+        <div>
+          <div class="t-overline muted" data-i18n-es="E-08 · Cambio de status" data-i18n-en="E-08 · Status update">E-08 · Cambio de status</div>
+          <h2 class="t-h3" style="margin: 4px 0 0;" data-i18n-es="Actualizar status de aplicación" data-i18n-en="Update application status">Actualizar status de aplicación</h2>
+          <div class="t-body-sm muted" style="margin-top: 4px;">María González · Hospitality Marketing Lead</div>
+        </div>
+        <button class="close-x" aria-label="Close">×</button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- From → To -->
+        <div class="from-to">
+          <span class="t-body-sm muted" data-i18n-es="De:" data-i18n-en="From:">De:</span>
+          <span class="badge badge-violet"><span class="dot"></span>Interviewing</span>
+          <span class="arrow">→</span>
+          <span class="t-body-sm muted" data-i18n-es="A:" data-i18n-en="To:">A:</span>
+          <span class="badge badge-orange" style="font-weight: 700;"><span class="dot"></span>Offer Extended</span>
+        </div>
+
+        <div class="label" data-i18n-es="Selecciona el nuevo status" data-i18n-en="Select the new status">Selecciona el nuevo status</div>
+
+        <div class="status-grid">
+
+          <label class="status-option">
+            <input type="radio" name="status" />
+            <div class="so-content">
+              <div class="so-row">
+                <span class="badge badge-neutral"><span class="dot"></span>Applied</span>
+                <span class="check-mark">✓</span>
+              </div>
+              <div class="so-desc" data-i18n-es="Aplicación recibida, sin revisar" data-i18n-en="Application received, not reviewed">Aplicación recibida, sin revisar</div>
+            </div>
+          </label>
+
+          <label class="status-option">
+            <input type="radio" name="status" />
+            <div class="so-content">
+              <div class="so-row">
+                <span class="badge badge-info"><span class="dot"></span>Under Review</span>
+                <span class="check-mark">✓</span>
+              </div>
+              <div class="so-desc" data-i18n-es="Revisando perfil y resume" data-i18n-en="Reviewing profile and resume">Revisando perfil y resume</div>
+            </div>
+          </label>
+
+          <label class="status-option">
+            <input type="radio" name="status" />
+            <div class="so-content">
+              <div class="so-row">
+                <span class="badge badge-violet"><span class="dot"></span>Interviewing</span>
+                <span class="check-mark">✓</span>
+              </div>
+              <div class="so-desc" data-i18n-es="En proceso de entrevistas" data-i18n-en="In interview process">En proceso de entrevistas</div>
+            </div>
+          </label>
+
+          <label class="status-option">
+            <input type="radio" name="status" checked />
+            <div class="so-content">
+              <div class="so-row">
+                <span class="badge badge-orange"><span class="dot"></span>Offer Extended</span>
+                <span class="check-mark">✓</span>
+              </div>
+              <div class="so-desc" data-i18n-es="Oferta enviada al candidato" data-i18n-en="Offer sent to candidate">Oferta enviada al candidato</div>
+            </div>
+          </label>
+
+          <label class="status-option">
+            <input type="radio" name="status" />
+            <div class="so-content">
+              <div class="so-row">
+                <span class="badge badge-success"><span class="dot"></span>Hired</span>
+                <span class="check-mark">✓</span>
+              </div>
+              <div class="so-desc" data-i18n-es="Contratado · notifica al admin" data-i18n-en="Hired · notifies admin">Contratado · notifica al admin</div>
+            </div>
+          </label>
+
+          <label class="status-option">
+            <input type="radio" name="status" />
+            <div class="so-content">
+              <div class="so-row">
+                <span class="badge badge-danger"><span class="dot"></span>Not Selected</span>
+                <span class="check-mark">✓</span>
+              </div>
+              <div class="so-desc" data-i18n-es="No avanzará en este proceso" data-i18n-en="Will not move forward">No avanzará en este proceso</div>
+            </div>
+          </label>
+
+        </div>
+
+        <!-- Optional message -->
+        <div style="margin-top: 20px;">
+          <label class="label" data-i18n-es="Mensaje para el candidato (opcional)" data-i18n-en="Message to candidate (optional)">Mensaje para el candidato (opcional)</label>
+          <textarea class="textarea" style="min-height: 90px;" data-i18n-es-placeholder="Felicitaciones María. Hemos preparado una oferta basada en…" data-i18n-en-placeholder="Congratulations María. We've prepared an offer based on…" placeholder="Felicitaciones María. Hemos preparado una oferta basada en…"></textarea>
+          <div class="hint" data-i18n-es="Se incluirá en el correo automático al candidato." data-i18n-en="Will be included in the automatic email to the candidate.">Se incluirá en el correo automático al candidato.</div>
+        </div>
+
+        <!-- Email preview -->
+        <div class="email-preview">
+          <strong><i class='i' data-icon='mail'></i> <span data-i18n-es="Email a enviar" data-i18n-en="Email to send">Email a enviar</span></strong> · <span data-i18n-es="el backend dispara este correo:" data-i18n-en="backend triggers this email:">el backend dispara este correo:</span><br/>
+          <span data-i18n-es="Asunto:" data-i18n-en="Subject:">Asunto:</span> "¡Tienes una oferta de Sunset Hotels Group! <i class='i' data-icon='sparkles'></i>"<br/>
+          <span data-i18n-es="Destinatario:" data-i18n-en="To:">Destinatario:</span> m.gonzalez@gmail.com
+        </div>
+
+        <!-- Special: Hired notice -->
+        <div class="alert alert-info hidden" id="hired-notice" style="margin-top: 14px;">
+          <div><i class='i' data-icon='sparkles'></i></div>
+          <div>
+            <div class="alert-title" data-i18n-es="Notificación a Admin" data-i18n-en="Admin notification">Notificación a Admin</div>
+            <div class="alert-body" data-i18n-es="Al marcar Hired, el equipo de Miami Professional Network es notificado para gestionar el 1% success fee." data-i18n-en="When you mark Hired, the Miami Professional Network team is notified to manage the 1% success fee.">Al marcar Hired, el equipo de Miami Professional Network es notificado para gestionar el 1% success fee.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-foot">
+        <label class="row gap-2 items-center" style="cursor: pointer;">
+          <input type="checkbox" checked />
+          <span class="t-body-sm" data-i18n-es="Notificar al candidato por email" data-i18n-en="Notify candidate by email">Notificar al candidato por email</span>
+        </label>
+        <div class="row gap-2">
+          <button class="btn btn-ghost" data-i18n-es="Cancelar" data-i18n-en="Cancel">Cancelar</button>
+          <button class="btn btn-primary" data-i18n-es="Confirmar cambio" data-i18n-en="Confirm change">Confirmar cambio</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script>
+    (function () {
+      function closeModal() {
+        if (document.referrer && document.referrer.indexOf(location.host) !== -1) {
+          window.history.back();
+        } else {
+          window.location.href = 'e07-applicant-detail.html';
+        }
+      }
+      document.querySelectorAll('.close-x').forEach(b => b.addEventListener('click', closeModal));
+      const backdrop = document.querySelector('.modal-backdrop');
+      if (backdrop) backdrop.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-backdrop')) closeModal();
+      });
+      document.querySelectorAll('.modal-foot .btn-ghost').forEach(b => {
+        const t = (b.textContent || '').toLowerCase();
+        if (t.includes('cancel')) b.addEventListener('click', closeModal);
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    })();
+  </script>
+</body>
+</html>

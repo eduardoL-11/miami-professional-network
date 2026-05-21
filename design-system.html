@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design System — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/brand.css" />
+  <link rel="stylesheet" href="css/lang-toggle.css" />
+  <style>
+    .ds-section { padding: 48px 0; border-bottom: 1px solid var(--ink-200); }
+    .ds-section:last-child { border-bottom: 0; }
+    .ds-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-500); margin-bottom: 8px; }
+    .swatch { border-radius: var(--r-md); height: 96px; padding: 12px; display: flex; flex-direction: column; justify-content: flex-end; font-size: 12px; font-weight: 600; }
+    .swatch-name { opacity: 0.85; font-weight: 500; }
+    .ds-hero {
+      background: var(--surface-dark); color: var(--white); padding: 60px 0;
+      position: relative; overflow: hidden;
+    }
+    .ds-hero::after {
+      content: ''; position: absolute; right: -5%; top: -50%;
+      width: 50%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(41,94,36,0.18) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .ds-hero .container { position: relative; z-index: 1; }
+    .ds-hero h1 { color: var(--white); margin: 0 0 8px; font-weight: 600; }
+    .ds-hero p { margin: 0; color: rgba(255,255,255,0.65); }
+
+    /* Icon grid */
+    .icon-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; }
+    @media (max-width: 900px) { .icon-grid { grid-template-columns: repeat(4, 1fr); } }
+    .icon-cell {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-md); padding: 14px 8px; text-align: center;
+      transition: border-color .12s, color .12s; color: var(--ink-700); cursor: pointer;
+    }
+    .icon-cell:hover { border-color: var(--brand-green); color: var(--brand-green); }
+    .icon-cell .i { font-size: 20px; margin: 0 auto 6px; display: flex; }
+    .icon-cell .name { font-size: 10px; color: var(--ink-500); font-family: var(--font-mono); letter-spacing: -0.02em; }
+    .ds-grid-colors { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+    .preview { background: var(--ink-100); border-radius: var(--r-md); padding: 24px; }
+    .nav-top { position: sticky; top: 0; z-index: 10; background: var(--white); border-bottom: 1px solid var(--ink-200); }
+    .nav-top .container { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; padding-bottom: 14px; }
+    .nav-top a.brand { display: flex; align-items: center; gap: 12px; color: var(--ink-800); font-weight: 700; }
+    .nav-top a.brand img { height: 32px; }
+    .nav-top nav { display: flex; gap: 24px; }
+    .nav-top nav a { color: var(--ink-700); font-size: 14px; font-weight: 500; }
+    .applicant-card { display: flex; gap: 16px; align-items: flex-start; }
+    .stat { display: flex; flex-direction: column; gap: 4px; }
+    .stat .stat-val { font-size: 28px; font-weight: 700; color: var(--ink-900); }
+    .stat .stat-label { font-size: 12px; color: var(--ink-600); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .stat .stat-delta { font-size: 12px; color: var(--success); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <!-- Top nav -->
+  <div class="nav-top">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <img src="assets/logo-fullcolor.png" alt="Miami Professional Network" />
+        <span>Miami Professional Network</span>
+      </a>
+      <nav>
+        <a href="index.html" data-i18n-es="Sitemap" data-i18n-en="Sitemap">Sitemap</a>
+        <a href="design-system.html" data-i18n-es="Design System" data-i18n-en="Design System">Design System</a>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+      <div class="lang-toggle">
+        <button data-lang="es">ES</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div class="ds-hero">
+    <div class="container">
+      <div class="t-overline" style="opacity:0.7" data-i18n-es="Design System v0.1" data-i18n-en="Design System v0.1">Design System v0.1</div>
+      <h1 class="t-display" data-i18n-es="Miami Professional Network" data-i18n-en="Miami Professional Network">Miami Professional Network</h1>
+      <p class="t-h4" style="font-weight:500" data-i18n-es="Los mejores profesionales para cada carrera" data-i18n-en="The best professionals for every career">Los mejores profesionales para cada carrera</p>
+    </div>
+  </div>
+
+  <main class="container">
+
+    <!-- BRAND -->
+    <section class="ds-section">
+      <div class="t-overline muted" data-i18n-es="01 — Marca" data-i18n-en="01 — Brand">01 — Marca</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Logo & uso" data-i18n-en="Logo & usage">Logo & uso</h2>
+      <div class="grid-4">
+        <div class="card text-center"><img src="assets/logo-fullcolor.png" alt="" style="height:64px; margin:8px auto" /><div class="t-caption muted">Fullcolor / light bg</div></div>
+        <div class="card text-center" style="background: var(--brand-green); border-color: var(--brand-green);"><img src="assets/logo-white.png" alt="" style="height:64px; margin:8px auto" /><div class="t-caption" style="color: rgba(255,255,255,0.8)">White / dark bg</div></div>
+        <div class="card text-center"><img src="assets/logo-green.png" alt="" style="height:64px; margin:8px auto" /><div class="t-caption muted">Green mono</div></div>
+        <div class="card text-center"><img src="assets/logo-orange.png" alt="" style="height:64px; margin:8px auto" /><div class="t-caption muted">Orange mono</div></div>
+      </div>
+    </section>
+
+    <!-- COLORS -->
+    <section class="ds-section">
+      <div class="t-overline muted" data-i18n-es="02 — Color" data-i18n-en="02 — Color">02 — Color</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Paleta" data-i18n-en="Palette">Paleta</h2>
+
+      <div class="ds-label" data-i18n-es="Marca" data-i18n-en="Brand">Marca</div>
+      <div class="ds-grid-colors mb-6">
+        <div class="swatch" style="background: var(--brand-green-700); color: white;"><span>#1F4A1B</span><span class="swatch-name">green-700</span></div>
+        <div class="swatch" style="background: var(--brand-green-600); color: white;"><span>#295E24</span><span class="swatch-name">green-600 · primary</span></div>
+        <div class="swatch" style="background: var(--brand-green-500); color: white;"><span>#357A2E</span><span class="swatch-name">green-500</span></div>
+        <div class="swatch" style="background: var(--brand-green-100); color: var(--brand-green-700);"><span>#E4F0E2</span><span class="swatch-name">green-100</span></div>
+        <div class="swatch" style="background: var(--brand-green-50); color: var(--brand-green-700);"><span>#F3F8F2</span><span class="swatch-name">green-50</span></div>
+        <div></div>
+        <div class="swatch" style="background: var(--brand-orange-700); color: white;"><span>#C8530E</span><span class="swatch-name">orange-700</span></div>
+        <div class="swatch" style="background: var(--brand-orange-600); color: white;"><span>#F36B1B</span><span class="swatch-name">orange-600 · accent / CTA</span></div>
+        <div class="swatch" style="background: var(--brand-orange-500); color: white;"><span>#FF8541</span><span class="swatch-name">orange-500</span></div>
+        <div class="swatch" style="background: var(--brand-orange-100); color: var(--brand-orange-700);"><span>#FCE2D1</span><span class="swatch-name">orange-100</span></div>
+        <div class="swatch" style="background: var(--brand-orange-50); color: var(--brand-orange-700);"><span>#FFF4EC</span><span class="swatch-name">orange-50</span></div>
+      </div>
+
+      <div class="ds-label" data-i18n-es="Neutros" data-i18n-en="Neutrals">Neutros</div>
+      <div class="ds-grid-colors mb-6">
+        <div class="swatch" style="background: var(--ink-900); color: white;"><span>#0F1411</span><span class="swatch-name">ink-900</span></div>
+        <div class="swatch" style="background: var(--ink-800); color: white;"><span>#1F2925</span><span class="swatch-name">ink-800</span></div>
+        <div class="swatch" style="background: var(--ink-700); color: white;"><span>#364541</span><span class="swatch-name">ink-700</span></div>
+        <div class="swatch" style="background: var(--ink-500); color: white;"><span>#7B8884</span><span class="swatch-name">ink-500</span></div>
+        <div class="swatch" style="background: var(--ink-300); color: var(--ink-800);"><span>#D1D8D5</span><span class="swatch-name">ink-300</span></div>
+        <div class="swatch" style="background: var(--ink-100); color: var(--ink-800); border: 1px solid var(--ink-200);"><span>#F3F5F4</span><span class="swatch-name">ink-100</span></div>
+      </div>
+
+      <div class="ds-label" data-i18n-es="Semántico" data-i18n-en="Semantic">Semántico</div>
+      <div class="ds-grid-colors">
+        <div class="swatch" style="background: var(--info); color: white;"><span>#2563EB</span><span class="swatch-name">info</span></div>
+        <div class="swatch" style="background: var(--success); color: white;"><span>#16A34A</span><span class="swatch-name">success</span></div>
+        <div class="swatch" style="background: var(--warning); color: white;"><span>#D97706</span><span class="swatch-name">warning</span></div>
+        <div class="swatch" style="background: var(--danger); color: white;"><span>#DC2626</span><span class="swatch-name">danger</span></div>
+        <div class="swatch" style="background: var(--violet); color: white;"><span>#7C3AED</span><span class="swatch-name">violet</span></div>
+      </div>
+    </section>
+
+    <!-- ICONS -->
+    <section class="ds-section">
+      <div class="t-overline muted" data-i18n-es="03 — Iconografía" data-i18n-en="03 — Iconography">03 — Iconografía</div>
+      <h2 class="t-h2 mt-2 mb-2" data-i18n-es="Sistema de íconos outline" data-i18n-en="Outline icon system">Sistema de íconos outline</h2>
+      <p class="t-body muted mb-6" data-i18n-es="Lucide-inspired · stroke 2 · monocromos · escalan con font-size · color hereda de currentColor." data-i18n-en="Lucide-inspired · stroke 2 · monochrome · scale with font-size · color from currentColor.">Lucide-inspired · stroke 2 · monocromos · escalan con font-size · color hereda de currentColor.</p>
+
+      <div class="ds-label">Uso</div>
+      <div class="card mb-6">
+        <code style="display:block; font-family: var(--font-mono); font-size: 12px; color: var(--ink-700); background: var(--ink-100); padding: 12px 14px; border-radius: var(--r-sm);">&lt;i class="i" data-icon="search"&gt;&lt;/i&gt;</code>
+        <div class="t-body-sm muted mt-2">Renderizado automático en DOMContentLoaded. Tamaño con clases: <code>.i-sm</code> (14) · <code>.i-md</code> (16) · <code>.i-lg</code> (20) · <code>.i-xl</code> (28) · <code>.i-2xl</code> (40).</div>
+        <div class="row gap-4 mt-6" style="align-items: center;">
+          <i class="i i-xs" data-icon="search"></i>
+          <i class="i i-sm" data-icon="search"></i>
+          <i class="i i-md" data-icon="search"></i>
+          <i class="i i-lg" data-icon="search"></i>
+          <i class="i i-xl" data-icon="search"></i>
+          <i class="i i-2xl" data-icon="search"></i>
+        </div>
+      </div>
+
+      <div class="ds-label" data-i18n-es="Catálogo" data-i18n-en="Catalog">Catálogo</div>
+      <div class="card" style="padding: 16px;">
+        <div class="icon-grid">
+          <div class="icon-cell"><i class="i" data-icon="home"></i><div class="name">home</div></div>
+          <div class="icon-cell"><i class="i" data-icon="layout-grid"></i><div class="name">layout-grid</div></div>
+          <div class="icon-cell"><i class="i" data-icon="search"></i><div class="name">search</div></div>
+          <div class="icon-cell"><i class="i" data-icon="filter"></i><div class="name">filter</div></div>
+          <div class="icon-cell"><i class="i" data-icon="menu"></i><div class="name">menu</div></div>
+          <div class="icon-cell"><i class="i" data-icon="plus"></i><div class="name">plus</div></div>
+          <div class="icon-cell"><i class="i" data-icon="x"></i><div class="name">x</div></div>
+          <div class="icon-cell"><i class="i" data-icon="check"></i><div class="name">check</div></div>
+
+          <div class="icon-cell"><i class="i" data-icon="arrow-right"></i><div class="name">arrow-right</div></div>
+          <div class="icon-cell"><i class="i" data-icon="arrow-left"></i><div class="name">arrow-left</div></div>
+          <div class="icon-cell"><i class="i" data-icon="chevron-right"></i><div class="name">chevron-right</div></div>
+          <div class="icon-cell"><i class="i" data-icon="chevron-down"></i><div class="name">chevron-down</div></div>
+          <div class="icon-cell"><i class="i" data-icon="external-link"></i><div class="name">external-link</div></div>
+          <div class="icon-cell"><i class="i" data-icon="link"></i><div class="name">link</div></div>
+          <div class="icon-cell"><i class="i" data-icon="share"></i><div class="name">share</div></div>
+          <div class="icon-cell"><i class="i" data-icon="refresh"></i><div class="name">refresh</div></div>
+
+          <div class="icon-cell"><i class="i" data-icon="user"></i><div class="name">user</div></div>
+          <div class="icon-cell"><i class="i" data-icon="users"></i><div class="name">users</div></div>
+          <div class="icon-cell"><i class="i" data-icon="user-check"></i><div class="name">user-check</div></div>
+          <div class="icon-cell"><i class="i" data-icon="briefcase"></i><div class="name">briefcase</div></div>
+          <div class="icon-cell"><i class="i" data-icon="building"></i><div class="name">building</div></div>
+          <div class="icon-cell"><i class="i" data-icon="graduation-cap"></i><div class="name">graduation-cap</div></div>
+          <div class="icon-cell"><i class="i" data-icon="map-pin"></i><div class="name">map-pin</div></div>
+          <div class="icon-cell"><i class="i" data-icon="globe"></i><div class="name">globe</div></div>
+
+          <div class="icon-cell"><i class="i" data-icon="file-text"></i><div class="name">file-text</div></div>
+          <div class="icon-cell"><i class="i" data-icon="file"></i><div class="name">file</div></div>
+          <div class="icon-cell"><i class="i" data-icon="image"></i><div class="name">image</div></div>
+          <div class="icon-cell"><i class="i" data-icon="upload"></i><div class="name">upload</div></div>
+          <div class="icon-cell"><i class="i" data-icon="download"></i><div class="name">download</div></div>
+          <div class="icon-cell"><i class="i" data-icon="eye"></i><div class="name">eye</div></div>
+          <div class="icon-cell"><i class="i" data-icon="paperclip"></i><div class="name">paperclip</div></div>
+          <div class="icon-cell"><i class="i" data-icon="copy"></i><div class="name">copy</div></div>
+
+          <div class="icon-cell"><i class="i" data-icon="mail"></i><div class="name">mail</div></div>
+          <div class="icon-cell"><i class="i" data-icon="phone"></i><div class="name">phone</div></div>
+          <div class="icon-cell"><i class="i" data-icon="send"></i><div class="name">send</div></div>
+          <div class="icon-cell"><i class="i" data-icon="message-square"></i><div class="name">message-square</div></div>
+          <div class="icon-cell"><i class="i" data-icon="bell"></i><div class="name">bell</div></div>
+          <div class="icon-cell"><i class="i" data-icon="calendar"></i><div class="name">calendar</div></div>
+          <div class="icon-cell"><i class="i" data-icon="clock"></i><div class="name">clock</div></div>
+          <div class="icon-cell"><i class="i" data-icon="hourglass"></i><div class="name">hourglass</div></div>
+
+          <div class="icon-cell"><i class="i" data-icon="alert-triangle"></i><div class="name">alert-triangle</div></div>
+          <div class="icon-cell"><i class="i" data-icon="alert-circle"></i><div class="name">alert-circle</div></div>
+          <div class="icon-cell"><i class="i" data-icon="info"></i><div class="name">info</div></div>
+          <div class="icon-cell"><i class="i" data-icon="help-circle"></i><div class="name">help-circle</div></div>
+          <div class="icon-cell"><i class="i" data-icon="check-circle"></i><div class="name">check-circle</div></div>
+          <div class="icon-cell"><i class="i" data-icon="x-circle"></i><div class="name">x-circle</div></div>
+          <div class="icon-cell"><i class="i" data-icon="lightbulb"></i><div class="name">lightbulb</div></div>
+          <div class="icon-cell"><i class="i" data-icon="sparkles"></i><div class="name">sparkles</div></div>
+
+          <div class="icon-cell"><i class="i" data-icon="star"></i><div class="name">star</div></div>
+          <div class="icon-cell" style="color: var(--brand-orange);"><i class="i" data-icon="star-filled"></i><div class="name">star-filled</div></div>
+          <div class="icon-cell"><i class="i" data-icon="bookmark"></i><div class="name">bookmark</div></div>
+          <div class="icon-cell"><i class="i" data-icon="heart"></i><div class="name">heart</div></div>
+          <div class="icon-cell"><i class="i" data-icon="award"></i><div class="name">award</div></div>
+          <div class="icon-cell"><i class="i" data-icon="gift"></i><div class="name">gift</div></div>
+          <div class="icon-cell"><i class="i" data-icon="tag"></i><div class="name">tag</div></div>
+          <div class="icon-cell"><i class="i" data-icon="zap"></i><div class="name">zap</div></div>
+
+          <div class="icon-cell"><i class="i" data-icon="lock"></i><div class="name">lock</div></div>
+          <div class="icon-cell"><i class="i" data-icon="unlock"></i><div class="name">unlock</div></div>
+          <div class="icon-cell"><i class="i" data-icon="shield"></i><div class="name">shield</div></div>
+          <div class="icon-cell"><i class="i" data-icon="shield-check"></i><div class="name">shield-check</div></div>
+          <div class="icon-cell"><i class="i" data-icon="log-in"></i><div class="name">log-in</div></div>
+          <div class="icon-cell"><i class="i" data-icon="log-out"></i><div class="name">log-out</div></div>
+          <div class="icon-cell"><i class="i" data-icon="settings"></i><div class="name">settings</div></div>
+          <div class="icon-cell"><i class="i" data-icon="pencil"></i><div class="name">pencil</div></div>
+
+          <div class="icon-cell"><i class="i" data-icon="trash"></i><div class="name">trash</div></div>
+          <div class="icon-cell"><i class="i" data-icon="pause"></i><div class="name">pause</div></div>
+          <div class="icon-cell"><i class="i" data-icon="play"></i><div class="name">play</div></div>
+          <div class="icon-cell"><i class="i" data-icon="more-horizontal"></i><div class="name">more-horizontal</div></div>
+          <div class="icon-cell"><i class="i" data-icon="trending-up"></i><div class="name">trending-up</div></div>
+          <div class="icon-cell"><i class="i" data-icon="bar-chart"></i><div class="name">bar-chart</div></div>
+          <div class="icon-cell"><i class="i" data-icon="dollar-sign"></i><div class="name">dollar-sign</div></div>
+          <div class="icon-cell"><i class="i" data-icon="arrow-up-right"></i><div class="name">arrow-up-right</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TYPOGRAPHY -->
+    <section class="ds-section">
+      <div class="t-overline muted" data-i18n-es="04 — Tipografía" data-i18n-en="04 — Typography">04 — Tipografía</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Escala — Montserrat" data-i18n-en="Scale — Montserrat">Escala — Montserrat</h2>
+      <div class="card stack-4">
+        <div><div class="ds-label">Display · 48 / 800</div><div class="t-display">Los mejores profesionales</div></div>
+        <div><div class="ds-label">H1 · 36 / 700</div><div class="t-h1">Encuentra el siguiente paso de tu carrera</div></div>
+        <div><div class="ds-label">H2 · 28 / 700</div><div class="t-h2">Job Posting Details</div></div>
+        <div><div class="ds-label">H3 · 22 / 600</div><div class="t-h3">Aplicaciones recientes</div></div>
+        <div><div class="ds-label">H4 · 18 / 600</div><div class="t-h4">Senior Product Designer</div></div>
+        <div><div class="ds-label">Body · 15 / 400</div><div class="t-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Diseñado para legibilidad en pantallas y formularios largos.</div></div>
+        <div><div class="ds-label">Body small · 13 / 400</div><div class="t-body-sm">Texto secundario para metadata, fechas, descripciones breves.</div></div>
+        <div><div class="ds-label">Caption · 12 / 500</div><div class="t-caption">Etiquetas y microcopy</div></div>
+        <div><div class="ds-label">Overline · 11 / 700 uppercase</div><div class="t-overline">Sección destacada</div></div>
+      </div>
+    </section>
+
+    <!-- BUTTONS -->
+    <section class="ds-section">
+      <div class="t-overline muted">04 — Buttons</div>
+      <h2 class="t-h2 mt-2 mb-6">Botones</h2>
+      <div class="card">
+        <div class="ds-label">Variants</div>
+        <div class="row mb-6" style="flex-wrap:wrap;">
+          <button class="btn btn-primary" data-i18n-es="Aplicar al puesto" data-i18n-en="Apply to job">Aplicar al puesto</button>
+          <button class="btn btn-secondary" data-i18n-es="Publicar empleo" data-i18n-en="Post a job">Publicar empleo</button>
+          <button class="btn btn-outline" data-i18n-es="Guardar" data-i18n-en="Save">Guardar</button>
+          <button class="btn btn-ghost" data-i18n-es="Cancelar" data-i18n-en="Cancel">Cancelar</button>
+          <button class="btn btn-danger" data-i18n-es="Retirar aplicación" data-i18n-en="Withdraw application">Retirar aplicación</button>
+          <button class="btn btn-primary" disabled data-i18n-es="Disabled" data-i18n-en="Disabled">Disabled</button>
+        </div>
+        <div class="ds-label">Sizes</div>
+        <div class="row" style="align-items:center; flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm">Small</button>
+          <button class="btn btn-primary">Default</button>
+          <button class="btn btn-primary btn-lg">Large</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMS -->
+    <section class="ds-section">
+      <div class="t-overline muted">05 — Forms</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Inputs & campos" data-i18n-en="Inputs & fields">Inputs & campos</h2>
+      <div class="grid-2">
+        <div class="card stack-4">
+          <div>
+            <label class="label" data-i18n-es="Nombre completo" data-i18n-en="Full name">Nombre completo <span class="req">*</span></label>
+            <input class="input" placeholder="María González" />
+            <div class="hint" data-i18n-es="Como aparece en tu documento de identidad" data-i18n-en="As shown on your government ID">Como aparece en tu documento de identidad</div>
+          </div>
+          <div>
+            <label class="label">Email <span class="req">*</span></label>
+            <input class="input input-error" value="maria@ejemplo" />
+            <div class="error-text" data-i18n-es="Ingresa un correo válido" data-i18n-en="Enter a valid email">Ingresa un correo válido</div>
+          </div>
+          <div>
+            <label class="label" data-i18n-es="Industria" data-i18n-en="Industry">Industria</label>
+            <select class="select">
+              <option>Hospitality</option><option>Tech</option><option>Healthcare</option><option>Construction</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" data-i18n-es="Bio corta" data-i18n-en="Short bio">Bio corta</label>
+            <textarea class="textarea" data-i18n-es="Cuéntanos sobre tu experiencia..." data-i18n-en="Tell us about your experience..." placeholder="Cuéntanos sobre tu experiencia..."></textarea>
+          </div>
+        </div>
+        <div class="card stack-4">
+          <div>
+            <label class="label" data-i18n-es="Resume PDF" data-i18n-en="Resume PDF">Resume PDF <span class="req">*</span></label>
+            <div class="file-drop">
+              <div style="font-size:32px; line-height:1;"><i class='i' data-icon='file-text'></i></div>
+              <div class="t-body-sm mt-2" data-i18n-es="Arrastra tu PDF o haz clic para subir" data-i18n-en="Drop your PDF or click to upload">Arrastra tu PDF o haz clic para subir</div>
+              <div class="hint" data-i18n-es="Máx. 5 MB · solo PDF" data-i18n-en="Max 5 MB · PDF only">Máx. 5 MB · solo PDF</div>
+            </div>
+          </div>
+          <div>
+            <label class="label" data-i18n-es="Visibilidad de salario" data-i18n-en="Salary visibility">Visibilidad de salario</label>
+            <div class="row gap-3">
+              <label class="row gap-2 items-center" style="cursor:pointer;"><input type="radio" name="vis" checked /> <span class="t-body-sm" data-i18n-es="Mostrar a candidatos" data-i18n-en="Show to candidates">Mostrar a candidatos</span></label>
+              <label class="row gap-2 items-center" style="cursor:pointer;"><input type="radio" name="vis" /> <span class="t-body-sm" data-i18n-es="Ocultar" data-i18n-en="Hide">Ocultar</span></label>
+            </div>
+          </div>
+          <div>
+            <label class="row gap-2 items-center" style="cursor:pointer;">
+              <input type="checkbox" checked />
+              <span class="t-body-sm" data-i18n-es="Acepto los términos y la política de privacidad" data-i18n-en="I accept the terms and privacy policy">Acepto los términos y la política de privacidad</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BADGES -->
+    <section class="ds-section">
+      <div class="t-overline muted">06 — Badges</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Status de aplicación" data-i18n-en="Application status">Status de aplicación</h2>
+      <div class="card">
+        <div class="ds-label" data-i18n-es="Candidato — status de aplicación" data-i18n-en="Candidate — application status">Candidato — status de aplicación</div>
+        <div class="row mb-6" style="flex-wrap:wrap;">
+          <span class="badge badge-neutral"><span class="dot"></span>Applied</span>
+          <span class="badge badge-info"><span class="dot"></span>Under Review</span>
+          <span class="badge badge-violet"><span class="dot"></span>Interviewing</span>
+          <span class="badge badge-orange"><span class="dot"></span>Offer Extended</span>
+          <span class="badge badge-success"><span class="dot"></span>Hired</span>
+          <span class="badge badge-danger"><span class="dot"></span>Not Selected</span>
+        </div>
+        <div class="ds-label" data-i18n-es="Job — estado" data-i18n-en="Job — state">Job — estado</div>
+        <div class="row mb-6" style="flex-wrap:wrap;">
+          <span class="badge badge-success"><span class="dot"></span>Active</span>
+          <span class="badge badge-warning"><span class="dot"></span>Paused</span>
+          <span class="badge badge-neutral"><span class="dot"></span>Closed</span>
+        </div>
+        <div class="ds-label" data-i18n-es="Employer — aprobación" data-i18n-en="Employer — approval">Employer — aprobación</div>
+        <div class="row" style="flex-wrap:wrap;">
+          <span class="badge badge-warning"><span class="dot"></span>Pending</span>
+          <span class="badge badge-success"><span class="dot"></span>Approved</span>
+          <span class="badge badge-danger"><span class="dot"></span>Rejected</span>
+          <span class="badge badge-warning" style="font-weight:700;"><i class='i' data-icon='alert-triangle'></i> Overdue</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALERTS -->
+    <section class="ds-section">
+      <div class="t-overline muted">07 — Alerts / Banners</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Estados disparados por backend" data-i18n-en="Backend-triggered states">Estados disparados por backend</h2>
+      <div class="stack-4">
+        <div class="alert alert-info">
+          <div><i class='i' data-icon='info'></i></div>
+          <div>
+            <div class="alert-title" data-i18n-es="Verifica tu correo" data-i18n-en="Verify your email">Verifica tu correo</div>
+            <div class="alert-body" data-i18n-es="Te enviamos un enlace de verificación a maria@ejemplo.com" data-i18n-en="We sent a verification link to maria@example.com">Te enviamos un enlace de verificación a maria@ejemplo.com</div>
+          </div>
+        </div>
+        <div class="alert alert-warning">
+          <div><i class='i' data-icon='hourglass'></i></div>
+          <div>
+            <div class="alert-title" data-i18n-es="Cuenta de empleador en revisión" data-i18n-en="Employer account under review">Cuenta de empleador en revisión</div>
+            <div class="alert-body" data-i18n-es="Tu solicitud está pendiente de aprobación. Te notificaremos cuando esté lista." data-i18n-en="Your application is pending approval. We'll notify you once it's ready.">Tu solicitud está pendiente de aprobación. Te notificaremos cuando esté lista.</div>
+          </div>
+        </div>
+        <div class="alert alert-warning">
+          <div><i class='i' data-icon='alert-triangle'></i></div>
+          <div>
+            <div class="alert-title" data-i18n-es="Update needed" data-i18n-en="Update needed">Update needed</div>
+            <div class="alert-body" data-i18n-es="Esta aplicación lleva más de 14 días en Under Review." data-i18n-en="This application has been Under Review for more than 14 days.">Esta aplicación lleva más de 14 días en Under Review.</div>
+          </div>
+        </div>
+        <div class="alert alert-success">
+          <i class="i" data-icon="check-circle"></i>
+          <div>
+            <div class="alert-title" data-i18n-es="¡Empleador aprobado!" data-i18n-en="Employer approved!">¡Empleador aprobado!</div>
+            <div class="alert-body" data-i18n-es="Ya puedes publicar empleos y revisar aplicantes." data-i18n-en="You can now post jobs and review applicants.">Ya puedes publicar empleos y revisar aplicantes.</div>
+          </div>
+        </div>
+        <div class="alert alert-danger">
+          <div><i class='i' data-icon='x-circle'></i></div>
+          <div>
+            <div class="alert-title" data-i18n-es="No se pudo procesar" data-i18n-en="Couldn't process">No se pudo procesar</div>
+            <div class="alert-body" data-i18n-es="Revisa los campos marcados e intenta de nuevo." data-i18n-en="Check the highlighted fields and try again.">Revisa los campos marcados e intenta de nuevo.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE COMPLETION -->
+    <section class="ds-section">
+      <div class="t-overline muted">08 — Profile completion</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Indicador de perfil" data-i18n-en="Profile indicator">Indicador de perfil</h2>
+      <div class="grid-2">
+        <div class="card">
+          <div class="flex justify-between items-center mb-2">
+            <div class="t-h4" data-i18n-es="Tu perfil" data-i18n-en="Your profile">Tu perfil</div>
+            <div class="t-h4" style="color: var(--brand-orange);">85%</div>
+          </div>
+          <div class="progress mb-4"><div class="progress-bar warn" style="width:85%"></div></div>
+          <div class="t-body-sm muted" data-i18n-es="Falta: Resume, Referencias" data-i18n-en="Missing: Resume, References">Falta: Resume, Referencias</div>
+        </div>
+        <div class="card">
+          <div class="flex justify-between items-center mb-2">
+            <div class="t-h4" data-i18n-es="Perfil completo" data-i18n-en="Profile complete">Perfil completo</div>
+            <div class="t-h4" style="color: var(--success);">100%</div>
+          </div>
+          <div class="progress mb-4"><div class="progress-bar" style="width:100%"></div></div>
+          <div class="t-body-sm" style="color: var(--success);" data-i18n-es="✓ Listo para aplicar a empleos" data-i18n-en="✓ Ready to apply to jobs">✓ Listo para aplicar a empleos</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAT CARDS -->
+    <section class="ds-section">
+      <div class="t-overline muted">09 — Stat cards</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Métricas (Admin / Employer dashboards)" data-i18n-en="Metrics (Admin / Employer dashboards)">Métricas (Admin / Employer dashboards)</h2>
+      <div class="grid-4">
+        <div class="card stat">
+          <div class="stat-label" data-i18n-es="Candidatos totales" data-i18n-en="Total candidates">Candidatos totales</div>
+          <div class="stat-val">1,284</div>
+          <div class="stat-delta">+24 esta semana</div>
+        </div>
+        <div class="card stat">
+          <div class="stat-label" data-i18n-es="Empleos activos" data-i18n-en="Active jobs">Empleos activos</div>
+          <div class="stat-val">37</div>
+          <div class="stat-delta">+3</div>
+        </div>
+        <div class="card stat">
+          <div class="stat-label" data-i18n-es="Aprobaciones pendientes" data-i18n-en="Pending approvals">Aprobaciones pendientes</div>
+          <div class="stat-val" style="color: var(--warning);">8</div>
+          <div class="t-caption muted" data-i18n-es="Requiere acción" data-i18n-en="Needs action">Requiere acción</div>
+        </div>
+        <div class="card stat">
+          <div class="stat-label" data-i18n-es="Aplicaciones vencidas" data-i18n-en="Overdue applications">Aplicaciones vencidas</div>
+          <div class="stat-val" style="color: var(--danger);">12</div>
+          <div class="t-caption muted">+14 días Under Review</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOB CARD + APPLICANT CARD -->
+    <section class="ds-section">
+      <div class="t-overline muted">10 — Cards</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Job & applicant cards" data-i18n-en="Job & applicant cards">Job & applicant cards</h2>
+      <div class="grid-2">
+        <!-- Job card -->
+        <div class="card card-hover">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <div class="t-h4 mb-2">Senior Product Designer</div>
+              <div class="t-body-sm muted">Sunset Hotels Group · Miami, FL</div>
+            </div>
+            <span class="badge badge-success"><span class="dot"></span>Active</span>
+          </div>
+          <div class="row mb-4" style="flex-wrap:wrap; gap:6px;">
+            <span class="badge badge-neutral">Full-time</span>
+            <span class="badge badge-neutral">Hospitality</span>
+            <span class="badge badge-neutral">$80k–$110k</span>
+          </div>
+          <div class="t-body-sm muted mb-4" data-i18n-es="Diseña experiencias para huéspedes en toda la cartera de hoteles de lujo de la región." data-i18n-en="Design guest experiences across our luxury hotel portfolio in the region.">Diseña experiencias para huéspedes en toda la cartera de hoteles de lujo de la región.</div>
+          <div class="flex justify-between items-center">
+            <span class="t-caption muted" data-i18n-es="Publicado hace 3 días" data-i18n-en="Posted 3 days ago">Publicado hace 3 días</span>
+            <div class="row gap-2">
+              <button class="btn btn-outline btn-sm" data-i18n-es="Guardar" data-i18n-en="Save">Guardar</button>
+              <button class="btn btn-primary btn-sm" data-i18n-es="Aplicar" data-i18n-en="Apply">Aplicar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Applicant card -->
+        <div class="card">
+          <div class="applicant-card">
+            <div class="avatar avatar-lg">MG</div>
+            <div style="flex:1;">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <div class="t-h4">María González</div>
+                  <div class="t-body-sm muted">Senior UX Designer · Miami, FL</div>
+                </div>
+                <span class="badge badge-violet"><span class="dot"></span>Interviewing</span>
+              </div>
+              <div class="row mb-4" style="flex-wrap:wrap; gap:6px;">
+                <span class="badge badge-neutral">7 yrs exp</span>
+                <span class="badge badge-neutral">Hospitality</span>
+              </div>
+              <div class="row gap-2">
+                <button class="btn btn-outline btn-sm"><i class='i' data-icon='file-text'></i> View Resume</button>
+                <button class="btn btn-ghost btn-sm">Notes</button>
+                <select class="select" style="width:auto; padding: 6px 30px 6px 10px; font-size:13px;">
+                  <option>Update status…</option>
+                  <option>Applied</option><option>Under Review</option><option>Interviewing</option><option>Offer Extended</option><option>Hired</option><option>Not Selected</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="ds-section">
+      <div class="t-overline muted">11 — Timeline</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Status timeline (aplicación)" data-i18n-en="Application status timeline">Status timeline (aplicación)</h2>
+      <div class="card">
+        <div class="timeline">
+          <div class="timeline-item done">
+            <div class="t-h4">Applied</div>
+            <div class="t-body-sm muted">12 Mar 2026 · 09:14</div>
+          </div>
+          <div class="timeline-item done">
+            <div class="t-h4">Under Review</div>
+            <div class="t-body-sm muted">14 Mar 2026 · 11:02 · Sunset Hotels Group</div>
+          </div>
+          <div class="timeline-item active">
+            <div class="t-h4">Interviewing</div>
+            <div class="t-body-sm muted">22 Mar 2026 · 16:30</div>
+            <div class="t-body-sm mt-2" data-i18n-es="Entrevista programada para el 28 de marzo a las 10:00 AM" data-i18n-en="Interview scheduled for March 28 at 10:00 AM">Entrevista programada para el 28 de marzo a las 10:00 AM</div>
+          </div>
+          <div class="timeline-item">
+            <div class="t-h4 muted">Offer Extended</div>
+            <div class="t-body-sm subtle">—</div>
+          </div>
+          <div class="timeline-item">
+            <div class="t-h4 muted">Hired</div>
+            <div class="t-body-sm subtle">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILE BUTTONS -->
+    <section class="ds-section">
+      <div class="t-overline muted">12 — Secure files</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Archivos privados (link temporal)" data-i18n-en="Private files (temporary link)">Archivos privados (link temporal)</h2>
+      <div class="card">
+        <div class="alert alert-info mb-6">
+          <div><i class='i' data-icon='lock'></i></div>
+          <div>
+            <div class="alert-title" data-i18n-es="Acceso seguro" data-i18n-en="Secure access">Acceso seguro</div>
+            <div class="alert-body" data-i18n-es="Resumes y headshots no son URLs públicas. El backend genera un link temporal cuando un empleador aprobado o admin lo solicita." data-i18n-en="Resumes and headshots are not public URLs. The backend generates a temporary link when an approved employer or admin requests it.">Resumes y headshots no son URLs públicas. El backend genera un link temporal cuando un empleador aprobado o admin lo solicita.</div>
+          </div>
+        </div>
+        <div class="row" style="flex-wrap:wrap;">
+          <button class="btn btn-outline"><i class='i' data-icon='file-text'></i> View Resume</button>
+          <button class="btn btn-outline"><i class='i' data-icon='download'></i> Download Resume</button>
+          <button class="btn btn-outline"><i class='i' data-icon='image'></i> View Headshot</button>
+          <button class="btn btn-ghost" data-i18n-es="Reemplazar resume" data-i18n-en="Replace resume">Reemplazar resume</button>
+          <button class="btn btn-ghost" data-i18n-es="Reemplazar headshot" data-i18n-en="Replace headshot">Reemplazar headshot</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABLE -->
+    <section class="ds-section">
+      <div class="t-overline muted">13 — Tables</div>
+      <h2 class="t-h2 mt-2 mb-6" data-i18n-es="Tablas (Admin)" data-i18n-en="Tables (Admin)">Tablas (Admin)</h2>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th data-i18n-es="Empresa" data-i18n-en="Company">Empresa</th>
+              <th data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</th>
+              <th>Industry</th>
+              <th data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Sunset Hotels Group</strong></td><td>carlos@sunset.com</td><td>Hospitality</td><td>5</td><td><span class="badge badge-warning"><span class="dot"></span>Pending</span></td><td class="text-right"><button class="btn btn-primary btn-sm">Approve</button> <button class="btn btn-ghost btn-sm">Reject</button></td></tr>
+            <tr><td><strong>Brickell Build Co.</strong></td><td>ana@brickell.co</td><td>Construction</td><td>12</td><td><span class="badge badge-success"><span class="dot"></span>Approved</span></td><td class="text-right"><button class="btn btn-ghost btn-sm">View</button></td></tr>
+            <tr><td><strong>Wynwood Health</strong></td><td>dr.lopez@wynh.com</td><td>Healthcare</td><td>3</td><td><span class="badge badge-warning"><span class="dot"></span>Pending</span></td><td class="text-right"><button class="btn btn-primary btn-sm">Approve</button> <button class="btn btn-ghost btn-sm">Reject</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- AVATARS -->
+    <section class="ds-section">
+      <div class="t-overline muted">14 — Avatars</div>
+      <h2 class="t-h2 mt-2 mb-6">Avatars</h2>
+      <div class="card row items-center" style="flex-wrap:wrap;">
+        <div class="avatar avatar-sm">MG</div>
+        <div class="avatar">MG</div>
+        <div class="avatar avatar-lg">MG</div>
+        <div class="avatar" style="background: var(--brand-orange-100); color: var(--brand-orange-700);">CR</div>
+        <div class="avatar" style="background: var(--violet-bg); color: var(--violet);">JL</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="padding: 32px 0; text-align: center; color: var(--ink-500); font-size: 12px;">
+    Miami Professional Network · Design System v0.1
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/i18n.js"></script>
+</body>
+</html>

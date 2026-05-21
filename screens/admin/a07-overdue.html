@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-07 · Aplicaciones vencidas — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .hero-warning {
+      background: var(--warning-bg);
+      border: 1px solid rgba(217,119,6,0.20);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      display: flex; gap: 18px; align-items: center;
+      margin-bottom: 24px;
+    }
+    .hero-warning .icon {
+      width: 40px; height: 40px; border-radius: var(--r-md);
+      background: var(--white); color: var(--warning);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+      border: 1px solid rgba(217,119,6,0.20);
+    }
+    .hero-warning .copy h2 { margin: 0 0 2px; color: #92400E; font-weight: 600; letter-spacing: -0.01em; }
+    .hero-warning .copy p { margin: 0; color: #B45309; font-size: 13px; }
+
+    .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    @media (max-width: 900px) { .stats-strip { grid-template-columns: repeat(2, 1fr); } }
+    .mini-stat {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-md); padding: 14px 16px;
+    }
+    .mini-stat .l { font-size: 11px; color: var(--ink-600); font-weight: 500; }
+    .mini-stat .n { font-size: 22px; font-weight: 600; letter-spacing: -0.015em; margin-top: 2px; color: var(--ink-900); }
+    .mini-stat .delta { font-size: 11px; font-weight: 500; margin-top: 2px; color: var(--ink-500); }
+
+    .overdue-card {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 18px 20px;
+      margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      gap: 18px;
+      align-items: center;
+    }
+    .overdue-card .days-block {
+      text-align: center; padding: 6px 14px; background: var(--warning-bg); border-radius: var(--r-md);
+      min-width: 80px;
+    }
+    .overdue-card .days-block .n { font-size: 22px; font-weight: 700; color: var(--warning); line-height: 1; letter-spacing: -0.015em; }
+    .overdue-card .days-block .l { font-size: 10px; color: var(--warning); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-top: 2px; }
+
+    .applicant-mini { display: flex; gap: 12px; align-items: center; }
+    .applicant-mini .info { flex: 1; min-width: 0; }
+    .applicant-mini .name { font-weight: 600; font-size: 14px; color: var(--ink-900); }
+    .applicant-mini .meta { font-size: 12px; color: var(--ink-600); margin-top: 2px; }
+
+    .employer-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; background: var(--ink-100);
+      border-radius: var(--r-full); font-size: 12px; font-weight: 500;
+      color: var(--ink-800);
+    }
+    .employer-chip .lg {
+      width: 18px; height: 18px; border-radius: 50%; background: var(--ink-200);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; color: var(--ink-700);
+    }
+
+    .escalation-card {
+      background: var(--white); border: 1px solid var(--danger);
+      border-radius: var(--r-lg); padding: 20px;
+      margin-top: 24px;
+    }
+    .escalation-card h3 { margin: 0 0 8px; color: var(--danger); }
+    .esc-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--ink-200);
+    }
+    .esc-row:last-child { border-bottom: 0; }
+    .esc-row .info { flex: 1; }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="admin" data-active="overdue">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Admin · Vencidas" data-i18n-en="Admin · Overdue">Admin · Vencidas</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Aplicaciones vencidas" data-i18n-en="Overdue applications">Aplicaciones vencidas</h1>
+          <div class="t-body-sm muted" data-i18n-es="Aplicaciones +14 días en Under Review en toda la plataforma" data-i18n-en="Applications +14 days in Under Review platform-wide">Aplicaciones +14 días en Under Review en toda la plataforma</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="btn btn-primary btn-sm"><i class="i" data-icon="send"></i> <span data-i18n-es="Enviar recordatorios" data-i18n-en="Send reminders">Enviar recordatorios</span></button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero warning -->
+      <div class="hero-warning">
+        <div class="icon"><i class="i" data-icon="alert-triangle"></i></div>
+        <div class="copy" style="flex: 1;">
+          <h2 class="t-h3" data-i18n-es="12 aplicaciones vencidas en 5 empleadores" data-i18n-en="12 overdue applications across 5 employers">12 aplicaciones vencidas en 5 empleadores</h2>
+          <p data-i18n-es="2 llevan +30 días sin respuesta — considera escalar el contacto manualmente." data-i18n-en="2 are +30 days without response — consider escalating contact manually.">2 llevan +30 días sin respuesta — considera escalar el contacto manualmente.</p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-strip">
+        <div class="mini-stat">
+          <div class="l" data-i18n-es="Total vencidas" data-i18n-en="Total overdue">Total vencidas</div>
+          <div class="n" style="color: var(--warning);">12</div>
+          <div class="delta" data-i18n-es="de 486 Under Review" data-i18n-en="of 486 Under Review">de 486 Under Review</div>
+        </div>
+        <div class="mini-stat">
+          <div class="l" data-i18n-es="Empleadores afectados" data-i18n-en="Affected employers">Empleadores afectados</div>
+          <div class="n">5</div>
+          <div class="delta" data-i18n-es="2 con multiple casos" data-i18n-en="2 with multiple cases">2 con multiple casos</div>
+        </div>
+        <div class="mini-stat">
+          <div class="l" data-i18n-es="Promedio en revisión" data-i18n-en="Avg. in review">Promedio en revisión</div>
+          <div class="n">19 <span style="font-size: 12px; font-weight: 500;" data-i18n-es="días" data-i18n-en="days">días</span></div>
+          <div class="delta" data-i18n-es="Meta: &lt; 14 días" data-i18n-en="Target: &lt; 14 days">Meta: &lt; 14 días</div>
+        </div>
+        <div class="mini-stat">
+          <div class="l" data-i18n-es="Recordatorios enviados" data-i18n-en="Reminders sent">Recordatorios enviados</div>
+          <div class="n">8</div>
+          <div class="delta" data-i18n-es="esta semana" data-i18n-en="this week">esta semana</div>
+        </div>
+      </div>
+
+      <!-- Overdue list -->
+      <div class="t-h4 mb-4" data-i18n-es="Todas las vencidas" data-i18n-en="All overdue">Todas las vencidas</div>
+
+      <div class="overdue-card">
+        <div class="applicant-mini">
+          <div class="avatar">MG</div>
+          <div class="info">
+            <div class="name">María González <span class="muted" style="font-weight: 400;">→ Hospitality Marketing Lead</span></div>
+            <div class="meta" data-i18n-es="Aplicó el 28 Abr · Recordatorios: 1 enviado" data-i18n-en="Applied Apr 28 · Reminders: 1 sent">Aplicó el 28 Abr · Recordatorios: 1 enviado</div>
+          </div>
+        </div>
+        <span class="employer-chip"><span class="lg">SH</span>Sunset Hotels Group</span>
+        <div class="days-block">
+          <div class="n">18</div>
+          <div class="l" data-i18n-es="días" data-i18n-en="days">días</div>
+        </div>
+        <div class="row gap-2">
+          <button class="btn btn-outline btn-sm" data-i18n-es="Recordar" data-i18n-en="Remind">Recordar</button>
+          <button class="btn btn-ghost btn-sm"><i class="i" data-icon="more-horizontal"></i></button>
+        </div>
+      </div>
+
+      <div class="overdue-card">
+        <div class="applicant-mini">
+          <div class="avatar">JR</div>
+          <div class="info">
+            <div class="name">Jonathan Reyes <span class="muted" style="font-weight: 400;">→ Front Office Manager</span></div>
+            <div class="meta" data-i18n-es="Aplicó el 02 May · Recordatorios: 1 enviado" data-i18n-en="Applied May 2 · Reminders: 1 sent">Aplicó el 02 May · Recordatorios: 1 enviado</div>
+          </div>
+        </div>
+        <span class="employer-chip"><span class="lg">SH</span>Sunset Hotels Group</span>
+        <div class="days-block">
+          <div class="n">16</div>
+          <div class="l" data-i18n-es="días" data-i18n-en="days">días</div>
+        </div>
+        <div class="row gap-2">
+          <button class="btn btn-outline btn-sm" data-i18n-es="Recordar" data-i18n-en="Remind">Recordar</button>
+          <button class="btn btn-ghost btn-sm"><i class="i" data-icon="more-horizontal"></i></button>
+        </div>
+      </div>
+
+      <div class="overdue-card">
+        <div class="applicant-mini">
+          <div class="avatar">PG</div>
+          <div class="info">
+            <div class="name">Paola García <span class="muted" style="font-weight: 400;">→ UX Researcher</span></div>
+            <div class="meta" data-i18n-es="Aplicó el 28 Abr · Recordatorios: 2 enviados" data-i18n-en="Applied Apr 28 · Reminders: 2 sent">Aplicó el 28 Abr · Recordatorios: 2 enviados</div>
+          </div>
+        </div>
+        <span class="employer-chip"><span class="lg">WH</span>Wynwood Health</span>
+        <div class="days-block">
+          <div class="n">21</div>
+          <div class="l" data-i18n-es="días" data-i18n-en="days">días</div>
+        </div>
+        <div class="row gap-2">
+          <button class="btn btn-outline btn-sm" data-i18n-es="Recordar" data-i18n-en="Remind">Recordar</button>
+          <button class="btn btn-ghost btn-sm"><i class="i" data-icon="more-horizontal"></i></button>
+        </div>
+      </div>
+
+      <div class="overdue-card">
+        <div class="applicant-mini">
+          <div class="avatar">VC</div>
+          <div class="info">
+            <div class="name">Verónica Castro <span class="muted" style="font-weight: 400;">→ Marketing Coordinator</span></div>
+            <div class="meta" data-i18n-es="Aplicó el 15 Abr · Recordatorios: 2 enviados" data-i18n-en="Applied Apr 15 · Reminders: 2 sent">Aplicó el 15 Abr · Recordatorios: 2 enviados</div>
+          </div>
+        </div>
+        <span class="employer-chip"><span class="lg">CV</span>Coastal Ventures</span>
+        <div class="days-block">
+          <div class="n">17</div>
+          <div class="l" data-i18n-es="días" data-i18n-en="days">días</div>
+        </div>
+        <div class="row gap-2">
+          <button class="btn btn-outline btn-sm" data-i18n-es="Recordar" data-i18n-en="Remind">Recordar</button>
+          <button class="btn btn-ghost btn-sm"><i class="i" data-icon="more-horizontal"></i></button>
+        </div>
+      </div>
+
+      <!-- Escalation section -->
+      <div class="escalation-card">
+        <div class="row gap-3 items-center mb-4">
+          <i class="i" data-icon="alert-triangle" style="font-size: 20px; color: var(--danger);"></i>
+          <div>
+            <h3 class="t-h4" data-i18n-es="Para escalar manualmente (+30 días)" data-i18n-en="For manual escalation (+30 days)">Para escalar manualmente (+30 días)</h3>
+            <div class="t-body-sm" style="color: var(--ink-700);" data-i18n-es="Considera contactar al empleador directamente por teléfono o pausar su acceso a publicar nuevos empleos." data-i18n-en="Consider contacting the employer directly by phone or pausing their ability to post new jobs.">Considera contactar al empleador directamente por teléfono o pausar su acceso a publicar nuevos empleos.</div>
+          </div>
+        </div>
+
+        <div class="esc-row">
+          <div class="avatar">DL</div>
+          <div class="info">
+            <div style="font-weight: 600; font-size: 14px;">Daniela Lara <span class="muted" style="font-weight: 400;">→ Service Designer</span></div>
+            <div class="t-body-sm muted">Ocean Mirage Resort · <span data-i18n-es="35 días sin update · 3 recordatorios sin respuesta" data-i18n-en="35 days no update · 3 reminders unanswered">35 días sin update · 3 recordatorios sin respuesta</span></div>
+          </div>
+          <button class="btn btn-outline btn-sm"><i class="i" data-icon="phone"></i> <span data-i18n-es="Contactar" data-i18n-en="Contact">Contactar</span></button>
+          <button class="btn btn-danger btn-sm" data-i18n-es="Pausar empleador" data-i18n-en="Pause employer">Pausar empleador</button>
+        </div>
+
+        <div class="esc-row">
+          <div class="avatar">FT</div>
+          <div class="info">
+            <div style="font-weight: 600; font-size: 14px;">Fernando Téllez <span class="muted" style="font-weight: 400;">→ Sous Chef</span></div>
+            <div class="t-body-sm muted">Coastal Ventures · <span data-i18n-es="31 días sin update · 3 recordatorios sin respuesta" data-i18n-en="31 days no update · 3 reminders unanswered">31 días sin update · 3 recordatorios sin respuesta</span></div>
+          </div>
+          <button class="btn btn-outline btn-sm"><i class="i" data-icon="phone"></i> <span data-i18n-es="Contactar" data-i18n-en="Contact">Contactar</span></button>
+          <button class="btn btn-danger btn-sm" data-i18n-es="Pausar empleador" data-i18n-en="Pause employer">Pausar empleador</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

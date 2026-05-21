@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#03061A"/>
+      <stop offset="50%" stop-color="#0A1530"/>
+      <stop offset="78%" stop-color="#1A0F2A"/>
+      <stop offset="100%" stop-color="#2B1318"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.55" cy="1" r="0.75">
+      <stop offset="0%" stop-color="#F36B1B" stop-opacity="0.32"/>
+      <stop offset="35%" stop-color="#F36B1B" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F36B1B" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pinkglow" cx="0.30" cy="1" r="0.55">
+      <stop offset="0%" stop-color="#E13C8C" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#E13C8C" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Sky gradient + warm horizon glows -->
+  <rect width="1000" height="1400" fill="url(#sky)"/>
+  <rect width="1000" height="1400" fill="url(#pinkglow)"/>
+  <rect width="1000" height="1400" fill="url(#glow)"/>
+
+  <!-- Moon -->
+  <circle cx="730" cy="280" r="32" fill="#F0E8D0" opacity="0.85"/>
+  <circle cx="740" cy="276" r="28" fill="#1A1F2E" opacity="0.55"/>
+
+  <!-- Stars -->
+  <g fill="#FFFFFF" opacity="0.55">
+    <circle cx="60" cy="120" r="1"/>
+    <circle cx="180" cy="80" r="1.4"/>
+    <circle cx="280" cy="200" r="0.8"/>
+    <circle cx="420" cy="140" r="1.1"/>
+    <circle cx="540" cy="60" r="1"/>
+    <circle cx="640" cy="180" r="0.8"/>
+    <circle cx="900" cy="100" r="1.2"/>
+    <circle cx="350" cy="320" r="0.7"/>
+    <circle cx="100" cy="380" r="0.9"/>
+    <circle cx="980" cy="320" r="1"/>
+    <circle cx="160" cy="440" r="0.6"/>
+    <circle cx="850" cy="460" r="0.8"/>
+    <circle cx="500" cy="280" r="0.7"/>
+    <circle cx="220" cy="540" r="0.5"/>
+    <circle cx="610" cy="420" r="1"/>
+    <circle cx="780" cy="540" r="0.6"/>
+  </g>
+
+  <!-- City skyline (Brickell-style — tall buildings center, shorter at edges) -->
+  <g fill="#020610">
+    <rect x="-5" y="900" width="55" height="500"/>
+    <rect x="50" y="880" width="42" height="520"/>
+    <rect x="92" y="920" width="56" height="480"/>
+    <rect x="148" y="860" width="35" height="540"/>
+    <rect x="183" y="900" width="50" height="500"/>
+    <rect x="233" y="840" width="45" height="560"/>
+    <rect x="278" y="880" width="40" height="520"/>
+    <rect x="318" y="780" width="55" height="620"/>
+    <rect x="373" y="820" width="35" height="580"/>
+    <rect x="408" y="740" width="65" height="660"/>
+    <rect x="473" y="790" width="40" height="610"/>
+    <rect x="513" y="700" width="70" height="700"/>
+    <rect x="583" y="760" width="45" height="640"/>
+    <rect x="628" y="800" width="50" height="600"/>
+    <rect x="678" y="850" width="40" height="550"/>
+    <rect x="718" y="820" width="50" height="580"/>
+    <rect x="768" y="880" width="35" height="520"/>
+    <rect x="803" y="860" width="45" height="540"/>
+    <rect x="848" y="900" width="40" height="500"/>
+    <rect x="888" y="870" width="55" height="530"/>
+    <rect x="943" y="910" width="60" height="490"/>
+  </g>
+
+  <!-- Building windows (warm yellow lights) -->
+  <g fill="#FFCB6B" opacity="0.85">
+    <rect x="14" y="940" width="3" height="3"/>
+    <rect x="28" y="970" width="3" height="3"/>
+    <rect x="18" y="1010" width="3" height="3"/>
+    <rect x="34" y="1050" width="3" height="3"/>
+    <rect x="22" y="1100" width="3" height="3"/>
+    <rect x="60" y="920" width="3" height="3"/>
+    <rect x="65" y="960" width="3" height="3"/>
+    <rect x="60" y="1000" width="3" height="3"/>
+    <rect x="72" y="1040" width="3" height="3"/>
+    <rect x="100" y="950" width="3" height="3"/>
+    <rect x="115" y="980" width="3" height="3"/>
+    <rect x="105" y="1020" width="3" height="3"/>
+    <rect x="120" y="1060" width="3" height="3"/>
+    <rect x="158" y="900" width="3" height="3"/>
+    <rect x="165" y="950" width="3" height="3"/>
+    <rect x="155" y="1000" width="3" height="3"/>
+    <rect x="190" y="930" width="3" height="3"/>
+    <rect x="200" y="980" width="3" height="3"/>
+    <rect x="210" y="1030" width="3" height="3"/>
+    <rect x="245" y="870" width="3" height="3"/>
+    <rect x="250" y="910" width="3" height="3"/>
+    <rect x="260" y="960" width="3" height="3"/>
+    <rect x="265" y="1010" width="3" height="3"/>
+    <rect x="285" y="900" width="3" height="3"/>
+    <rect x="290" y="950" width="3" height="3"/>
+    <rect x="295" y="1000" width="3" height="3"/>
+    <rect x="335" y="820" width="3" height="3"/>
+    <rect x="330" y="870" width="3" height="3"/>
+    <rect x="345" y="910" width="3" height="3"/>
+    <rect x="350" y="960" width="3" height="3"/>
+    <rect x="340" y="1010" width="3" height="3"/>
+    <rect x="380" y="850" width="3" height="3"/>
+    <rect x="385" y="900" width="3" height="3"/>
+    <rect x="392" y="950" width="3" height="3"/>
+    <rect x="425" y="780" width="3" height="3"/>
+    <rect x="420" y="830" width="3" height="3"/>
+    <rect x="440" y="870" width="3" height="3"/>
+    <rect x="445" y="920" width="3" height="3"/>
+    <rect x="435" y="980" width="3" height="3"/>
+    <rect x="455" y="1030" width="3" height="3"/>
+    <rect x="485" y="820" width="3" height="3"/>
+    <rect x="490" y="870" width="3" height="3"/>
+    <rect x="495" y="920" width="3" height="3"/>
+    <rect x="500" y="970" width="3" height="3"/>
+    <rect x="530" y="740" width="3" height="3"/>
+    <rect x="540" y="780" width="3" height="3"/>
+    <rect x="525" y="820" width="3" height="3"/>
+    <rect x="540" y="870" width="3" height="3"/>
+    <rect x="555" y="920" width="3" height="3"/>
+    <rect x="560" y="970" width="3" height="3"/>
+    <rect x="540" y="1020" width="3" height="3"/>
+    <rect x="555" y="1070" width="3" height="3"/>
+    <rect x="600" y="790" width="3" height="3"/>
+    <rect x="605" y="840" width="3" height="3"/>
+    <rect x="610" y="890" width="3" height="3"/>
+    <rect x="615" y="940" width="3" height="3"/>
+    <rect x="640" y="830" width="3" height="3"/>
+    <rect x="650" y="880" width="3" height="3"/>
+    <rect x="655" y="930" width="3" height="3"/>
+    <rect x="660" y="980" width="3" height="3"/>
+    <rect x="688" y="880" width="3" height="3"/>
+    <rect x="700" y="930" width="3" height="3"/>
+    <rect x="695" y="980" width="3" height="3"/>
+    <rect x="730" y="850" width="3" height="3"/>
+    <rect x="745" y="890" width="3" height="3"/>
+    <rect x="735" y="940" width="3" height="3"/>
+    <rect x="750" y="990" width="3" height="3"/>
+    <rect x="780" y="910" width="3" height="3"/>
+    <rect x="790" y="960" width="3" height="3"/>
+    <rect x="820" y="890" width="3" height="3"/>
+    <rect x="825" y="935" width="3" height="3"/>
+    <rect x="830" y="990" width="3" height="3"/>
+    <rect x="870" y="930" width="3" height="3"/>
+    <rect x="875" y="980" width="3" height="3"/>
+    <rect x="900" y="900" width="3" height="3"/>
+    <rect x="910" y="950" width="3" height="3"/>
+    <rect x="915" y="1000" width="3" height="3"/>
+    <rect x="960" y="940" width="3" height="3"/>
+    <rect x="970" y="990" width="3" height="3"/>
+  </g>
+
+  <!-- Water reflection (subtle warm shimmer at bottom) -->
+  <rect x="0" y="1180" width="1000" height="220" fill="#F36B1B" opacity="0.05"/>
+  <rect x="0" y="1280" width="1000" height="120" fill="#E13C8C" opacity="0.03"/>
+
+  <!-- Palm tree silhouette (right edge — Miami icon) -->
+  <g fill="#01030A" transform="translate(885, 740)">
+    <!-- Trunk (curved) -->
+    <path d="M -7 0 Q -3 80 -5 200 Q -10 350 -14 480 L 7 480 Q 11 350 9 200 Q 11 80 7 0 Z"/>
+    <!-- Fronds radiating from top -->
+    <ellipse cx="-60" cy="-8" rx="68" ry="9" transform="rotate(-12 -60 -8)"/>
+    <ellipse cx="62" cy="-8" rx="68" ry="9" transform="rotate(12 62 -8)"/>
+    <ellipse cx="-50" cy="-40" rx="68" ry="9" transform="rotate(-50 -50 -40)"/>
+    <ellipse cx="52" cy="-40" rx="68" ry="9" transform="rotate(50 52 -40)"/>
+    <ellipse cx="-25" cy="-60" rx="60" ry="8" transform="rotate(-85 -25 -60)"/>
+    <ellipse cx="27" cy="-60" rx="60" ry="8" transform="rotate(85 27 -60)"/>
+  </g>
+
+  <!-- Second smaller palm tree (left, partial) -->
+  <g fill="#01030A" opacity="0.85" transform="translate(80, 820)">
+    <path d="M -5 0 Q -2 60 -4 150 Q -8 280 -10 400 L 6 400 Q 10 280 8 150 Q 10 60 6 0 Z"/>
+    <ellipse cx="-45" cy="-6" rx="55" ry="7" transform="rotate(-14 -45 -6)"/>
+    <ellipse cx="47" cy="-6" rx="55" ry="7" transform="rotate(14 47 -6)"/>
+    <ellipse cx="-35" cy="-30" rx="55" ry="7" transform="rotate(-50 -35 -30)"/>
+    <ellipse cx="40" cy="-30" rx="55" ry="7" transform="rotate(50 40 -30)"/>
+    <ellipse cx="-15" cy="-50" rx="50" ry="7" transform="rotate(-85 -15 -50)"/>
+    <ellipse cx="18" cy="-50" rx="50" ry="7" transform="rotate(85 18 -50)"/>
+  </g>
+</svg>

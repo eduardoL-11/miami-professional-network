@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-06 · Todas las aplicaciones — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .stats-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 16px; }
+    @media (max-width: 1100px) { .stats-strip { grid-template-columns: repeat(3, 1fr); } }
+    .mini-stat {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-md); padding: 12px 14px; cursor: pointer;
+      transition: border-color .12s, box-shadow .12s;
+    }
+    .mini-stat:hover { border-color: var(--ink-300); }
+    .mini-stat.active { border-color: var(--ink-900); background: var(--ink-50); }
+    .mini-stat .l { font-size: 11px; color: var(--ink-600); font-weight: 500; display: flex; align-items: center; gap: 6px; }
+    .mini-stat .l .dot { width: 6px; height: 6px; border-radius: 50%; }
+    .mini-stat .n { font-size: 20px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.015em; margin-top: 2px; }
+
+    .filter-bar {
+      background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-md);
+      padding: 6px; display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .search-wrap { position: relative; flex: 1; min-width: 240px; }
+    .search-wrap .input { padding-left: 36px; border: 0; }
+    .search-wrap .search-i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-500); font-size: 14px; pointer-events: none; }
+    .filter-bar .select { width: auto; min-width: 130px; border: 0; }
+    .filter-bar > .divider { width: 1px; align-self: stretch; background: var(--ink-200); }
+
+    .table-wrap { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); overflow: hidden; }
+    .atable { width: 100%; border-collapse: collapse; }
+    .atable th {
+      background: var(--ink-50); color: var(--ink-600); font-weight: 600; font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--ink-200);
+    }
+    .atable td { padding: 12px 16px; font-size: 13px; vertical-align: middle; }
+    .atable tbody tr { border-top: 1px solid var(--ink-200); }
+    .atable tbody tr:first-child { border-top: 0; }
+    .atable tbody tr:hover { background: var(--ink-50); }
+    .atable tbody tr td:first-child { padding-left: 20px; }
+    .atable tbody tr td:last-child { padding-right: 20px; }
+
+    .name-cell { display: flex; align-items: center; gap: 10px; min-width: 200px; }
+    .name-cell .avatar { width: 28px; height: 28px; font-size: 11px; }
+    .name-cell .name { font-weight: 600; color: var(--ink-900); font-size: 13px; }
+
+    .pagination { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: var(--ink-50); border-top: 1px solid var(--ink-200); }
+    .pagination .pages { display: flex; gap: 4px; }
+    .pagination .pages a { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--r-sm); font-size: 13px; color: var(--ink-700); text-decoration: none; }
+    .pagination .pages a.active { background: var(--ink-900); color: var(--white); font-weight: 600; }
+    .pagination .pages a:hover:not(.active) { background: var(--ink-100); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="admin" data-active="applications">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Admin · Aplicaciones" data-i18n-en="Admin · Applications">Admin · Aplicaciones</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Todas las aplicaciones" data-i18n-en="All applications">Todas las aplicaciones</h1>
+          <div class="t-body-sm muted" data-i18n-es="Vista cruzada de todas las aplicaciones · candidatos × empleadores × empleos" data-i18n-en="Cross-cutting view of all applications · candidates × employers × jobs">Vista cruzada de todas las aplicaciones · candidatos × empleadores × empleos</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="btn btn-outline btn-sm"><i class="i" data-icon="download"></i> <span data-i18n-es="Exportar" data-i18n-en="Export">Exportar</span></button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status stats as filter tiles -->
+      <div class="stats-strip">
+        <div class="mini-stat active">
+          <div class="l"><span data-i18n-es="Todas" data-i18n-en="All">Todas</span></div>
+          <div class="n">3,492</div>
+        </div>
+        <div class="mini-stat">
+          <div class="l"><span class="dot" style="background: var(--ink-500);"></span>Applied</div>
+          <div class="n">1,142</div>
+        </div>
+        <div class="mini-stat">
+          <div class="l"><span class="dot" style="background: var(--info);"></span>Under Review</div>
+          <div class="n">486</div>
+        </div>
+        <div class="mini-stat">
+          <div class="l"><span class="dot" style="background: var(--violet);"></span>Interviewing</div>
+          <div class="n">198</div>
+        </div>
+        <div class="mini-stat">
+          <div class="l"><span class="dot" style="background: var(--brand-orange);"></span>Offer</div>
+          <div class="n">42</div>
+        </div>
+        <div class="mini-stat">
+          <div class="l"><span class="dot" style="background: var(--success);"></span>Hired</div>
+          <div class="n">98</div>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <i class="i search-i" data-icon="search"></i>
+          <input class="input" data-i18n-es-placeholder="Buscar por candidato, empresa, puesto…" data-i18n-en-placeholder="Search by candidate, company, role…" placeholder="Buscar por candidato, empresa, puesto…" />
+        </div>
+        <div class="divider"></div>
+        <select class="select">
+          <option data-i18n-es="Todas las empresas" data-i18n-en="All companies">Todas las empresas</option>
+          <option>Sunset Hotels Group</option><option>Brickell Build Co.</option>
+        </select>
+        <select class="select">
+          <option data-i18n-es="Toda la industria" data-i18n-en="All industries">Toda la industria</option>
+          <option>Hospitality</option><option>Tech</option><option>Healthcare</option>
+        </select>
+        <select class="select">
+          <option data-i18n-es="Últimos 30 días" data-i18n-en="Last 30 days">Últimos 30 días</option>
+          <option data-i18n-es="Últimos 7 días" data-i18n-en="Last 7 days">Últimos 7 días</option>
+          <option data-i18n-es="Cualquier fecha" data-i18n-en="Any time">Cualquier fecha</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table class="atable">
+          <thead>
+            <tr>
+              <th data-i18n-es="Candidato" data-i18n-en="Candidate">Candidato</th>
+              <th data-i18n-es="Empleo" data-i18n-en="Job">Empleo</th>
+              <th data-i18n-es="Empresa" data-i18n-en="Company">Empresa</th>
+              <th>Status</th>
+              <th data-i18n-es="Aplicó" data-i18n-en="Applied">Aplicó</th>
+              <th data-i18n-es="Actualizado" data-i18n-en="Updated">Actualizado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td><div class="name-cell"><div class="avatar">MG</div><span class="name">María González</span></div></td>
+              <td>Hospitality Marketing Lead</td>
+              <td><span class="muted">Sunset Hotels Group</span></td>
+              <td><span class="badge"><span class="dot" style="background: var(--success);"></span>Hired</span></td>
+              <td><span class="muted">12 Mar</span></td>
+              <td><span data-i18n-es="hace 2h" data-i18n-en="2h ago">hace 2h</span></td>
+              <td><a href="../candidate/c08-application-timeline.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell"><div class="avatar">JR</div><span class="name">Jonathan Reyes</span></div></td>
+              <td>Front Office Manager</td>
+              <td><span class="muted">Sunset Hotels Group</span></td>
+              <td><span class="badge"><span class="dot" style="background: var(--info);"></span>Under Review</span></td>
+              <td><span class="muted">02 May</span></td>
+              <td><span style="color: var(--warning); font-weight: 500;" data-i18n-es="16d · vencida" data-i18n-en="16d · overdue">16d · vencida</span></td>
+              <td><a href="../candidate/c08-application-timeline.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell"><div class="avatar">AL</div><span class="name">Andrea López</span></div></td>
+              <td>Front Office Manager</td>
+              <td><span class="muted">Sunset Hotels Group</span></td>
+              <td><span class="badge"><span class="dot" style="background: var(--violet);"></span>Interviewing</span></td>
+              <td><span class="muted">06 May</span></td>
+              <td><span data-i18n-es="ayer" data-i18n-en="yesterday">ayer</span></td>
+              <td><a href="../candidate/c08-application-timeline.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell"><div class="avatar">DP</div><span class="name">Diego Pérez</span></div></td>
+              <td>Senior Product Designer</td>
+              <td><span class="muted">Brickell Build Co.</span></td>
+              <td><span class="badge"><span class="dot" style="background: var(--brand-orange);"></span>Offer</span></td>
+              <td><span class="muted">14 May</span></td>
+              <td><span data-i18n-es="hoy" data-i18n-en="today">hoy</span></td>
+              <td><a href="../candidate/c08-application-timeline.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell"><div class="avatar">SK</div><span class="name">Samantha Kim</span></div></td>
+              <td>Concierge Specialist</td>
+              <td><span class="muted">Sunset Hotels Group</span></td>
+              <td><span class="badge"><span class="dot" style="background: var(--brand-orange);"></span>Offer</span></td>
+              <td><span class="muted">28 Apr</span></td>
+              <td><span data-i18n-es="hace 3d" data-i18n-en="3d ago">hace 3d</span></td>
+              <td><a href="../candidate/c08-application-timeline.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell"><div class="avatar">CT</div><span class="name">Carolina Torres</span></div></td>
+              <td>Hospitality Marketing Lead</td>
+              <td><span class="muted">Sunset Hotels Group</span></td>
+              <td><span class="badge"><span class="dot" style="background: var(--ink-500);"></span>Applied</span></td>
+              <td><span class="muted">19 May</span></td>
+              <td><span data-i18n-es="hoy" data-i18n-en="today">hoy</span></td>
+              <td><a href="../candidate/c08-application-timeline.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell"><div class="avatar">DV</div><span class="name">Daniel Vargas</span></div></td>
+              <td>Building Engineer</td>
+              <td><span class="muted">Sunset Hotels Group</span></td>
+              <td><span class="badge"><span class="dot" style="background: var(--success);"></span>Hired</span></td>
+              <td><span class="muted">10 Apr</span></td>
+              <td><span class="muted">02 May</span></td>
+              <td><a href="../candidate/c08-application-timeline.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell"><div class="avatar">RH</div><span class="name">Rodrigo Hernández</span></div></td>
+              <td>Brand Designer</td>
+              <td><span class="muted">Palm Beach Studios</span></td>
+              <td><span class="badge"><span class="dot" style="background: var(--ink-500);"></span>Applied</span></td>
+              <td><span class="muted">18 May</span></td>
+              <td><span data-i18n-es="hace 1d" data-i18n-en="1d ago">hace 1d</span></td>
+              <td><a href="../candidate/c08-application-timeline.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell"><div class="avatar">PG</div><span class="name">Paola García</span></div></td>
+              <td>UX Researcher</td>
+              <td><span class="muted">Wynwood Health</span></td>
+              <td><span class="badge"><span class="dot" style="background: var(--danger);"></span>Not Selected</span></td>
+              <td><span class="muted">02 Mar</span></td>
+              <td><span class="muted">18 Mar</span></td>
+              <td><a href="../candidate/c08-application-timeline.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+            <tr>
+              <td><div class="name-cell"><div class="avatar">VC</div><span class="name">Verónica Castro</span></div></td>
+              <td>Marketing Coordinator</td>
+              <td><span class="muted">Coastal Ventures</span></td>
+              <td><span class="badge"><span class="dot" style="background: var(--info);"></span>Under Review</span></td>
+              <td><span class="muted">15 May</span></td>
+              <td><span data-i18n-es="hace 4d" data-i18n-en="4d ago">hace 4d</span></td>
+              <td><a href="../candidate/c08-application-timeline.html" class="btn btn-ghost btn-sm"><i class="i" data-icon="external-link"></i></a></td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <div class="pagination">
+          <div class="t-body-sm muted"><span data-i18n-es="Mostrando 1–10 de 3,492 aplicaciones" data-i18n-en="Showing 1–10 of 3,492 applications">Mostrando 1–10 de 3,492 aplicaciones</span></div>
+          <div class="pages">
+            <a href="#"><i class="i" data-icon="chevron-left"></i></a>
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">…</a>
+            <a href="#">350</a>
+            <a href="#"><i class="i" data-icon="chevron-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

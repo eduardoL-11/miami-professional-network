@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-03 · Detalle de empleador — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .detail-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+    @media (max-width: 1100px) { .detail-layout { grid-template-columns: 1fr; } }
+
+    .profile-header {
+      display: flex; gap: 18px; align-items: flex-start;
+      padding: 24px; background: var(--white);
+      border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+      margin-bottom: 16px;
+    }
+    .profile-header .logo {
+      width: 64px; height: 64px; border-radius: var(--r-md);
+      background: var(--ink-100); color: var(--ink-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700; flex-shrink: 0;
+    }
+
+    .quick-bar {
+      display: flex; gap: 28px; padding: 14px 0;
+      border-top: 1px solid var(--ink-200); border-bottom: 1px solid var(--ink-200);
+      margin: 16px 0;
+    }
+    .qb-item .lbl { font-size: 10px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .qb-item .val { font-size: 14px; color: var(--ink-900); font-weight: 600; margin-top: 3px; }
+
+    .section { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 22px; margin-bottom: 16px; }
+    .section h3 { margin: 0 0 14px; }
+
+    .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .info-grid .lbl { font-size: 11px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-bottom: 4px; }
+    .info-grid .val { font-size: 14px; color: var(--ink-900); }
+
+    .job-mini-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--ink-200);
+    }
+    .job-mini-row:last-child { border-bottom: 0; }
+    .job-mini-row .info { flex: 1; }
+    .job-mini-row .name { font-weight: 600; font-size: 14px; color: var(--ink-900); }
+    .job-mini-row .meta { font-size: 12px; color: var(--ink-600); margin-top: 2px; }
+
+    .side-col { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 24px; }
+    .side-card { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 20px; }
+    .side-card .row-line { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; }
+    .side-card .row-line .l { color: var(--ink-600); }
+    .side-card .row-line .v { color: var(--ink-900); font-weight: 600; }
+
+    .danger-zone { background: var(--danger-bg); border-color: rgba(220,38,38,0.18); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="admin" data-active="approvals">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="row items-center gap-3">
+            <a href="a02-pending-approvals.html" class="t-body-sm muted">← <span data-i18n-es="Volver a aprobaciones" data-i18n-en="Back to approvals">Volver a aprobaciones</span></a>
+          </div>
+          <div class="row items-center gap-3" style="margin-top: 6px;">
+            <h1 class="t-h2" style="margin: 0;">Palm Beach Studios</h1>
+            <span class="badge"><span class="dot" style="background: var(--warning);"></span>Pending</span>
+          </div>
+          <div class="t-body-sm muted mt-2" data-i18n-es="Solicitud recibida el 18 May 2026 · 14:32 — vence en 24h" data-i18n-en="Request received May 18, 2026 · 14:32 — 24h SLA">Solicitud recibida el 18 May 2026 · 14:32 — vence en 24h</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: rgba(220,38,38,0.30);" data-i18n-es="Rechazar" data-i18n-en="Reject">Rechazar</button>
+          <button class="btn btn-secondary btn-sm" data-i18n-es="Aprobar empleador" data-i18n-en="Approve employer">Aprobar empleador</button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-layout">
+
+        <!-- LEFT: Detail content -->
+        <div>
+
+          <!-- Profile header -->
+          <div class="profile-header">
+            <div class="logo">PB</div>
+            <div style="flex: 1;">
+              <div class="t-overline muted" style="margin-bottom: 4px;">Marketing · <span data-i18n-es="Empresa solicitante" data-i18n-en="Requesting company">Empresa solicitante</span></div>
+              <h2 class="t-h3" style="margin: 0;">Palm Beach Studios</h2>
+              <div class="t-body-sm muted mt-2" data-i18n-es="Estudio de branding y marketing creativo · Miami + NYC" data-i18n-en="Branding and creative marketing studio · Miami + NYC">Estudio de branding y marketing creativo · Miami + NYC</div>
+            </div>
+            <div class="row gap-2">
+              <button class="btn btn-outline btn-sm"><i class="i" data-icon="external-link"></i> <span data-i18n-es="Visitar web" data-i18n-en="Visit site">Visitar web</span></button>
+              <button class="btn btn-outline btn-sm"><i class="i" data-icon="link"></i> LinkedIn</button>
+            </div>
+          </div>
+
+          <!-- Quick bar -->
+          <div class="section">
+            <div class="quick-bar" style="margin: 0; border: 0; padding: 0;">
+              <div class="qb-item"><div class="lbl">Industry</div><div class="val">Marketing</div></div>
+              <div class="qb-item"><div class="lbl" data-i18n-es="Empleados" data-i18n-en="Employees">Empleados</div><div class="val">18</div></div>
+              <div class="qb-item"><div class="lbl" data-i18n-es="Fundada" data-i18n-en="Founded">Fundada</div><div class="val">2019</div></div>
+              <div class="qb-item"><div class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</div><div class="val">4</div></div>
+              <div class="qb-item"><div class="lbl" data-i18n-es="Ubicación" data-i18n-en="Location">Ubicación</div><div class="val">Wynwood, FL</div></div>
+            </div>
+          </div>
+
+          <!-- Contact info -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Información de contacto" data-i18n-en="Contact information">Información de contacto</h3>
+            <div class="info-grid">
+              <div><div class="lbl" data-i18n-es="Persona de contacto" data-i18n-en="Contact person">Persona de contacto</div><div class="val">Ana Vargas</div></div>
+              <div><div class="lbl" data-i18n-es="Cargo" data-i18n-en="Role">Cargo</div><div class="val">Head of People</div></div>
+              <div><div class="lbl">Email</div><div class="val">ana@palmbeach.studio</div></div>
+              <div><div class="lbl" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</div><div class="val">+1 (305) 555-0188</div></div>
+            </div>
+          </div>
+
+          <!-- Hiring needs -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Necesidades de contratación" data-i18n-en="Hiring needs">Necesidades de contratación</h3>
+            <p style="margin: 0; font-size: 14px; color: var(--ink-700); line-height: 1.6;" data-i18n-es="Estudio de branding y marketing creativo en expansión. Necesitamos 4 perfiles senior en los próximos 3 meses: Brand Designer, Motion Designer, Content Strategist y Account Manager. Foco en clientes hospitality y retail en Miami y NYC. Cultura colaborativa, presencial 3 días por semana." data-i18n-en="Branding and creative marketing studio in expansion. We need 4 senior profiles in the next 3 months: Brand Designer, Motion Designer, Content Strategist and Account Manager. Focus on hospitality and retail clients in Miami and NYC. Collaborative culture, 3 days a week in office.">Estudio de branding y marketing creativo en expansión. Necesitamos 4 perfiles senior en los próximos 3 meses: Brand Designer, Motion Designer, Content Strategist y Account Manager. Foco en clientes hospitality y retail en Miami y NYC. Cultura colaborativa, presencial 3 días por semana.</p>
+          </div>
+
+          <!-- Verification check -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Verificación" data-i18n-en="Verification">Verificación</h3>
+
+            <div class="row" style="flex-direction: column; gap: 10px;">
+              <div class="row gap-3 items-center">
+                <i class="i" data-icon="check-circle" style="color: var(--success); font-size: 18px;"></i>
+                <div style="flex: 1;">
+                  <div style="font-size: 14px; font-weight: 500;" data-i18n-es="Empresa registrada en FL" data-i18n-en="Company registered in FL">Empresa registrada en FL</div>
+                  <div class="t-caption muted">Florida Division of Corporations · LLC P19000045128</div>
+                </div>
+              </div>
+              <div class="row gap-3 items-center">
+                <i class="i" data-icon="check-circle" style="color: var(--success); font-size: 18px;"></i>
+                <div style="flex: 1;">
+                  <div style="font-size: 14px; font-weight: 500;" data-i18n-es="Web activa y dominio coincide" data-i18n-en="Active website, domain matches">Web activa y dominio coincide</div>
+                  <div class="t-caption muted">palmbeach.studio · contact email @palmbeach.studio</div>
+                </div>
+              </div>
+              <div class="row gap-3 items-center">
+                <i class="i" data-icon="check-circle" style="color: var(--success); font-size: 18px;"></i>
+                <div style="flex: 1;">
+                  <div style="font-size: 14px; font-weight: 500;" data-i18n-es="LinkedIn verificado · 18 empleados" data-i18n-en="LinkedIn verified · 18 employees">LinkedIn verificado · 18 empleados</div>
+                  <div class="t-caption muted">linkedin.com/company/palm-beach-studios</div>
+                </div>
+              </div>
+              <div class="row gap-3 items-center">
+                <i class="i" data-icon="alert-circle" style="color: var(--warning); font-size: 18px;"></i>
+                <div style="flex: 1;">
+                  <div style="font-size: 14px; font-weight: 500;" data-i18n-es="Primera contratación en la plataforma" data-i18n-en="First hire on the platform">Primera contratación en la plataforma</div>
+                  <div class="t-caption muted" data-i18n-es="Sin historial previo en Miami Professional Network" data-i18n-en="No prior history on Miami Professional Network">Sin historial previo en Miami Professional Network</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin notes -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Notas internas" data-i18n-en="Internal notes">Notas internas</h3>
+            <textarea class="textarea" data-i18n-es-placeholder="Agrega contexto, dudas o validaciones pendientes…" data-i18n-en-placeholder="Add context, questions, pending validations…" placeholder="Agrega contexto, dudas o validaciones pendientes…"></textarea>
+            <div class="hint mt-2" data-i18n-es="Solo visible para el equipo admin. El empleador no las ve." data-i18n-en="Only visible to the admin team. The employer does not see them.">Solo visible para el equipo admin. El empleador no las ve.</div>
+          </div>
+
+          <!-- Danger zone (for approved employers, shown here as example) -->
+          <div class="section danger-zone">
+            <h3 class="t-h4" style="color: var(--danger);" data-i18n-es="Acción crítica" data-i18n-en="Danger action">Acción crítica</h3>
+            <p style="margin: 0 0 12px; font-size: 13px; color: var(--ink-700);" data-i18n-es="Si rechazas esta solicitud, el empleador recibirá un correo de notificación. Puedes incluir una razón." data-i18n-en="If you reject this request, the employer will receive a notification email. You can include a reason.">Si rechazas esta solicitud, el empleador recibirá un correo de notificación. Puedes incluir una razón.</p>
+            <textarea class="textarea" style="min-height: 70px; margin-bottom: 12px;" data-i18n-es-placeholder="Razón del rechazo (opcional, incluida en el correo al empleador)…" data-i18n-en-placeholder="Rejection reason (optional, included in the email)…" placeholder="Razón del rechazo (opcional, incluida en el correo al empleador)…"></textarea>
+            <button class="btn btn-danger btn-sm" data-i18n-es="Rechazar solicitud" data-i18n-en="Reject request">Rechazar solicitud</button>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Sidebar -->
+        <aside class="side-col">
+
+          <!-- Decision -->
+          <div class="side-card">
+            <div class="t-h4 mb-4" data-i18n-es="Decisión" data-i18n-en="Decision">Decisión</div>
+            <button class="btn btn-secondary btn-lg w-full" style="display: flex; justify-content: center;" data-i18n-es="✓ Aprobar empleador" data-i18n-en="✓ Approve employer">✓ Aprobar empleador</button>
+            <div class="t-body-sm muted text-center mt-3" style="line-height: 1.5;" data-i18n-es="Al aprobar, el empleador recibe acceso inmediato y un correo de bienvenida con instrucciones." data-i18n-en="On approval, the employer gets immediate access and a welcome email with instructions.">Al aprobar, el empleador recibe acceso inmediato y un correo de bienvenida con instrucciones.</div>
+          </div>
+
+          <!-- Timing -->
+          <div class="side-card">
+            <div class="t-h4 mb-3" data-i18n-es="Tiempos" data-i18n-en="Timing">Tiempos</div>
+            <div class="row-line"><span class="l" data-i18n-es="Solicitud enviada" data-i18n-en="Submitted">Solicitud enviada</span><span class="v">18 May · 14:32</span></div>
+            <div class="row-line"><span class="l" data-i18n-es="Pendiente desde" data-i18n-en="Pending for">Pendiente desde</span><span class="v">4h</span></div>
+            <div class="row-line"><span class="l" data-i18n-es="SLA restante" data-i18n-en="SLA remaining">SLA restante</span><span class="v" style="color: var(--warning);">20h</span></div>
+            <div class="row-line"><span class="l" data-i18n-es="Recordatorios" data-i18n-en="Reminders">Recordatorios</span><span class="v">0</span></div>
+          </div>
+
+          <!-- Past requests by this contact -->
+          <div class="side-card">
+            <div class="t-h4 mb-3" data-i18n-es="Historial del contacto" data-i18n-en="Contact history">Historial del contacto</div>
+            <div class="t-body-sm" style="color: var(--ink-600);" data-i18n-es="ana@palmbeach.studio no ha solicitado acceso antes." data-i18n-en="ana@palmbeach.studio has not requested access before.">ana@palmbeach.studio no ha solicitado acceso antes.</div>
+          </div>
+
+          <!-- Similar approved -->
+          <div class="side-card">
+            <div class="t-h4 mb-3" data-i18n-es="Empleadores similares aprobados" data-i18n-en="Similar approved employers">Empleadores similares aprobados</div>
+            <div class="job-mini-row">
+              <div class="avatar">MR</div>
+              <div class="info"><div class="name">Mango Republic</div><div class="meta">Retail · 9 hires</div></div>
+            </div>
+            <div class="job-mini-row">
+              <div class="avatar">SH</div>
+              <div class="info"><div class="name">Sunset Hotels Group</div><div class="meta">Hospitality · 12 hires</div></div>
+            </div>
+            <div class="job-mini-row">
+              <div class="avatar">WC</div>
+              <div class="info"><div class="name">Wynwood Creative</div><div class="meta">Marketing · 4 hires</div></div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

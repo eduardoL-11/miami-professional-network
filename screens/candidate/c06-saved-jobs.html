@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C-06 · Empleos guardados — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .empty-state {
+      background: var(--white); border: 1px dashed var(--ink-300); border-radius: var(--r-lg);
+      padding: 64px 32px; text-align: center;
+      max-width: 480px; margin: 32px auto;
+    }
+    .empty-state .icon-big {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--brand-orange-50); color: var(--brand-orange);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; margin: 0 auto 16px;
+    }
+
+    .saved-card {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 20px;
+      margin-bottom: 12px; transition: border-color .12s, box-shadow .12s;
+      display: grid; grid-template-columns: auto 1fr auto; gap: 16px;
+    }
+    .saved-card:hover { border-color: var(--ink-300); box-shadow: var(--shadow-sm); }
+    .saved-card .logo {
+      width: 56px; height: 56px; border-radius: var(--r-md);
+      background: var(--ink-100); color: var(--ink-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800; flex-shrink: 0;
+    }
+    .saved-card .body .title-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .saved-card .title { font-weight: 700; font-size: 17px; color: var(--ink-900); }
+    .saved-card .title:hover { color: var(--ink-900); }
+    .saved-card .company-line { font-size: 13px; color: var(--ink-700); margin-top: 2px; }
+    .saved-card .meta-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .saved-card .footer-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--ink-100); font-size: 12px; color: var(--ink-600); }
+    .saved-card .right-col { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; min-width: 130px; }
+
+    .closing-soon { background: var(--warning-bg); color: var(--warning); }
+
+    .saved-since { font-size: 11px; color: var(--ink-500); }
+
+    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+
+    .tabs {
+      display: flex; gap: 4px; border-bottom: 1px solid var(--ink-200); margin-bottom: 24px;
+    }
+    .tabs a {
+      padding: 10px 14px; font-size: 14px; font-weight: 600;
+      color: var(--ink-600); border-bottom: 2px solid transparent;
+      margin-bottom: -1px; text-decoration: none;
+    }
+    .tabs a:hover { color: var(--ink-900); text-decoration: none; }
+    .tabs a.active { color: var(--ink-900); border-bottom-color: var(--ink-900); }
+    .tabs a .count { display: inline-block; min-width: 18px; padding: 1px 6px; background: var(--ink-100); color: var(--ink-700); border-radius: var(--r-full); font-size: 11px; margin-left: 6px; }
+    .tabs a.active .count { background: var(--ink-100); color: var(--ink-700); }
+
+    .closed-card { opacity: 0.6; }
+    .closed-card .title { color: var(--ink-700); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="candidate" data-active="saved">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Candidato · Guardados" data-i18n-en="Candidate · Saved">Candidato · Guardados</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Empleos guardados" data-i18n-en="Saved jobs">Empleos guardados</h1>
+          <div class="t-body-sm muted" data-i18n-es="7 empleos guardados · 2 cierran esta semana" data-i18n-en="7 saved jobs · 2 closing this week">7 empleos guardados · 2 cierran esta semana</div>
+        </div>
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+        <div class="lang-toggle">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <a href="#" class="active" data-i18n-es="Todos" data-i18n-en="All">Todos<span class="count">7</span></a>
+        <a href="#" data-i18n-es="Activos" data-i18n-en="Active">Activos<span class="count">5</span></a>
+        <a href="#" data-i18n-es="Cierran pronto" data-i18n-en="Closing soon">Cierran pronto<span class="count">2</span></a>
+        <a href="#" data-i18n-es="Cerrados" data-i18n-en="Closed">Cerrados<span class="count">2</span></a>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="t-body-sm" style="color: var(--ink-700);"><strong>7</strong> <span data-i18n-es="empleos guardados" data-i18n-en="saved jobs">empleos guardados</span></div>
+        <div class="row gap-2 items-center">
+          <select class="select" style="width: auto; padding-right: 36px;">
+            <option data-i18n-es="Más recientes (guardado)" data-i18n-en="Most recently saved">Más recientes (guardado)</option>
+            <option data-i18n-es="Cierran pronto" data-i18n-en="Closing soon">Cierran pronto</option>
+            <option data-i18n-es="Mejor salario" data-i18n-en="Highest salary">Mejor salario</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Closing soon banner -->
+      <div class="alert alert-warning mb-6">
+        <div><i class='i' data-icon='clock'></i></div>
+        <div style="flex: 1;">
+          <div class="alert-title" data-i18n-es="2 empleos cierran en los próximos 3 días" data-i18n-en="2 jobs close in the next 3 days">2 empleos cierran en los próximos 3 días</div>
+          <div class="alert-body" data-i18n-es="No pierdas la oportunidad — aplica antes de que cierre la postulación." data-i18n-en="Don't miss out — apply before the posting closes.">No pierdas la oportunidad — aplica antes de que cierre la postulación.</div>
+        </div>
+      </div>
+
+      <!-- Saved cards -->
+
+      <article class="saved-card">
+        <div class="logo">SH</div>
+        <div class="body">
+          <div class="title-row">
+            <a href="c05-job-detail.html" class="title">Hospitality Marketing Lead</a>
+            <span class="badge badge-warning"><span class="dot"></span><span data-i18n-es="Cierra en 2 días" data-i18n-en="Closes in 2 days">Cierra en 2 días</span></span>
+          </div>
+          <div class="company-line">Sunset Hotels Group · Miami, FL</div>
+          <div class="meta-row">
+            <span class="badge badge-neutral">Full-time</span>
+            <span class="badge badge-neutral">Hospitality</span>
+            <span class="badge badge-neutral">$80k–$110k</span>
+          </div>
+          <div class="footer-row">
+            <span class="saved-since" data-i18n-es="★ Guardado hace 3 días" data-i18n-en="★ Saved 3 days ago">★ Guardado hace 3 días</span>
+            <span data-i18n-es="<i class='i' data-icon='calendar'></i> Cierra el 30 May 2026" data-i18n-en="<i class='i' data-icon='calendar'></i> Closes May 30, 2026"><i class='i' data-icon='calendar'></i> Cierra el 30 May 2026</span>
+          </div>
+        </div>
+        <div class="right-col">
+          <button class="save-btn" style="background: var(--brand-orange-50); border: 1px solid var(--brand-orange); color: var(--brand-orange); width: 36px; height: 36px; border-radius: var(--r-md); cursor: pointer; font-size: 16px;">★</button>
+          <a href="c05-job-detail.html" class="btn btn-primary btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Aplicar ahora" data-i18n-en="Apply now">Aplicar ahora</a>
+          <a href="c05-job-detail.html" class="btn btn-ghost btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+        </div>
+      </article>
+
+      <article class="saved-card">
+        <div class="logo">MR</div>
+        <div class="body">
+          <div class="title-row">
+            <a href="c05-job-detail.html" class="title">Customer Experience Designer</a>
+            <span class="badge badge-warning"><span class="dot"></span><span data-i18n-es="Cierra en 3 días" data-i18n-en="Closes in 3 days">Cierra en 3 días</span></span>
+          </div>
+          <div class="company-line">Mango Republic · Coral Gables, FL</div>
+          <div class="meta-row">
+            <span class="badge badge-neutral">Full-time</span>
+            <span class="badge badge-neutral">Retail</span>
+            <span class="badge badge-neutral">$70k–$95k</span>
+          </div>
+          <div class="footer-row">
+            <span class="saved-since" data-i18n-es="★ Guardado hace 5 días" data-i18n-en="★ Saved 5 days ago">★ Guardado hace 5 días</span>
+            <span data-i18n-es="<i class='i' data-icon='calendar'></i> Cierra el 31 May 2026" data-i18n-en="<i class='i' data-icon='calendar'></i> Closes May 31, 2026"><i class='i' data-icon='calendar'></i> Cierra el 31 May 2026</span>
+          </div>
+        </div>
+        <div class="right-col">
+          <button class="save-btn" style="background: var(--brand-orange-50); border: 1px solid var(--brand-orange); color: var(--brand-orange); width: 36px; height: 36px; border-radius: var(--r-md); cursor: pointer; font-size: 16px;">★</button>
+          <a href="c05-job-detail.html" class="btn btn-primary btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Aplicar ahora" data-i18n-en="Apply now">Aplicar ahora</a>
+          <a href="c05-job-detail.html" class="btn btn-ghost btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+        </div>
+      </article>
+
+      <article class="saved-card">
+        <div class="logo">WH</div>
+        <div class="body">
+          <div class="title-row">
+            <a href="c05-job-detail.html" class="title">UX Researcher</a>
+          </div>
+          <div class="company-line">Wynwood Health · Miami, FL · <span data-i18n-es="Remoto" data-i18n-en="Remote">Remoto</span></div>
+          <div class="meta-row">
+            <span class="badge badge-neutral">Full-time</span>
+            <span class="badge badge-neutral">Healthcare</span>
+            <span class="badge badge-neutral">$75k–$100k</span>
+          </div>
+          <div class="footer-row">
+            <span class="saved-since" data-i18n-es="★ Guardado ayer" data-i18n-en="★ Saved yesterday">★ Guardado ayer</span>
+            <span data-i18n-es="<i class='i' data-icon='calendar'></i> Cierra el 15 Jun 2026" data-i18n-en="<i class='i' data-icon='calendar'></i> Closes Jun 15, 2026"><i class='i' data-icon='calendar'></i> Cierra el 15 Jun 2026</span>
+          </div>
+        </div>
+        <div class="right-col">
+          <button class="save-btn" style="background: var(--brand-orange-50); border: 1px solid var(--brand-orange); color: var(--brand-orange); width: 36px; height: 36px; border-radius: var(--r-md); cursor: pointer; font-size: 16px;">★</button>
+          <a href="c05-job-detail.html" class="btn btn-primary btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Aplicar ahora" data-i18n-en="Apply now">Aplicar ahora</a>
+          <a href="c05-job-detail.html" class="btn btn-ghost btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+        </div>
+      </article>
+
+      <article class="saved-card">
+        <div class="logo">OM</div>
+        <div class="body">
+          <div class="title-row">
+            <a href="c05-job-detail.html" class="title">Service Designer (Hospitality)</a>
+          </div>
+          <div class="company-line">Ocean Mirage Resort · Miami Beach, FL</div>
+          <div class="meta-row">
+            <span class="badge badge-neutral">Full-time</span>
+            <span class="badge badge-neutral">Hospitality</span>
+          </div>
+          <div class="footer-row">
+            <span class="saved-since" data-i18n-es="★ Guardado hace 1 semana" data-i18n-en="★ Saved 1 week ago">★ Guardado hace 1 semana</span>
+            <span data-i18n-es="<i class='i' data-icon='calendar'></i> Cierra el 20 Jun 2026" data-i18n-en="<i class='i' data-icon='calendar'></i> Closes Jun 20, 2026"><i class='i' data-icon='calendar'></i> Cierra el 20 Jun 2026</span>
+          </div>
+        </div>
+        <div class="right-col">
+          <button class="save-btn" style="background: var(--brand-orange-50); border: 1px solid var(--brand-orange); color: var(--brand-orange); width: 36px; height: 36px; border-radius: var(--r-md); cursor: pointer; font-size: 16px;">★</button>
+          <a href="c05-job-detail.html" class="btn btn-primary btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Aplicar ahora" data-i18n-en="Apply now">Aplicar ahora</a>
+          <a href="c05-job-detail.html" class="btn btn-ghost btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+        </div>
+      </article>
+
+      <!-- Closed -->
+      <div class="t-h4 mt-8 mb-4" data-i18n-es="Cerrados / ya no disponibles" data-i18n-en="Closed / no longer available">Cerrados / ya no disponibles</div>
+
+      <article class="saved-card closed-card">
+        <div class="logo">BC</div>
+        <div class="body">
+          <div class="title-row">
+            <a href="c05-job-detail.html" class="title">Bell Captain</a>
+            <span class="badge badge-neutral"><span class="dot"></span>Closed</span>
+          </div>
+          <div class="company-line">Beach Club Miami · Miami Beach, FL</div>
+          <div class="footer-row">
+            <span class="saved-since" data-i18n-es="★ Guardado hace 3 semanas" data-i18n-en="★ Saved 3 weeks ago">★ Guardado hace 3 semanas</span>
+            <span data-i18n-es="<i class='i' data-icon='x-circle'></i> Cerrado el 30 Apr 2026" data-i18n-en="<i class='i' data-icon='x-circle'></i> Closed on Apr 30, 2026"><i class='i' data-icon='x-circle'></i> Cerrado el 30 Apr 2026</span>
+          </div>
+        </div>
+        <div class="right-col">
+          <button class="btn btn-ghost btn-sm" style="color: var(--danger);" data-i18n-es="Eliminar" data-i18n-en="Remove"><i class='i' data-icon='trash'></i> Eliminar</button>
+        </div>
+      </article>
+
+      <!-- Empty state demo (hidden, just for the design) -->
+      <div class="empty-state hidden">
+        <div class="icon-big">★</div>
+        <div class="t-h3" data-i18n-es="Aún no tienes empleos guardados" data-i18n-en="No saved jobs yet">Aún no tienes empleos guardados</div>
+        <div class="t-body muted mt-2" style="max-width: 360px; margin-left: auto; margin-right: auto;" data-i18n-es="Cuando encuentres un empleo interesante, dale clic a la estrella para guardarlo aquí." data-i18n-en="When you find an interesting job, click the star to save it here.">Cuando encuentres un empleo interesante, dale clic a la estrella para guardarlo aquí.</div>
+        <a href="c04-jobs.html" class="btn btn-primary mt-6" data-i18n-es="Explorar empleos" data-i18n-en="Browse jobs">Explorar empleos</a>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

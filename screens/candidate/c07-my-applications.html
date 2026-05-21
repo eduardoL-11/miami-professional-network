@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C-07 · Mis aplicaciones — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    /* Stat tiles */
+    .stat-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 24px; }
+    @media (max-width: 1100px) { .stat-row { grid-template-columns: repeat(3, 1fr); } }
+    .stat-tile {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-md); padding: 14px;
+      display: flex; flex-direction: column; gap: 4px;
+      cursor: pointer; transition: border-color .12s, box-shadow .12s;
+    }
+    .stat-tile:hover { border-color: var(--ink-400); }
+    .stat-tile.active { border-color: var(--ink-900); background: var(--ink-50); }
+    .stat-tile .n { font-size: 22px; font-weight: 800; color: var(--ink-900); line-height: 1; }
+    .stat-tile .l { font-size: 11px; color: var(--ink-600); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .stat-tile .l .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 4px; vertical-align: middle; }
+
+    /* Application card */
+    .app-card {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 20px;
+      margin-bottom: 12px; transition: border-color .12s, box-shadow .12s;
+      display: grid; grid-template-columns: auto 1fr auto; gap: 16px;
+    }
+    .app-card:hover { border-color: var(--ink-300); box-shadow: var(--shadow-sm); }
+    .app-card.highlight, .app-card.highlight-violet { border-color: var(--ink-300); }
+
+    .app-card .logo {
+      width: 56px; height: 56px; border-radius: var(--r-md);
+      background: var(--ink-100); color: var(--ink-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800; flex-shrink: 0;
+    }
+    .app-card .title { font-weight: 700; font-size: 17px; color: var(--ink-900); }
+    .app-card .title:hover { color: var(--ink-900); }
+    .app-card .company-line { font-size: 13px; color: var(--ink-700); margin-top: 2px; }
+    .app-card .meta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; font-size: 12px; color: var(--ink-600); }
+    .app-card .right-col { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; min-width: 150px; }
+
+    .status-update {
+      background: var(--brand-orange-50); color: var(--brand-orange-700);
+      padding: 6px 12px; border-radius: var(--r-md);
+      font-size: 12px; font-weight: 600; margin-top: 10px;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .new-badge {
+      background: var(--brand-orange); color: white;
+      font-size: 10px; font-weight: 700; padding: 2px 6px;
+      border-radius: var(--r-full); margin-left: 6px; text-transform: uppercase;
+    }
+
+    .tabs {
+      display: flex; gap: 4px; border-bottom: 1px solid var(--ink-200); margin-bottom: 20px;
+    }
+    .tabs a {
+      padding: 10px 14px; font-size: 14px; font-weight: 600;
+      color: var(--ink-600); border-bottom: 2px solid transparent;
+      margin-bottom: -1px; text-decoration: none;
+    }
+    .tabs a:hover { color: var(--ink-900); text-decoration: none; }
+    .tabs a.active { color: var(--ink-900); border-bottom-color: var(--ink-900); }
+    .tabs a .count { display: inline-block; min-width: 18px; padding: 1px 6px; background: var(--ink-100); color: var(--ink-700); border-radius: var(--r-full); font-size: 11px; margin-left: 6px; }
+    .tabs a.active .count { background: var(--ink-100); color: var(--ink-700); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="candidate" data-active="applications">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Candidato · Aplicaciones" data-i18n-en="Candidate · Applications">Candidato · Aplicaciones</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Mis aplicaciones" data-i18n-en="My applications">Mis aplicaciones</h1>
+          <div class="t-body-sm muted" data-i18n-es="Sigue el estado de cada postulación en tiempo real" data-i18n-en="Track each application status in real time">Sigue el estado de cada postulación en tiempo real</div>
+        </div>
+        <div class="row items-center gap-3">
+          <a href="c04-jobs.html" class="btn btn-primary"><span><i class='i' data-icon='search'></i></span> <span data-i18n-es="Buscar más empleos" data-i18n-en="Browse more jobs">Buscar más empleos</span></a>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Offer alert -->
+      <div class="alert alert-success mb-6">
+        <div style="font-size: 22px;"><i class='i' data-icon='sparkles'></i></div>
+        <div style="flex: 1;">
+          <div class="alert-title" data-i18n-es="¡Tienes una oferta nueva!" data-i18n-en="You have a new offer!">¡Tienes una oferta nueva!</div>
+          <div class="alert-body" data-i18n-es="Sunset Hotels Group te extendió una oferta para Hospitality Marketing Lead." data-i18n-en="Sunset Hotels Group extended an offer for Hospitality Marketing Lead.">Sunset Hotels Group te extendió una oferta para Hospitality Marketing Lead.</div>
+        </div>
+        <a href="c08-application-timeline.html" class="btn btn-primary btn-sm" style="align-self: center;" data-i18n-es="Ver oferta" data-i18n-en="View offer">Ver oferta</a>
+      </div>
+
+      <!-- Status stats -->
+      <div class="stat-row">
+        <div class="stat-tile active">
+          <span class="l"><span data-i18n-es="Todas" data-i18n-en="All">Todas</span></span>
+          <span class="n">12</span>
+        </div>
+        <div class="stat-tile">
+          <span class="l"><span class="dot" style="background: var(--ink-500);"></span>Applied</span>
+          <span class="n">3</span>
+        </div>
+        <div class="stat-tile">
+          <span class="l"><span class="dot" style="background: var(--info);"></span>Under Review</span>
+          <span class="n">4</span>
+        </div>
+        <div class="stat-tile">
+          <span class="l"><span class="dot" style="background: var(--violet);"></span>Interviewing</span>
+          <span class="n">2</span>
+        </div>
+        <div class="stat-tile">
+          <span class="l"><span class="dot" style="background: var(--brand-orange);"></span>Offer</span>
+          <span class="n">1</span>
+        </div>
+        <div class="stat-tile">
+          <span class="l"><span class="dot" style="background: var(--success);"></span>Hired</span>
+          <span class="n">0</span>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <a href="#" class="active" data-i18n-es="Activas" data-i18n-en="Active">Activas<span class="count">10</span></a>
+        <a href="#" data-i18n-es="Finalizadas" data-i18n-en="Closed">Finalizadas<span class="count">2</span></a>
+        <a href="#" data-i18n-es="Retiradas por mí" data-i18n-en="Withdrawn">Retiradas por mí<span class="count">0</span></a>
+      </div>
+
+      <!-- Apps -->
+
+      <!-- Offer extended -->
+      <article class="app-card highlight">
+        <div class="logo">SH</div>
+        <div>
+          <div class="row gap-3 items-center" style="flex-wrap: wrap;">
+            <a href="c08-application-timeline.html" class="title">Hospitality Marketing Lead</a>
+            <span class="badge badge-orange" style="font-weight: 700;"><span class="dot"></span>Offer Extended</span>
+            <span class="new-badge">New</span>
+          </div>
+          <div class="company-line">Sunset Hotels Group · Miami, FL · Full-time</div>
+          <div class="status-update">
+            <i class='i' data-icon='mail'></i> <span data-i18n-es-html="Recibiste una oferta el <strong>22 May</strong>. Responde antes del 29 May." data-i18n-en-html="You received an offer on <strong>May 22</strong>. Respond by May 29.">Recibiste una oferta el <strong>22 May</strong>. Responde antes del 29 May.</span>
+          </div>
+          <div class="meta-row">
+            <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicaste el 12 Mar 2026" data-i18n-en="Applied Mar 12, 2026">Aplicaste el 12 Mar 2026</span></span>
+            <span><i class='i' data-icon='refresh'></i> <span data-i18n-es="Última actualización: hace 2 horas" data-i18n-en="Last update: 2h ago">Última actualización: hace 2 horas</span></span>
+          </div>
+        </div>
+        <div class="right-col">
+          <a href="c08-application-timeline.html" class="btn btn-primary btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver oferta" data-i18n-en="View offer">Ver oferta</a>
+          <a href="c08-application-timeline.html" class="btn btn-ghost btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Timeline" data-i18n-en="Timeline">Timeline</a>
+        </div>
+      </article>
+
+      <!-- Interviewing -->
+      <article class="app-card highlight-violet">
+        <div class="logo">WH</div>
+        <div>
+          <div class="row gap-3 items-center" style="flex-wrap: wrap;">
+            <a href="c08-application-timeline.html" class="title">UX Researcher</a>
+            <span class="badge badge-violet"><span class="dot"></span>Interviewing</span>
+          </div>
+          <div class="company-line">Wynwood Health · Miami, FL · Remoto</div>
+          <div class="status-update">
+            <i class='i' data-icon='phone'></i> <span data-i18n-es-html="Entrevista programada para el <strong>28 May a las 10:00 AM</strong>" data-i18n-en-html="Interview scheduled for <strong>May 28 at 10:00 AM</strong>">Entrevista programada para el <strong>28 May a las 10:00 AM</strong></span>
+          </div>
+          <div class="meta-row">
+            <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicaste el 06 May 2026" data-i18n-en="Applied May 6, 2026">Aplicaste el 06 May 2026</span></span>
+            <span><i class='i' data-icon='refresh'></i> <span data-i18n-es="Última actualización: ayer" data-i18n-en="Last update: yesterday">Última actualización: ayer</span></span>
+          </div>
+        </div>
+        <div class="right-col">
+          <a href="c08-application-timeline.html" class="btn btn-outline btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+        </div>
+      </article>
+
+      <!-- Interviewing -->
+      <article class="app-card">
+        <div class="logo">BB</div>
+        <div>
+          <div class="row gap-3 items-center" style="flex-wrap: wrap;">
+            <a href="c08-application-timeline.html" class="title">Senior Product Designer</a>
+            <span class="badge badge-violet"><span class="dot"></span>Interviewing</span>
+          </div>
+          <div class="company-line">Brickell Build Co. · Miami, FL · Full-time</div>
+          <div class="meta-row">
+            <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicaste el 14 May 2026" data-i18n-en="Applied May 14, 2026">Aplicaste el 14 May 2026</span></span>
+            <span><i class='i' data-icon='refresh'></i> <span data-i18n-es="Última actualización: hace 3 días" data-i18n-en="Last update: 3 days ago">Última actualización: hace 3 días</span></span>
+          </div>
+        </div>
+        <div class="right-col">
+          <a href="c08-application-timeline.html" class="btn btn-outline btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+        </div>
+      </article>
+
+      <!-- Under Review -->
+      <article class="app-card">
+        <div class="logo">OM</div>
+        <div>
+          <div class="row gap-3 items-center" style="flex-wrap: wrap;">
+            <a href="c08-application-timeline.html" class="title">Service Designer (Hospitality)</a>
+            <span class="badge badge-info"><span class="dot"></span>Under Review</span>
+          </div>
+          <div class="company-line">Ocean Mirage Resort · Miami Beach, FL · Full-time</div>
+          <div class="meta-row">
+            <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicaste el 10 May 2026" data-i18n-en="Applied May 10, 2026">Aplicaste el 10 May 2026</span></span>
+            <span><i class='i' data-icon='refresh'></i> <span data-i18n-es="En revisión desde hace 9 días" data-i18n-en="In review for 9 days">En revisión desde hace 9 días</span></span>
+          </div>
+        </div>
+        <div class="right-col">
+          <a href="c08-application-timeline.html" class="btn btn-outline btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+        </div>
+      </article>
+
+      <!-- Under Review -->
+      <article class="app-card">
+        <div class="logo">MR</div>
+        <div>
+          <div class="row gap-3 items-center" style="flex-wrap: wrap;">
+            <a href="c08-application-timeline.html" class="title">Customer Experience Designer</a>
+            <span class="badge badge-info"><span class="dot"></span>Under Review</span>
+          </div>
+          <div class="company-line">Mango Republic · Coral Gables, FL · Full-time</div>
+          <div class="meta-row">
+            <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicaste el 08 May 2026" data-i18n-en="Applied May 8, 2026">Aplicaste el 08 May 2026</span></span>
+            <span><i class='i' data-icon='refresh'></i> <span data-i18n-es="En revisión desde hace 11 días" data-i18n-en="In review for 11 days">En revisión desde hace 11 días</span></span>
+          </div>
+        </div>
+        <div class="right-col">
+          <a href="c08-application-timeline.html" class="btn btn-outline btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+        </div>
+      </article>
+
+      <!-- Applied (recent) -->
+      <article class="app-card">
+        <div class="logo">PB</div>
+        <div>
+          <div class="row gap-3 items-center" style="flex-wrap: wrap;">
+            <a href="c08-application-timeline.html" class="title">Brand Designer</a>
+            <span class="badge badge-neutral"><span class="dot"></span>Applied</span>
+          </div>
+          <div class="company-line">Palm Beach Studios · Miami, FL · Contract</div>
+          <div class="meta-row">
+            <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicaste hoy a las 09:14" data-i18n-en="Applied today at 09:14">Aplicaste hoy a las 09:14</span></span>
+            <span><i class='i' data-icon='clock'></i> <span data-i18n-es="Esperando revisión" data-i18n-en="Waiting for review">Esperando revisión</span></span>
+          </div>
+        </div>
+        <div class="right-col">
+          <a href="c08-application-timeline.html" class="btn btn-outline btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+        </div>
+      </article>
+
+      <!-- Finalized — Not Selected (collapsed-style) -->
+      <div class="t-h4 mt-8 mb-4" data-i18n-es="Finalizadas" data-i18n-en="Closed">Finalizadas</div>
+
+      <article class="app-card" style="opacity: 0.85;">
+        <div class="logo" style="background: var(--ink-200); color: var(--ink-600);">CV</div>
+        <div>
+          <div class="row gap-3 items-center" style="flex-wrap: wrap;">
+            <a href="c08-application-timeline.html" class="title" style="color: var(--ink-700);">Marketing Coordinator</a>
+            <span class="badge badge-danger"><span class="dot"></span>Not Selected</span>
+          </div>
+          <div class="company-line">Coastal Ventures · Miami Beach, FL</div>
+          <div class="meta-row">
+            <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Aplicaste el 02 Mar 2026" data-i18n-en="Applied Mar 2, 2026">Aplicaste el 02 Mar 2026</span></span>
+            <span><i class='i' data-icon='bookmark'></i> <span data-i18n-es="Cerrada el 18 Mar 2026" data-i18n-en="Closed Mar 18, 2026">Cerrada el 18 Mar 2026</span></span>
+          </div>
+        </div>
+        <div class="right-col">
+          <a href="c08-application-timeline.html" class="btn btn-ghost btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+        </div>
+      </article>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

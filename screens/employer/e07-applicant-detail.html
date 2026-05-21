@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-07 · Applicant Detail — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .detail-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+    @media (max-width: 1100px) { .detail-layout { grid-template-columns: 1fr; } }
+
+    .profile-header {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 24px; background: var(--white);
+      border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+    }
+    .profile-header .avatar-xl {
+      width: 96px; height: 96px; border-radius: 50%;
+      background: var(--brand-green); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; font-weight: 700;
+    }
+
+    .quick-bar {
+      display: flex; gap: 24px; padding: 16px 0;
+      border-top: 1px solid var(--ink-200); border-bottom: 1px solid var(--ink-200);
+      margin: 20px 0;
+    }
+    .qb-item .lbl { font-size: 11px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .qb-item .val { font-size: 14px; color: var(--ink-900); font-weight: 600; margin-top: 4px; }
+
+    .section { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 24px; margin-bottom: 16px; }
+    .section h3 { margin: 0 0 16px; }
+
+    .edu-item { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--ink-200); }
+    .edu-item:last-child { border-bottom: 0; }
+    .edu-item .icon { width: 36px; height: 36px; border-radius: var(--r-md); background: var(--brand-green-50); color: var(--brand-green-700); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    .ref-card {
+      padding: 14px; background: var(--ink-50); border-radius: var(--r-md); display: flex; gap: 12px; align-items: center;
+    }
+    .ref-card .avatar { background: var(--ink-200); color: var(--ink-700); }
+
+    /* Notes (E-09) */
+    .note {
+      padding: 14px; border-radius: var(--r-md); margin-bottom: 12px;
+      background: var(--brand-orange-50); border: 1px solid var(--brand-orange-100);
+      position: relative;
+    }
+    .note .head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .note .author { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink-800); }
+    .note .time { font-size: 11px; color: var(--ink-500); }
+    .note .body { font-size: 13px; color: var(--ink-700); line-height: 1.5; }
+
+    .private-banner {
+      display: flex; gap: 10px; padding: 10px 12px;
+      background: var(--violet-bg); border-radius: var(--r-md);
+      font-size: 12px; color: var(--violet); font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    /* Sticky side */
+    .side-col { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 24px; }
+
+    .status-panel { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 20px; }
+    .status-current {
+      padding: 16px; border-radius: var(--r-md); background: var(--violet-bg); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .status-current .icon { font-size: 22px; }
+    .status-current .info { flex: 1; }
+    .status-current .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--violet); font-weight: 700; }
+    .status-current .value { font-size: 16px; font-weight: 700; color: var(--ink-900); }
+    .status-current .since { font-size: 12px; color: var(--ink-600); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="employer" data-active="applicants">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="row items-center gap-3">
+            <a href="e06-applicants.html" class="t-body-sm muted">← <span data-i18n-es="Volver a Aplicantes" data-i18n-en="Back to Applicants">Volver a Aplicantes</span></a>
+          </div>
+          <h1 class="t-h2" style="margin:6px 0 4px;">María González</h1>
+          <div class="t-body-sm muted" data-i18n-es="Aplicó a Hospitality Marketing Lead · 12 Mar 2026" data-i18n-en="Applied to Hospitality Marketing Lead · Mar 12, 2026">Aplicó a Hospitality Marketing Lead · 12 Mar 2026</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="btn btn-outline btn-sm" data-i18n-es="← Anterior" data-i18n-en="← Previous">← Anterior</button>
+          <button class="btn btn-outline btn-sm" data-i18n-es="Siguiente →" data-i18n-en="Next →">Siguiente →</button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-layout">
+
+        <!-- LEFT: Profile content -->
+        <div>
+
+          <!-- Profile header -->
+          <div class="profile-header">
+            <div class="avatar-xl">MG</div>
+            <div style="flex: 1;">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="t-h3" style="margin: 0;">María González</div>
+                  <div class="t-body muted" style="margin-top: 4px;">Senior UX Designer</div>
+                  <div class="t-body-sm muted" style="margin-top: 2px;"><i class='i' data-icon='map-pin'></i> Miami, FL</div>
+                </div>
+                <span class="badge badge-violet" style="padding: 6px 12px; font-size: 13px;"><span class="dot"></span>Interviewing</span>
+              </div>
+
+              <div class="row mt-4" style="flex-wrap: wrap; gap: 8px;">
+                <button class="btn btn-outline btn-sm"><i class='i' data-icon='file-text'></i> <span data-i18n-es="Ver resume" data-i18n-en="View resume">Ver resume</span></button>
+                <button class="btn btn-outline btn-sm"><i class='i' data-icon='download'></i> <span data-i18n-es="Descargar" data-i18n-en="Download">Descargar</span></button>
+                <button class="btn btn-outline btn-sm"><i class='i' data-icon='image'></i> <span data-i18n-es="Ver headshot" data-i18n-en="View headshot">Ver headshot</span></button>
+                <button class="btn btn-outline btn-sm"><i class='i' data-icon='mail'></i> <span data-i18n-es="Contactar" data-i18n-en="Contact">Contactar</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick metadata -->
+          <div class="card" style="margin-top: 16px;">
+            <div class="quick-bar" style="margin: 0; border: 0; padding: 0;">
+              <div class="qb-item">
+                <div class="lbl" data-i18n-es="Experiencia" data-i18n-en="Experience">Experiencia</div>
+                <div class="val">7 <span data-i18n-es="años" data-i18n-en="years">años</span></div>
+              </div>
+              <div class="qb-item">
+                <div class="lbl" data-i18n-es="Industria" data-i18n-en="Industry">Industria</div>
+                <div class="val">Hospitality</div>
+              </div>
+              <div class="qb-item">
+                <div class="lbl" data-i18n-es="Aplicó" data-i18n-en="Applied">Aplicó</div>
+                <div class="val">12 Mar 2026</div>
+              </div>
+              <div class="qb-item">
+                <div class="lbl" data-i18n-es="Última actualización" data-i18n-en="Last update">Última actualización</div>
+                <div class="val">22 Mar 2026</div>
+              </div>
+              <div class="qb-item">
+                <div class="lbl">Email</div>
+                <div class="val">m.gonzalez@gmail.com</div>
+              </div>
+              <div class="qb-item">
+                <div class="lbl" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</div>
+                <div class="val">+1 (305) 555-2918</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bio -->
+          <div class="section" style="margin-top: 16px;">
+            <h3 class="t-h4" data-i18n-es="Sobre María" data-i18n-en="About María">Sobre María</h3>
+            <p class="t-body" style="margin: 0; color: var(--ink-700);" data-i18n-es="Senior UX Designer con 7 años creando productos digitales y experiencias físicas para marcas de hospitalidad de lujo. Especialista en research de usuarios y diseño cross-channel. Bilingüe (ES/EN), basada en Miami." data-i18n-en="Senior UX Designer with 7 years building digital products and physical experiences for luxury hospitality brands. Expert in user research and cross-channel design. Bilingual (ES/EN), based in Miami.">Senior UX Designer con 7 años creando productos digitales y experiencias físicas para marcas de hospitalidad de lujo. Especialista en research de usuarios y diseño cross-channel. Bilingüe (ES/EN), basada en Miami.</p>
+          </div>
+
+          <!-- Education -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Educación" data-i18n-en="Education">Educación</h3>
+
+            <div class="edu-item">
+              <div class="icon"><i class='i' data-icon='graduation-cap'></i></div>
+              <div style="flex: 1;">
+                <div style="font-weight: 600;" data-i18n-es="Maestría en Diseño de Experiencia" data-i18n-en="Master in Experience Design">Maestría en Diseño de Experiencia</div>
+                <div class="t-body-sm muted">School of Visual Arts · New York · 2018–2020</div>
+              </div>
+            </div>
+
+            <div class="edu-item">
+              <div class="icon"><i class='i' data-icon='graduation-cap'></i></div>
+              <div style="flex: 1;">
+                <div style="font-weight: 600;" data-i18n-es="Licenciatura en Comunicación Visual" data-i18n-en="BA in Visual Communication">Licenciatura en Comunicación Visual</div>
+                <div class="t-body-sm muted">Universidad de los Andes · Bogotá · 2010–2014</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resume preview -->
+          <div class="section">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="t-h4" style="margin: 0;" data-i18n-es="Resume" data-i18n-en="Resume">Resume</h3>
+              <div class="row gap-2">
+                <button class="btn btn-outline btn-sm"><i class='i' data-icon='file-text'></i> <span data-i18n-es="Abrir en pestaña nueva" data-i18n-en="Open in new tab">Abrir en pestaña nueva</span></button>
+                <button class="btn btn-ghost btn-sm"><i class='i' data-icon='download'></i></button>
+              </div>
+            </div>
+            <div style="background: var(--ink-100); border-radius: var(--r-md); padding: 60px; text-align: center; color: var(--ink-600);">
+              <div style="font-size: 48px; margin-bottom: 12px;"><i class='i' data-icon='file-text'></i></div>
+              <div class="t-body" data-i18n-es="Vista previa del resume" data-i18n-en="Resume preview">Vista previa del resume</div>
+              <div class="t-body-sm muted" style="margin-top: 4px;">maria-gonzalez-cv.pdf · 1.2 MB</div>
+              <div class="private-banner" style="display: inline-flex; margin-top: 16px; margin-bottom: 0;">
+                <i class='i' data-icon='lock'></i> <span data-i18n-es="Acceso vía link temporal seguro" data-i18n-en="Access via secure temporary link">Acceso vía link temporal seguro</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- References -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Referencias" data-i18n-en="References">Referencias</h3>
+
+            <div class="stack-2">
+              <div class="ref-card">
+                <div class="avatar">RM</div>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600; font-size: 14px;">Roberto Mendoza</div>
+                  <div class="t-body-sm muted" data-i18n-es="Ex-Manager · Marriott International" data-i18n-en="Former Manager · Marriott International">Ex-Manager · Marriott International</div>
+                  <div class="t-body-sm muted">r.mendoza@marriott.com · +1 (305) 555-1024</div>
+                </div>
+              </div>
+              <div class="ref-card">
+                <div class="avatar">PS</div>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600; font-size: 14px;">Patricia Sánchez</div>
+                  <div class="t-body-sm muted" data-i18n-es="Director · Hotel Boutique Group" data-i18n-en="Director · Hotel Boutique Group">Director · Hotel Boutique Group</div>
+                  <div class="t-body-sm muted">p.sanchez@hbg.com · +1 (786) 555-3847</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Application timeline -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Historia de esta aplicación" data-i18n-en="Application history">Historia de esta aplicación</h3>
+
+            <div class="timeline">
+              <div class="timeline-item done">
+                <div style="font-weight: 600;">Applied</div>
+                <div class="t-body-sm muted">12 Mar 2026 · 09:14 · <span data-i18n-es="vía formulario web" data-i18n-en="via web form">vía formulario web</span></div>
+              </div>
+              <div class="timeline-item done">
+                <div style="font-weight: 600;">Under Review</div>
+                <div class="t-body-sm muted">14 Mar 2026 · 11:02 · Carlos Rivera</div>
+              </div>
+              <div class="timeline-item active">
+                <div style="font-weight: 600;">Interviewing</div>
+                <div class="t-body-sm muted">22 Mar 2026 · 16:30 · Carlos Rivera</div>
+                <div class="t-body-sm" style="margin-top: 4px;" data-i18n-es="Entrevista programada para el 28 de marzo a las 10:00 AM" data-i18n-en="Interview scheduled for March 28 at 10:00 AM">Entrevista programada para el 28 de marzo a las 10:00 AM</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Status + Notes (E-09) -->
+        <aside class="side-col">
+
+          <!-- Status panel -->
+          <div class="status-panel">
+            <div class="status-current">
+              <div class="icon"><i class='i' data-icon='briefcase'></i></div>
+              <div class="info">
+                <div class="label" data-i18n-es="Status actual" data-i18n-en="Current status">Status actual</div>
+                <div class="value">Interviewing</div>
+                <div class="since" data-i18n-es="Desde hace 2 días" data-i18n-en="Since 2 days ago">Desde hace 2 días</div>
+              </div>
+            </div>
+
+            <a href="e08-status-modal.html" class="btn btn-primary w-full" style="display:flex;" data-i18n-es="Actualizar status" data-i18n-en="Update status">Actualizar status</a>
+
+            <div class="stack-2 mt-4">
+              <div class="ds-grid" style="display: grid; grid-template-columns: 1fr; gap: 6px; font-size: 13px;">
+                <a href="#" style="display: flex; justify-content: space-between; padding: 8px 12px; border-radius: var(--r-md); color: var(--ink-700);"
+                   onmouseover="this.style.background='var(--ink-100)'" onmouseout="this.style.background=''">
+                  <span><i class='i' data-icon='calendar'></i> <span data-i18n-es="Programar entrevista" data-i18n-en="Schedule interview">Programar entrevista</span></span><span>→</span>
+                </a>
+                <a href="#" style="display: flex; justify-content: space-between; padding: 8px 12px; border-radius: var(--r-md); color: var(--ink-700);"
+                   onmouseover="this.style.background='var(--ink-100)'" onmouseout="this.style.background=''">
+                  <span><i class='i' data-icon='mail'></i> <span data-i18n-es="Enviar mensaje" data-i18n-en="Send message">Enviar mensaje</span></span><span>→</span>
+                </a>
+                <a href="#" style="display: flex; justify-content: space-between; padding: 8px 12px; border-radius: var(--r-md); color: var(--danger);"
+                   onmouseover="this.style.background='var(--danger-bg)'" onmouseout="this.style.background=''">
+                  <span>✕ <span data-i18n-es="Marcar como Not Selected" data-i18n-en="Mark as Not Selected">Marcar como Not Selected</span></span><span>→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- E-09: Private Notes -->
+          <div class="status-panel">
+            <div class="flex justify-between items-center mb-4">
+              <div>
+                <div class="t-h4" style="margin: 0;" data-i18n-es="Notas privadas" data-i18n-en="Private notes">Notas privadas</div>
+                <div class="t-caption muted">E-09</div>
+              </div>
+              <span class="badge badge-violet" style="font-size: 10px;"><i class='i' data-icon='lock'></i> <span data-i18n-es="Solo equipo" data-i18n-en="Team only">Solo equipo</span></span>
+            </div>
+
+            <div class="private-banner">
+              <i class='i' data-icon='lock'></i> <span data-i18n-es="Solo visible para tu equipo y administradores. El candidato no las ve." data-i18n-en="Only visible to your team and admins. The candidate cannot see them.">Solo visible para tu equipo y administradores. El candidato no las ve.</span>
+            </div>
+
+            <!-- Existing notes -->
+            <div class="note">
+              <div class="head">
+                <div class="author">
+                  <div class="avatar avatar-sm">CR</div>
+                  Carlos Rivera
+                </div>
+                <div class="time" data-i18n-es="hace 2 días" data-i18n-en="2 days ago">hace 2 días</div>
+              </div>
+              <div class="body" data-i18n-es="Excelente portfolio y dominio de research. Considerar para el equipo de marca regional. Confirmar disponibilidad para fines de semana." data-i18n-en="Excellent portfolio and research expertise. Consider for the regional brand team. Confirm weekend availability.">Excelente portfolio y dominio de research. Considerar para el equipo de marca regional. Confirmar disponibilidad para fines de semana.</div>
+            </div>
+
+            <div class="note">
+              <div class="head">
+                <div class="author">
+                  <div class="avatar avatar-sm">VL</div>
+                  Valeria López
+                </div>
+                <div class="time" data-i18n-es="hace 5 días" data-i18n-en="5 days ago">hace 5 días</div>
+              </div>
+              <div class="body" data-i18n-es="Referencias muy positivas de Marriott. Llegó puntual a la screening call. Buena comunicación." data-i18n-en="Very positive references from Marriott. On time to screening call. Good communication.">Referencias muy positivas de Marriott. Llegó puntual a la screening call. Buena comunicación.</div>
+            </div>
+
+            <!-- Add note -->
+            <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--ink-200);">
+              <textarea class="textarea" style="min-height: 80px; font-size: 13px;" data-i18n-es-placeholder="Agregar una nota privada…" data-i18n-en-placeholder="Add a private note…" placeholder="Agregar una nota privada…"></textarea>
+              <div class="flex justify-between items-center mt-2">
+                <span class="t-caption muted" data-i18n-es="Markdown soportado" data-i18n-en="Markdown supported">Markdown soportado</span>
+                <button class="btn btn-secondary btn-sm" data-i18n-es="Agregar nota" data-i18n-en="Add note">Agregar nota</button>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

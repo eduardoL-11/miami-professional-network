@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P-05 · Verificar email — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <link rel="stylesheet" href="../../css/auth.css" />
+  <style>
+    .state-toggle {
+      display: inline-flex; padding: 3px;
+      background: var(--ink-100); border-radius: var(--r-full);
+      margin: 0 auto 24px;
+    }
+    .state-toggle button {
+      border: 0; background: transparent;
+      padding: 5px 12px; border-radius: var(--r-full);
+      font-family: var(--font-sans); font-size: 12px; font-weight: 600;
+      color: var(--ink-600); cursor: pointer;
+    }
+    .state-toggle button.active { background: var(--ink-900); color: var(--white); }
+
+    .otp-input { display: flex; gap: 8px; justify-content: center; }
+    .otp-input input {
+      width: 44px; height: 52px; text-align: center;
+      font-size: 18px; font-weight: 600; font-family: var(--font-mono);
+      border: 1px solid var(--ink-300); border-radius: var(--r-md);
+      background: var(--white); color: var(--ink-900);
+    }
+    .otp-input input:focus { outline: none; border-color: var(--ink-700); box-shadow: 0 0 0 3px rgba(15,20,17,0.06); }
+
+    .email-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; background: var(--ink-100); border-radius: var(--r-full);
+      font-size: 13px; color: var(--ink-800); font-family: var(--font-mono);
+    }
+  </style>
+</head>
+<body class="auth">
+
+  <header class="auth-top">
+    <a href="../../index.html" class="brand">
+      <img src="../../assets/logo-fullcolor.png" alt="" />
+      <span>Miami Professional Network</span>
+    </a>
+    <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+    <div class="lang-toggle">
+      <button data-lang="es">ES</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <main class="auth-shell">
+    <div class="auth-card text-center">
+
+      <div class="t-overline muted mb-2" data-i18n-es="P-05 · Verificación" data-i18n-en="P-05 · Verification">P-05 · Verificación</div>
+
+      <div class="state-toggle" id="state-toggle">
+        <button class="active" data-state="sent" data-i18n-es="Enviado" data-i18n-en="Sent">Enviado</button>
+        <button data-state="success" data-i18n-es="Verificado" data-i18n-en="Verified">Verificado</button>
+        <button data-state="expired" data-i18n-es="Expirado" data-i18n-en="Expired">Expirado</button>
+      </div>
+
+      <!-- State: SENT -->
+      <div id="state-sent" class="state-content">
+        <div class="auth-status-icon info"><i class="i" data-icon="mail"></i></div>
+        <h1 data-i18n-es="Verifica tu correo" data-i18n-en="Verify your email">Verifica tu correo</h1>
+        <p class="sub" data-i18n-es="Te enviamos un enlace de verificación a:" data-i18n-en="We sent a verification link to:">Te enviamos un enlace de verificación a:</p>
+        <div class="email-pill mb-6">maria@ejemplo.com</div>
+
+        <p class="t-body-sm muted mb-4" data-i18n-es="También puedes ingresar el código de 6 dígitos:" data-i18n-en="Or enter the 6-digit code:">También puedes ingresar el código de 6 dígitos:</p>
+
+        <div class="otp-input mb-6">
+          <input maxlength="1" value="4" />
+          <input maxlength="1" value="7" />
+          <input maxlength="1" value="2" />
+          <input maxlength="1" />
+          <input maxlength="1" />
+          <input maxlength="1" />
+        </div>
+
+        <button class="btn btn-primary btn-lg w-full" style="display: flex; justify-content: center;" data-i18n-es="Verificar código" data-i18n-en="Verify code">Verificar código</button>
+
+        <div class="auth-foot">
+          <span data-i18n-es="¿No recibiste el correo?" data-i18n-en="Didn't receive the email?">¿No recibiste el correo?</span>
+          <a href="#" data-i18n-es="Reenviar" data-i18n-en="Resend">Reenviar</a>
+          <span style="color: var(--ink-400);"> · </span>
+          <a href="#" data-i18n-es="Cambiar email" data-i18n-en="Change email">Cambiar email</a>
+        </div>
+      </div>
+
+      <!-- State: SUCCESS -->
+      <div id="state-success" class="state-content hidden">
+        <div class="auth-status-icon success"><i class="i" data-icon="check"></i></div>
+        <h1 data-i18n-es="¡Email verificado!" data-i18n-en="Email verified!">¡Email verificado!</h1>
+        <p class="sub" data-i18n-es="Tu cuenta está lista. Empieza a explorar empleos y completa tu perfil para aplicar." data-i18n-en="Your account is ready. Start exploring jobs and complete your profile to apply.">Tu cuenta está lista. Empieza a explorar empleos y completa tu perfil para aplicar.</p>
+
+        <a href="../candidate/c01-onboarding.html" class="btn btn-primary btn-lg w-full mt-2" style="display: flex; justify-content: center;" data-i18n-es="Empezar →" data-i18n-en="Get started →">Empezar →</a>
+
+        <div class="auth-foot">
+          <a href="../candidate/c02-profile.html" data-i18n-es="Ir a mi perfil" data-i18n-en="Go to my profile">Ir a mi perfil</a>
+        </div>
+      </div>
+
+      <!-- State: EXPIRED -->
+      <div id="state-expired" class="state-content hidden">
+        <div class="auth-status-icon warning"><i class="i" data-icon="hourglass"></i></div>
+        <h1 data-i18n-es="El enlace expiró" data-i18n-en="The link has expired">El enlace expiró</h1>
+        <p class="sub" data-i18n-es="Los enlaces de verificación son válidos por 24 horas. Solicita uno nuevo para continuar." data-i18n-en="Verification links are valid for 24 hours. Request a new one to continue.">Los enlaces de verificación son válidos por 24 horas. Solicita uno nuevo para continuar.</p>
+
+        <button class="btn btn-primary btn-lg w-full mt-2" style="display: flex; justify-content: center;" data-i18n-es="Reenviar enlace" data-i18n-en="Resend link">Reenviar enlace</button>
+
+        <div class="auth-foot">
+          <a href="p04-login.html" data-i18n-es="Volver a iniciar sesión" data-i18n-en="Back to sign in">Volver a iniciar sesión</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script>
+    document.querySelectorAll('#state-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#state-toggle button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const state = btn.getAttribute('data-state');
+        document.querySelectorAll('.state-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById('state-' + state).classList.remove('hidden');
+      });
+    });
+  </script>
+</body>
+</html>

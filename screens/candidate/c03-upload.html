@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C-03 · Subir archivos — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 980px) { .upload-grid { grid-template-columns: 1fr; } }
+
+    .upload-card { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 24px; }
+
+    .drop-zone {
+      border: 2px dashed var(--ink-300); border-radius: var(--r-md);
+      padding: 40px 24px; text-align: center; cursor: pointer;
+      background: var(--ink-50); transition: all .15s ease;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--brand-green); background: var(--brand-green-50);
+    }
+    .drop-zone.has-file {
+      border-style: solid; border-color: var(--success); background: var(--success-bg);
+      text-align: left; padding: 16px 20px;
+    }
+    .drop-zone .big-icon { font-size: 48px; margin-bottom: 12px; line-height: 1; }
+    .drop-zone .or { font-size: 12px; color: var(--ink-500); margin: 8px 0; }
+
+    .file-row { display: flex; align-items: center; gap: 14px; }
+    .file-row .file-icon {
+      width: 48px; height: 48px; border-radius: var(--r-md);
+      background: var(--white); color: var(--brand-orange-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0; border: 1px solid var(--ink-200);
+    }
+    .file-row .file-info { flex: 1; min-width: 0; }
+    .file-row .file-info .name { font-weight: 600; font-size: 14px; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-row .file-info .meta { font-size: 12px; color: var(--ink-600); }
+
+    .upload-progress {
+      height: 6px; background: var(--ink-200); border-radius: var(--r-full);
+      overflow: hidden; margin-top: 10px;
+    }
+    .upload-progress > div {
+      height: 100%; background: var(--brand-green); border-radius: var(--r-full);
+      transition: width .3s ease;
+    }
+
+    /* Headshot crop */
+    .crop-stage {
+      width: 100%; aspect-ratio: 1; background: var(--ink-100);
+      border-radius: var(--r-md); overflow: hidden; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .crop-stage .preview-img {
+      width: 100%; height: 100%; background: linear-gradient(135deg, var(--brand-green) 0%, var(--brand-green-700) 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 96px; font-weight: 800;
+    }
+    .crop-stage .crop-ring {
+      position: absolute; inset: 16px; border-radius: 50%;
+      border: 3px dashed rgba(255,255,255,0.7);
+      pointer-events: none;
+    }
+
+    .req-list { padding: 0; margin: 0; list-style: none; }
+    .req-list li {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 0; font-size: 13px; color: var(--ink-700);
+    }
+    .req-list li .ok { color: var(--success); font-weight: 700; }
+    .req-list li .no { color: var(--danger); font-weight: 700; }
+
+    .security-note {
+      background: var(--violet-bg); border: 1px solid #DDD6FE;
+      border-radius: var(--r-md);
+      padding: 14px 16px; font-size: 12px; color: var(--violet);
+      display: flex; gap: 10px; align-items: flex-start;
+      margin-top: 16px;
+    }
+    .security-note strong { color: var(--violet); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="candidate" data-active="profile">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="row items-center gap-3">
+            <a href="c02-profile.html" class="t-body-sm muted">← <span data-i18n-es="Volver a mi perfil" data-i18n-en="Back to my profile">Volver a mi perfil</span></a>
+          </div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Subir mi foto y resume" data-i18n-en="Upload photo and resume">Subir mi foto y resume</h1>
+          <div class="t-body-sm muted" data-i18n-es="Tus archivos son privados y solo se comparten con empleadores aprobados cuando aplicas." data-i18n-en="Your files are private and only shared with approved employers when you apply.">Tus archivos son privados y solo se comparten con empleadores aprobados cuando aplicas.</div>
+        </div>
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+        <div class="lang-toggle">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <div class="upload-grid">
+
+        <!-- HEADSHOT -->
+        <div class="upload-card">
+          <div class="flex justify-between items-center mb-4">
+            <div>
+              <div class="t-h4" data-i18n-es="Headshot profesional" data-i18n-en="Professional headshot">Headshot profesional</div>
+              <div class="t-body-sm muted" data-i18n-es="Tu foto principal de perfil" data-i18n-en="Your main profile photo">Tu foto principal de perfil</div>
+            </div>
+            <span class="badge badge-success">✓ <span data-i18n-es="Subida" data-i18n-en="Uploaded">Subida</span></span>
+          </div>
+
+          <!-- Preview state -->
+          <div class="crop-stage">
+            <div class="preview-img">MG</div>
+            <div class="crop-ring"></div>
+          </div>
+
+          <div class="t-caption muted text-center mt-2" data-i18n-es="Encuadra dentro del círculo. Será recortada en redondo." data-i18n-en="Frame inside the circle. It will be cropped to a circle.">Encuadra dentro del círculo. Será recortada en redondo.</div>
+
+          <div class="row gap-2 mt-4">
+            <button class="btn btn-outline btn-sm" data-i18n-es="<i class='i' data-icon='refresh'></i> Reemplazar" data-i18n-en="<i class='i' data-icon='refresh'></i> Replace"><i class='i' data-icon='refresh'></i> Reemplazar</button>
+            <button class="btn btn-outline btn-sm" data-i18n-es="<i class='i' data-icon='edit'></i> Re-encuadrar" data-i18n-en="<i class='i' data-icon='edit'></i> Re-frame"><i class='i' data-icon='edit'></i> Re-encuadrar</button>
+            <button class="btn btn-ghost btn-sm" style="color: var(--danger);" data-i18n-es="Eliminar" data-i18n-en="Remove">Eliminar</button>
+          </div>
+
+          <div style="height: 1px; background: var(--ink-200); margin: 20px 0;"></div>
+
+          <div class="t-caption mb-2" style="font-weight: 700; color: var(--ink-700);" data-i18n-es="REQUISITOS" data-i18n-en="REQUIREMENTS">REQUISITOS</div>
+          <ul class="req-list">
+            <li><span class="ok">✓</span> <span data-i18n-es="JPG o PNG" data-i18n-en="JPG or PNG">JPG o PNG</span></li>
+            <li><span class="ok">✓</span> <span data-i18n-es="Mínimo 400×400 px" data-i18n-en="Minimum 400×400 px">Mínimo 400×400 px</span></li>
+            <li><span class="ok">✓</span> <span data-i18n-es="Máximo 5 MB" data-i18n-en="Max 5 MB">Máximo 5 MB</span></li>
+            <li><span class="ok">✓</span> <span data-i18n-es="Idealmente fondo claro y rostro centrado" data-i18n-en="Light background and centered face preferred">Idealmente fondo claro y rostro centrado</span></li>
+          </ul>
+        </div>
+
+        <!-- RESUME -->
+        <div class="upload-card">
+          <div class="flex justify-between items-center mb-4">
+            <div>
+              <div class="t-h4" data-i18n-es="Resume PDF" data-i18n-en="Resume PDF">Resume PDF</div>
+              <div class="t-body-sm muted" data-i18n-es="Tu currículum completo" data-i18n-en="Your full résumé">Tu currículum completo</div>
+            </div>
+            <span class="badge badge-warning">! <span data-i18n-es="Pendiente" data-i18n-en="Missing">Pendiente</span></span>
+          </div>
+
+          <!-- Empty drop zone -->
+          <label class="drop-zone" style="display: block;">
+            <input type="file" accept="application/pdf" hidden />
+            <div class="big-icon"><i class='i' data-icon='file-text'></i></div>
+            <div style="font-weight: 700; font-size: 16px; color: var(--ink-800);" data-i18n-es="Arrastra tu resume PDF aquí" data-i18n-en="Drop your resume PDF here">Arrastra tu resume PDF aquí</div>
+            <div class="or" data-i18n-es="— o —" data-i18n-en="— or —">— o —</div>
+            <span class="btn btn-secondary btn-sm" data-i18n-es="Seleccionar archivo" data-i18n-en="Browse files">Seleccionar archivo</span>
+            <div class="hint mt-4" data-i18n-es="PDF · máx. 5 MB" data-i18n-en="PDF · max 5 MB">PDF · máx. 5 MB</div>
+          </label>
+
+          <!-- Example: in-progress upload state -->
+          <div style="margin-top: 24px;">
+            <div class="t-caption mb-2" style="font-weight: 700; color: var(--ink-700);" data-i18n-es="ESTADOS DE EJEMPLO" data-i18n-en="EXAMPLE STATES">ESTADOS DE EJEMPLO</div>
+
+            <div class="drop-zone has-file" style="margin-bottom: 10px;">
+              <div class="file-row">
+                <div class="file-icon"><i class='i' data-icon='file-text'></i></div>
+                <div class="file-info">
+                  <div class="name">maria-gonzalez-cv.pdf</div>
+                  <div class="meta"><span data-i18n-es="Subiendo…" data-i18n-en="Uploading…">Subiendo…</span> · 1.2 / 1.8 MB</div>
+                  <div class="upload-progress"><div style="width: 65%;"></div></div>
+                </div>
+                <button class="btn btn-ghost btn-sm">×</button>
+              </div>
+            </div>
+
+            <div class="drop-zone has-file" style="margin-bottom: 10px;">
+              <div class="file-row">
+                <div class="file-icon" style="background: var(--success-bg); color: var(--success); border-color: #BBF7D0;">✓</div>
+                <div class="file-info">
+                  <div class="name">maria-gonzalez-cv.pdf</div>
+                  <div class="meta">1.8 MB · <span data-i18n-es="subido hace 2 min" data-i18n-en="uploaded 2 min ago">subido hace 2 min</span></div>
+                </div>
+                <button class="btn btn-outline btn-sm"><i class='i' data-icon='eye'></i> <span data-i18n-es="Ver" data-i18n-en="View">Ver</span></button>
+                <button class="btn btn-ghost btn-sm" style="color: var(--danger);" title="Remove"><i class='i' data-icon='trash'></i></button>
+              </div>
+            </div>
+
+            <div class="drop-zone has-file" style="background: var(--danger-bg); border-color: var(--danger);">
+              <div class="file-row">
+                <div class="file-icon" style="background: white; color: var(--danger); border-color: #FECACA;">✕</div>
+                <div class="file-info">
+                  <div class="name" style="color: var(--danger);">resume-old.docx</div>
+                  <div class="meta" style="color: var(--danger);" data-i18n-es="Formato no soportado · solo PDF" data-i18n-en="Unsupported format · PDF only">Formato no soportado · solo PDF</div>
+                </div>
+                <button class="btn btn-ghost btn-sm">×</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="t-caption mb-2 mt-6" style="font-weight: 700; color: var(--ink-700);" data-i18n-es="REQUISITOS" data-i18n-en="REQUIREMENTS">REQUISITOS</div>
+          <ul class="req-list">
+            <li><span class="ok">✓</span> <span data-i18n-es="Formato PDF (no Word, no imágenes)" data-i18n-en="PDF format (no Word, no images)">Formato PDF (no Word, no imágenes)</span></li>
+            <li><span class="ok">✓</span> <span data-i18n-es="Máximo 5 MB" data-i18n-en="Max 5 MB">Máximo 5 MB</span></li>
+            <li><span class="ok">✓</span> <span data-i18n-es="Máximo 3 páginas recomendado" data-i18n-en="Max 3 pages recommended">Máximo 3 páginas recomendado</span></li>
+            <li><span class="ok">✓</span> <span data-i18n-es="Texto seleccionable (no escaneado)" data-i18n-en="Selectable text (not scanned)">Texto seleccionable (no escaneado)</span></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Security note -->
+      <div class="security-note">
+        <div style="font-size: 16px;"><i class='i' data-icon='lock'></i></div>
+        <div>
+          <strong data-i18n-es="Tus archivos están protegidos." data-i18n-en="Your files are protected.">Tus archivos están protegidos.</strong>
+          <span data-i18n-es="Resume y headshot se almacenan de forma cifrada. Solo empleadores aprobados pueden verlos —y solo cuando aplicas a uno de sus empleos— a través de un enlace temporal y seguro generado por el backend." data-i18n-en="Resume and headshot are stored encrypted. Only approved employers can view them — and only when you apply to one of their jobs — via a temporary, secure link generated by the backend."> Resume y headshot se almacenan de forma cifrada. Solo empleadores aprobados pueden verlos —y solo cuando aplicas a uno de sus empleos— a través de un enlace temporal y seguro generado por el backend.</span>
+        </div>
+      </div>
+
+      <div class="row justify-end gap-2 mt-6" style="display:flex;">
+        <a href="c02-profile.html" class="btn btn-ghost" data-i18n-es="Cancelar" data-i18n-en="Cancel">Cancelar</a>
+        <a href="c02-profile.html" class="btn btn-primary" data-i18n-es="Guardar y volver" data-i18n-en="Save and go back">Guardar y volver</a>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

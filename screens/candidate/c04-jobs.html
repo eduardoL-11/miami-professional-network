@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C-04 · Buscar empleos — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .search-bar {
+      background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+      padding: 6px; display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 4px; align-items: stretch;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+    }
+    .search-bar > .field {
+      position: relative; display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-right: 1px solid var(--ink-200);
+    }
+    .search-bar > .field:last-of-type { border-right: 0; }
+    .search-bar > .field .icon { color: var(--ink-500); font-size: 16px; }
+    .search-bar > .field input,
+    .search-bar > .field select {
+      border: 0; outline: none; background: transparent; padding: 0; font-family: var(--font-sans);
+      font-size: 14px; width: 100%; color: var(--ink-900);
+      appearance: none;
+    }
+    .search-bar > .field label {
+      position: absolute; top: 3px; left: 14px;
+      font-size: 10px; font-weight: 700; color: var(--ink-500);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .search-bar > .field { padding-top: 22px; padding-bottom: 8px; }
+    .search-bar > .field .icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+    .search-bar > .field input { padding-right: 20px; }
+
+    .layout { display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start; }
+    @media (max-width: 1100px) { .layout { grid-template-columns: 1fr; } }
+
+    /* Filter panel */
+    .filter-panel { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 20px; position: sticky; top: 24px; }
+    .filter-group + .filter-group { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--ink-200); }
+    .filter-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-700); margin-bottom: 10px; }
+    .filter-list { display: flex; flex-direction: column; gap: 8px; }
+    .filter-list label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: var(--ink-700); }
+    .filter-list label .count { margin-left: auto; font-size: 11px; color: var(--ink-500); }
+
+    /* Job card */
+    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+
+    .job-card {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 20px;
+      margin-bottom: 12px; transition: border-color .12s, box-shadow .12s;
+      display: grid; grid-template-columns: auto 1fr auto; gap: 16px;
+    }
+    .job-card:hover { border-color: var(--ink-300); box-shadow: var(--shadow-sm); }
+    .job-card.applied { background: var(--ink-50); }
+    .job-card .company-logo {
+      width: 56px; height: 56px; border-radius: var(--r-md);
+      background: var(--ink-100); color: var(--ink-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800; flex-shrink: 0;
+    }
+    .job-card .body .title-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .job-card .title-row .title { font-weight: 700; font-size: 17px; color: var(--ink-900); }
+    .job-card .title-row .title:hover { color: var(--ink-900); }
+    .job-card .company-line { font-size: 13px; color: var(--ink-700); margin-top: 2px; }
+    .job-card .meta-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .job-card .desc { font-size: 13px; color: var(--ink-700); margin-top: 10px; line-height: 1.5; }
+    .job-card .footer-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--ink-100); font-size: 12px; color: var(--ink-600); }
+    .job-card .right-col { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; min-width: 120px; }
+
+    .save-btn {
+      background: transparent; border: 1px solid var(--ink-300); border-radius: var(--r-md);
+      width: 36px; height: 36px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink-600); transition: all .15s ease;
+    }
+    .save-btn:hover { color: var(--brand-orange); border-color: var(--brand-orange); background: var(--brand-orange-50); }
+    .save-btn.saved { color: var(--brand-orange); border-color: var(--brand-orange); background: var(--brand-orange-50); }
+
+    .results-count { font-size: 14px; color: var(--ink-700); }
+    .results-count strong { color: var(--ink-900); }
+
+    .active-chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--brand-green-50); color: var(--brand-green-700);
+      padding: 4px 10px; border-radius: var(--r-full);
+      font-size: 12px; font-weight: 500;
+    }
+    .active-chip button { background: transparent; border: 0; cursor: pointer; color: inherit; padding: 0 0 0 4px; font-size: 14px; }
+
+    .pagination { display: flex; justify-content: center; gap: 6px; margin-top: 24px; }
+    .pagination a { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--r-md); font-size: 13px; color: var(--ink-700); text-decoration: none; border: 1px solid var(--ink-200); background: var(--white); }
+    .pagination a.active { background: var(--brand-green); color: white; font-weight: 600; border-color: var(--brand-green); }
+    .pagination a:hover:not(.active) { background: var(--ink-100); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="candidate" data-active="jobs">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Candidato · Explorar" data-i18n-en="Candidate · Explore">Candidato · Explorar</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Buscar empleos" data-i18n-en="Browse jobs">Buscar empleos</h1>
+          <div class="t-body-sm muted" data-i18n-es="142 empleos activos en Miami y alrededores" data-i18n-en="142 active jobs in Miami and surroundings">142 empleos activos en Miami y alrededores</div>
+        </div>
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+        <div class="lang-toggle">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <!-- Search bar -->
+      <div class="search-bar">
+        <div class="field">
+          <label data-i18n-es="Buscar" data-i18n-en="Search">Buscar</label>
+          <input data-i18n-es-placeholder="Título, palabra clave…" data-i18n-en-placeholder="Title, keyword…" placeholder="Título, palabra clave…" value="UX Designer" />
+          <span class="icon"><i class='i' data-icon='search'></i></span>
+        </div>
+        <div class="field">
+          <label data-i18n-es="Ubicación" data-i18n-en="Location">Ubicación</label>
+          <input value="Miami, FL" />
+          <span class="icon"><i class='i' data-icon='map-pin'></i></span>
+        </div>
+        <div class="field">
+          <label>Industry</label>
+          <select>
+            <option data-i18n-es="Todas las industrias" data-i18n-en="All industries">Todas las industrias</option>
+            <option>Hospitality</option><option>Tech</option><option>Healthcare</option><option>Construction</option>
+          </select>
+          <span class="icon">▼</span>
+        </div>
+        <button class="btn btn-primary" style="border-radius: calc(var(--r-lg) - 6px);"><span data-i18n-es="Buscar" data-i18n-en="Search">Buscar</span></button>
+      </div>
+
+      <!-- Active filters -->
+      <div class="row gap-2 mb-6" style="flex-wrap: wrap;">
+        <span class="active-chip">UX Designer<button>×</button></span>
+        <span class="active-chip">Miami, FL<button>×</button></span>
+        <span class="active-chip" data-i18n-es="Full-time" data-i18n-en="Full-time">Full-time<button>×</button></span>
+        <a href="#" class="t-body-sm muted" style="align-self: center;" data-i18n-es="Limpiar todos" data-i18n-en="Clear all">Limpiar todos</a>
+      </div>
+
+      <div class="layout">
+
+        <!-- LEFT: Filters -->
+        <aside class="filter-panel">
+
+          <div class="filter-group">
+            <div class="filter-title" data-i18n-es="Tipo de empleo" data-i18n-en="Employment type">Tipo de empleo</div>
+            <div class="filter-list">
+              <label><input type="checkbox" checked /><span data-i18n-es="Tiempo completo" data-i18n-en="Full-time">Tiempo completo</span><span class="count">87</span></label>
+              <label><input type="checkbox" /><span data-i18n-es="Medio tiempo" data-i18n-en="Part-time">Medio tiempo</span><span class="count">23</span></label>
+              <label><input type="checkbox" /><span data-i18n-es="Contrato" data-i18n-en="Contract">Contrato</span><span class="count">14</span></label>
+              <label><input type="checkbox" /><span data-i18n-es="Temporal" data-i18n-en="Temporary">Temporal</span><span class="count">8</span></label>
+              <label><input type="checkbox" /><span data-i18n-es="Pasantía" data-i18n-en="Internship">Pasantía</span><span class="count">5</span></label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-title" data-i18n-es="Fecha de publicación" data-i18n-en="Date posted">Fecha de publicación</div>
+            <div class="filter-list">
+              <label><input type="radio" name="date" /><span data-i18n-es="Últimas 24 horas" data-i18n-en="Last 24 hours">Últimas 24 horas</span><span class="count">12</span></label>
+              <label><input type="radio" name="date" checked /><span data-i18n-es="Última semana" data-i18n-en="Last week">Última semana</span><span class="count">38</span></label>
+              <label><input type="radio" name="date" /><span data-i18n-es="Últimas 2 semanas" data-i18n-en="Last 2 weeks">Últimas 2 semanas</span><span class="count">76</span></label>
+              <label><input type="radio" name="date" /><span data-i18n-es="Cualquier fecha" data-i18n-en="Any time">Cualquier fecha</span><span class="count">142</span></label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-title" data-i18n-es="Industria" data-i18n-en="Industry">Industria</div>
+            <div class="filter-list">
+              <label><input type="checkbox" /><span>Hospitality</span><span class="count">52</span></label>
+              <label><input type="checkbox" /><span>Tech</span><span class="count">34</span></label>
+              <label><input type="checkbox" /><span>Healthcare</span><span class="count">28</span></label>
+              <label><input type="checkbox" /><span>Construction</span><span class="count">19</span></label>
+              <label><input type="checkbox" /><span>Retail</span><span class="count">9</span></label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-title" data-i18n-es="Salario" data-i18n-en="Salary">Salario</div>
+            <div class="filter-list">
+              <label><input type="checkbox" /><span>$40k+</span></label>
+              <label><input type="checkbox" /><span>$60k+</span></label>
+              <label><input type="checkbox" /><span>$80k+</span></label>
+              <label><input type="checkbox" /><span>$120k+</span></label>
+            </div>
+          </div>
+
+          <button class="btn btn-ghost btn-sm w-full mt-6" data-i18n-es="Limpiar filtros" data-i18n-en="Clear filters">Limpiar filtros</button>
+
+        </aside>
+
+        <!-- RIGHT: Results -->
+        <div>
+
+          <div class="toolbar">
+            <div class="results-count"><strong>24</strong> <span data-i18n-es="empleos coinciden" data-i18n-en="jobs match">empleos coinciden</span></div>
+            <select class="select" style="width: auto; padding-right: 36px;">
+              <option data-i18n-es="Más relevantes" data-i18n-en="Most relevant">Más relevantes</option>
+              <option data-i18n-es="Más recientes" data-i18n-en="Most recent">Más recientes</option>
+              <option data-i18n-es="Mejor salario" data-i18n-en="Highest salary">Mejor salario</option>
+            </select>
+          </div>
+
+          <!-- Job 1 -->
+          <article class="job-card">
+            <div class="company-logo">SH</div>
+            <div class="body">
+              <div class="title-row">
+                <a href="c05-job-detail.html" class="title">Hospitality Marketing Lead</a>
+                <span class="badge badge-orange" style="font-size: 10px;"><i class='i' data-icon='zap'></i> <span data-i18n-es="Destacado" data-i18n-en="Featured">Destacado</span></span>
+              </div>
+              <div class="company-line">Sunset Hotels Group · Miami, FL</div>
+              <div class="meta-row">
+                <span class="badge badge-neutral">Full-time</span>
+                <span class="badge badge-neutral">Hospitality</span>
+                <span class="badge badge-neutral">$80k–$110k</span>
+                <span class="badge badge-neutral" data-i18n-es="Híbrido" data-i18n-en="Hybrid">Híbrido</span>
+              </div>
+              <div class="desc" data-i18n-es="Diseña y ejecuta estrategias de marca para nuestra cartera de hoteles boutique en Miami. Trabajarás cross-funcional con operaciones, F&B y digital para crear experiencias memorables…" data-i18n-en="Design and execute brand strategies for our boutique hotel portfolio in Miami. You'll work cross-functional with operations, F&B and digital to create memorable experiences…">Diseña y ejecuta estrategias de marca para nuestra cartera de hoteles boutique en Miami. Trabajarás cross-funcional con operaciones, F&B y digital para crear experiencias memorables…</div>
+              <div class="footer-row">
+                <span data-i18n-es="<i class='i' data-icon='calendar'></i> Publicado hace 3 días" data-i18n-en="<i class='i' data-icon='calendar'></i> Posted 3 days ago"><i class='i' data-icon='calendar'></i> Publicado hace 3 días</span>
+                <span data-i18n-es="<i class='i' data-icon='users'></i> 24 aplicantes" data-i18n-en="<i class='i' data-icon='users'></i> 24 applicants"><i class='i' data-icon='users'></i> 24 aplicantes</span>
+              </div>
+            </div>
+            <div class="right-col">
+              <button class="save-btn saved" title="Saved">★</button>
+              <a href="c05-job-detail.html" class="btn btn-primary btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Aplicar" data-i18n-en="Apply">Aplicar</a>
+              <a href="c05-job-detail.html" class="btn btn-ghost btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+            </div>
+          </article>
+
+          <!-- Job 2: Already applied -->
+          <article class="job-card applied">
+            <div class="company-logo">BB</div>
+            <div class="body">
+              <div class="title-row">
+                <a href="c05-job-detail.html" class="title">Senior Product Designer</a>
+                <span class="badge badge-info" style="font-size: 10px;"><span class="dot"></span><span data-i18n-es="Ya aplicaste" data-i18n-en="Already applied">Ya aplicaste</span></span>
+              </div>
+              <div class="company-line">Brickell Build Co. · Miami, FL</div>
+              <div class="meta-row">
+                <span class="badge badge-neutral">Full-time</span>
+                <span class="badge badge-neutral">Tech</span>
+                <span class="badge badge-neutral">$95k–$130k</span>
+              </div>
+              <div class="desc" data-i18n-es="Lidera la dirección de diseño de productos digitales para una plataforma de gestión de obras. Equipo de 4 diseñadores, reportando directo a CPO…" data-i18n-en="Lead product design direction for a construction management platform. Team of 4 designers, reporting directly to CPO…">Lidera la dirección de diseño de productos digitales para una plataforma de gestión de obras. Equipo de 4 diseñadores, reportando directo a CPO…</div>
+              <div class="footer-row">
+                <span data-i18n-es="<i class='i' data-icon='calendar'></i> Publicado hace 5 días" data-i18n-en="<i class='i' data-icon='calendar'></i> Posted 5 days ago"><i class='i' data-icon='calendar'></i> Publicado hace 5 días</span>
+                <span style="color: var(--info); font-weight: 600;" data-i18n-es="✓ Aplicaste hace 2 días" data-i18n-en="✓ Applied 2 days ago">✓ Aplicaste hace 2 días</span>
+              </div>
+            </div>
+            <div class="right-col">
+              <button class="save-btn">☆</button>
+              <a href="c08-application-timeline.html" class="btn btn-outline btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver aplicación" data-i18n-en="View application">Ver aplicación</a>
+            </div>
+          </article>
+
+          <!-- Job 3 -->
+          <article class="job-card">
+            <div class="company-logo">WH</div>
+            <div class="body">
+              <div class="title-row">
+                <a href="c05-job-detail.html" class="title">UX Researcher</a>
+              </div>
+              <div class="company-line">Wynwood Health · Miami, FL</div>
+              <div class="meta-row">
+                <span class="badge badge-neutral">Full-time</span>
+                <span class="badge badge-neutral">Healthcare</span>
+                <span class="badge badge-neutral" data-i18n-es="Remoto" data-i18n-en="Remote">Remoto</span>
+              </div>
+              <div class="desc" data-i18n-es="Conduce investigación cualitativa con pacientes y profesionales médicos. Tu trabajo informará el rediseño de la app insignia…" data-i18n-en="Lead qualitative research with patients and medical professionals. Your work will inform our flagship app redesign…">Conduce investigación cualitativa con pacientes y profesionales médicos. Tu trabajo informará el rediseño de la app insignia…</div>
+              <div class="footer-row">
+                <span data-i18n-es="<i class='i' data-icon='calendar'></i> Publicado ayer" data-i18n-en="<i class='i' data-icon='calendar'></i> Posted yesterday"><i class='i' data-icon='calendar'></i> Publicado ayer</span>
+                <span data-i18n-es="<i class='i' data-icon='users'></i> 6 aplicantes" data-i18n-en="<i class='i' data-icon='users'></i> 6 applicants"><i class='i' data-icon='users'></i> 6 aplicantes</span>
+              </div>
+            </div>
+            <div class="right-col">
+              <button class="save-btn">☆</button>
+              <a href="c05-job-detail.html" class="btn btn-primary btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Aplicar" data-i18n-en="Apply">Aplicar</a>
+              <a href="c05-job-detail.html" class="btn btn-ghost btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+            </div>
+          </article>
+
+          <!-- Job 4 -->
+          <article class="job-card">
+            <div class="company-logo">MR</div>
+            <div class="body">
+              <div class="title-row">
+                <a href="c05-job-detail.html" class="title">Customer Experience Designer</a>
+              </div>
+              <div class="company-line">Mango Republic · Coral Gables, FL</div>
+              <div class="meta-row">
+                <span class="badge badge-neutral">Full-time</span>
+                <span class="badge badge-neutral">Retail</span>
+                <span class="badge badge-neutral">$70k–$95k</span>
+              </div>
+              <div class="desc" data-i18n-es="Diseña la experiencia omnichannel para nuestras 18 tiendas y tienda online. Foco en simplificar el journey de compra…" data-i18n-en="Design the omnichannel experience for our 18 stores and online shop. Focus on simplifying the buying journey…">Diseña la experiencia omnichannel para nuestras 18 tiendas y tienda online. Foco en simplificar el journey de compra…</div>
+              <div class="footer-row">
+                <span data-i18n-es="<i class='i' data-icon='calendar'></i> Publicado hace 4 días" data-i18n-en="<i class='i' data-icon='calendar'></i> Posted 4 days ago"><i class='i' data-icon='calendar'></i> Publicado hace 4 días</span>
+                <span data-i18n-es="<i class='i' data-icon='users'></i> 11 aplicantes" data-i18n-en="<i class='i' data-icon='users'></i> 11 applicants"><i class='i' data-icon='users'></i> 11 aplicantes</span>
+              </div>
+            </div>
+            <div class="right-col">
+              <button class="save-btn saved">★</button>
+              <a href="c05-job-detail.html" class="btn btn-primary btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Aplicar" data-i18n-en="Apply">Aplicar</a>
+              <a href="c05-job-detail.html" class="btn btn-ghost btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+            </div>
+          </article>
+
+          <!-- Job 5 -->
+          <article class="job-card">
+            <div class="company-logo">OM</div>
+            <div class="body">
+              <div class="title-row">
+                <a href="c05-job-detail.html" class="title">Service Designer (Hospitality)</a>
+              </div>
+              <div class="company-line">Ocean Mirage Resort · Miami Beach, FL</div>
+              <div class="meta-row">
+                <span class="badge badge-neutral">Full-time</span>
+                <span class="badge badge-neutral">Hospitality</span>
+              </div>
+              <div class="desc" data-i18n-es="Diseña experiencias de servicio end-to-end para huéspedes desde el check-in hasta el check-out. Trabajarás con F&B, housekeeping y front desk…" data-i18n-en="Design end-to-end guest service experiences from check-in to check-out. You'll work with F&B, housekeeping and front desk…">Diseña experiencias de servicio end-to-end para huéspedes desde el check-in hasta el check-out. Trabajarás con F&B, housekeeping y front desk…</div>
+              <div class="footer-row">
+                <span data-i18n-es="<i class='i' data-icon='calendar'></i> Publicado hace 1 semana" data-i18n-en="<i class='i' data-icon='calendar'></i> Posted 1 week ago"><i class='i' data-icon='calendar'></i> Publicado hace 1 semana</span>
+                <span data-i18n-es="<i class='i' data-icon='users'></i> 32 aplicantes" data-i18n-en="<i class='i' data-icon='users'></i> 32 applicants"><i class='i' data-icon='users'></i> 32 aplicantes</span>
+              </div>
+            </div>
+            <div class="right-col">
+              <button class="save-btn">☆</button>
+              <a href="c05-job-detail.html" class="btn btn-primary btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Aplicar" data-i18n-en="Apply">Aplicar</a>
+              <a href="c05-job-detail.html" class="btn btn-ghost btn-sm w-full" style="display: flex; justify-content: center;" data-i18n-es="Ver detalle" data-i18n-en="View detail">Ver detalle</a>
+            </div>
+          </article>
+
+          <div class="pagination">
+            <a href="#">←</a>
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <a href="#">→</a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

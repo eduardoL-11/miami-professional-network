@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-10 · Overdue Applications — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .hero-warning {
+      background: var(--warning-bg);
+      border: 1px solid rgba(217,119,6,0.20);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      display: flex; gap: 18px; align-items: center;
+      margin-bottom: 24px;
+    }
+    .hero-warning .icon {
+      width: 40px; height: 40px; border-radius: var(--r-md);
+      background: var(--white); color: var(--warning);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+      border: 1px solid rgba(217,119,6,0.20);
+    }
+    .hero-warning .copy h2 { margin: 0 0 2px; color: #92400E; font-weight: 600; letter-spacing: -0.01em; }
+    .hero-warning .copy p { margin: 0; color: #B45309; font-size: 13px; }
+    .overdue-card { border-left-width: 3px; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-warning {
+      background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+      padding: 18px; display: flex; flex-direction: column; gap: 4px;
+    }
+    .stat-warning .lbl { font-size: 11px; color: var(--ink-600); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .stat-warning .val { font-size: 28px; font-weight: 700; }
+
+    .overdue-card {
+      background: var(--white);
+      border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg);
+      padding: 20px;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+    .overdue-card .ribbon {
+      background: var(--warning); color: white;
+      padding: 4px 10px; border-radius: var(--r-full);
+      font-size: 11px; font-weight: 700;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .overdue-card .days-block {
+      text-align: center; padding: 8px 16px; background: var(--warning-bg); border-radius: var(--r-md);
+      min-width: 90px;
+    }
+    .overdue-card .days-block .n { font-size: 24px; font-weight: 800; color: var(--warning); line-height: 1; }
+    .overdue-card .days-block .l { font-size: 10px; color: var(--warning); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+
+    .applicant-mini { display: flex; gap: 14px; align-items: center; }
+    .applicant-mini .meta { font-size: 13px; color: var(--ink-700); }
+    .applicant-mini .meta strong { color: var(--ink-900); }
+    .applicant-mini .job-tag { font-size: 12px; color: var(--ink-600); margin-top: 4px; }
+
+    .pulse-dot {
+      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--warning); position: relative;
+    }
+    .pulse-dot::after {
+      content: ''; position: absolute; inset: -4px; border-radius: 50%;
+      background: var(--warning); opacity: 0.4; animation: pulse-ring 1.5s ease-out infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.5; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="employer" data-active="applicants">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="row items-center gap-3">
+            <a href="e06-applicants.html" class="t-body-sm muted">← <span data-i18n-es="Volver a Aplicantes" data-i18n-en="Back to Applicants">Volver a Aplicantes</span></a>
+          </div>
+          <div class="row items-center gap-3" style="margin-top: 6px;">
+            <h1 class="t-h2" style="margin: 0;" data-i18n-es="Aplicaciones vencidas" data-i18n-en="Overdue applications">Aplicaciones vencidas</h1>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="t-body-sm muted mt-2" data-i18n-es="Aplicaciones que llevan más de 14 días en Under Review sin cambios" data-i18n-en="Applications that have been in Under Review for more than 14 days without changes">Aplicaciones que llevan más de 14 días en Under Review sin cambios</div>
+        </div>
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+        <div class="lang-toggle">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <!-- Hero warning -->
+      <div class="hero-warning">
+        <div class="icon"><i class='i' data-icon='alert-triangle'></i></div>
+        <div class="copy" style="flex: 1;">
+          <h2 class="t-h3" data-i18n-es="2 aplicaciones requieren tu atención" data-i18n-en="2 applications need your attention">2 aplicaciones requieren tu atención</h2>
+          <p data-i18n-es="Una mala experiencia se viraliza. Mantén a los candidatos informados — incluso si la respuesta es un 'no'." data-i18n-en="A bad experience travels fast. Keep candidates informed — even if the answer is 'no'.">Una mala experiencia se viraliza. Mantén a los candidatos informados — incluso si la respuesta es un 'no'.</p>
+        </div>
+        <button class="btn btn-primary"><span data-i18n-es="Resolver todas" data-i18n-en="Resolve all">Resolver todas</span></button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-warning">
+          <span class="lbl" data-i18n-es="Total vencidas" data-i18n-en="Total overdue">Total vencidas</span>
+          <span class="val" style="color: var(--warning);">2</span>
+          <span class="t-caption muted" data-i18n-es="de 9 en Under Review" data-i18n-en="of 9 in Under Review">de 9 en Under Review</span>
+        </div>
+        <div class="stat-warning">
+          <span class="lbl" data-i18n-es="Promedio en revisión" data-i18n-en="Avg. in review">Promedio en revisión</span>
+          <span class="val" style="color: var(--warning);">17 <span style="font-size: 14px; font-weight: 500;" data-i18n-es="días" data-i18n-en="days">días</span></span>
+          <span class="t-caption muted" data-i18n-es="Meta: &lt; 14 días" data-i18n-en="Target: &lt; 14 days">Meta: &lt; 14 días</span>
+        </div>
+        <div class="stat-warning">
+          <span class="lbl" data-i18n-es="Recordatorios enviados" data-i18n-en="Reminders sent">Recordatorios enviados</span>
+          <span class="val">2</span>
+          <span class="t-caption muted" data-i18n-es="último: ayer" data-i18n-en="last: yesterday">último: ayer</span>
+        </div>
+      </div>
+
+      <!-- Overdue cards -->
+      <div class="t-h4 mb-4" data-i18n-es="Acciones requeridas" data-i18n-en="Required actions">Acciones requeridas</div>
+
+      <div class="overdue-card">
+        <div class="applicant-mini">
+          <div class="avatar avatar-lg">MG</div>
+          <div>
+            <div class="meta"><strong>María González</strong> · Senior UX Designer</div>
+            <div class="job-tag" data-i18n-es="Aplicó a:" data-i18n-en="Applied to:">Aplicó a: <strong>Hospitality Marketing Lead</strong></div>
+            <div class="row gap-2 mt-2" style="flex-wrap: wrap;">
+              <span class="badge badge-info"><span class="dot"></span>Under Review</span>
+              <span class="ribbon"><i class='i' data-icon='alert-triangle'></i> <span data-i18n-es="Vencida" data-i18n-en="Overdue">Vencida</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="days-block">
+          <div class="n">18</div>
+          <div class="l" data-i18n-es="días sin update" data-i18n-en="days no update">días sin update</div>
+        </div>
+        <div class="row gap-2">
+          <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" data-i18n-es="Ver perfil" data-i18n-en="View profile">Ver perfil</a>
+          <a href="e08-status-modal.html" class="btn btn-primary btn-sm" data-i18n-es="Actualizar status" data-i18n-en="Update status">Actualizar status</a>
+        </div>
+      </div>
+
+      <div class="overdue-card">
+        <div class="applicant-mini">
+          <div class="avatar avatar-lg">JR</div>
+          <div>
+            <div class="meta"><strong>Jonathan Reyes</strong> · Operations Manager</div>
+            <div class="job-tag" data-i18n-es="Aplicó a:" data-i18n-en="Applied to:">Aplicó a: <strong>Front Office Manager</strong></div>
+            <div class="row gap-2 mt-2" style="flex-wrap: wrap;">
+              <span class="badge badge-info"><span class="dot"></span>Under Review</span>
+              <span class="ribbon"><i class='i' data-icon='alert-triangle'></i> <span data-i18n-es="Vencida" data-i18n-en="Overdue">Vencida</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="days-block">
+          <div class="n">16</div>
+          <div class="l" data-i18n-es="días sin update" data-i18n-en="days no update">días sin update</div>
+        </div>
+        <div class="row gap-2">
+          <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" data-i18n-es="Ver perfil" data-i18n-en="View profile">Ver perfil</a>
+          <a href="e08-status-modal.html" class="btn btn-primary btn-sm" data-i18n-es="Actualizar status" data-i18n-en="Update status">Actualizar status</a>
+        </div>
+      </div>
+
+      <!-- Approaching -->
+      <div class="t-h4 mt-8 mb-4" data-i18n-es="Próximas a vencer (10–13 días)" data-i18n-en="Approaching (10–13 days)">Próximas a vencer (10–13 días)</div>
+
+      <div class="card">
+        <div class="applicant-mini" style="display: flex; justify-content: space-between;">
+          <div class="row gap-3 items-center">
+            <div class="avatar">CT</div>
+            <div>
+              <div style="font-weight: 600;">Carolina Torres</div>
+              <div class="t-body-sm muted">Hospitality Marketing Lead · <span data-i18n-es="13 días Under Review" data-i18n-en="13 days Under Review">13 días Under Review</span></div>
+            </div>
+          </div>
+          <div class="row gap-2 items-center">
+            <span class="badge badge-warning" style="font-weight: 500;"><i class='i' data-icon='clock'></i> <span data-i18n-es="1 día restante" data-i18n-en="1 day left">1 día restante</span></span>
+            <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" data-i18n-es="Revisar" data-i18n-en="Review">Revisar</a>
+          </div>
+        </div>
+        <div style="height: 1px; background: var(--ink-200); margin: 12px 0;"></div>
+        <div class="applicant-mini" style="display: flex; justify-content: space-between;">
+          <div class="row gap-3 items-center">
+            <div class="avatar">DP</div>
+            <div>
+              <div style="font-weight: 600;">Diego Pérez</div>
+              <div class="t-body-sm muted">Front Office Manager · <span data-i18n-es="11 días Under Review" data-i18n-en="11 days Under Review">11 días Under Review</span></div>
+            </div>
+          </div>
+          <div class="row gap-2 items-center">
+            <span class="badge badge-warning" style="font-weight: 500;"><i class='i' data-icon='clock'></i> <span data-i18n-es="3 días restantes" data-i18n-en="3 days left">3 días restantes</span></span>
+            <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" data-i18n-es="Revisar" data-i18n-en="Review">Revisar</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explanation -->
+      <div class="alert alert-info mt-8">
+        <div><i class='i' data-icon='lightbulb'></i></div>
+        <div>
+          <div class="alert-title" data-i18n-es="¿Cómo funciona?" data-i18n-en="How does it work?">¿Cómo funciona?</div>
+          <div class="alert-body" data-i18n-es="Cuando marcas una aplicación como Under Review, el sistema empieza a contar 14 días. Si no actualizas el status en ese período, se marca como vencida, recibes un recordatorio por correo y el equipo de Miami Professional Network es notificado." data-i18n-en="When you mark an application as Under Review, the system starts a 14-day clock. If you don't update the status in that period, it's flagged as overdue, you receive an email reminder, and the Miami Professional Network team is notified.">Cuando marcas una aplicación como Under Review, el sistema empieza a contar 14 días. Si no actualizas el status en ese período, se marca como vencida, recibes un recordatorio por correo y el equipo de Miami Professional Network es notificado.</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

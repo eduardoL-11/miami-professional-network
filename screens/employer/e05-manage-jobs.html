@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-05 · Manage Jobs — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .tabs {
+      display: flex; gap: 4px; border-bottom: 1px solid var(--ink-200); margin-bottom: 20px;
+    }
+    .tabs a {
+      padding: 10px 14px; font-size: 14px; font-weight: 600;
+      color: var(--ink-600); border-bottom: 2px solid transparent;
+      margin-bottom: -1px; text-decoration: none;
+    }
+    .tabs a:hover { color: var(--ink-900); text-decoration: none; }
+    .tabs a.active { color: var(--ink-900); border-bottom-color: var(--ink-900); }
+    .tabs a .count { display: inline-block; min-width: 18px; padding: 1px 6px; background: var(--ink-100); color: var(--ink-700); border-radius: var(--r-full); font-size: 11px; margin-left: 6px; }
+    .tabs a.active .count { background: var(--ink-100); color: var(--ink-700); }
+
+    .filter-bar {
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+      padding: 14px 16px; background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-md); margin-bottom: 16px;
+    }
+    .search-wrap { position: relative; flex: 1; min-width: 240px; }
+    .search-wrap .input { padding-left: 38px; }
+    .search-wrap .search-i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-500); font-size: 14px; pointer-events: none; }
+
+    .job-table-wrap { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); overflow: hidden; }
+    .job-table { width: 100%; border-collapse: collapse; }
+    .job-table th { background: var(--ink-100); color: var(--ink-700); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 14px 18px; text-align: left; }
+    .job-table td { padding: 18px; font-size: 14px; vertical-align: middle; }
+    .job-table tbody tr { border-top: 1px solid var(--ink-200); transition: background .12s; }
+    .job-table tbody tr:hover { background: var(--ink-50); }
+
+    .job-title-cell { display: flex; flex-direction: column; gap: 4px; min-width: 220px; }
+    .job-title-cell .title { font-weight: 600; color: var(--ink-900); }
+    .job-title-cell .meta { font-size: 12px; color: var(--ink-600); }
+
+    .mini-stat { display: flex; flex-direction: column; gap: 2px; }
+    .mini-stat .v { font-weight: 700; font-size: 16px; }
+    .mini-stat .l { font-size: 11px; color: var(--ink-500); }
+
+    .row-actions { display: flex; gap: 4px; justify-content: flex-end; }
+    .icon-btn {
+      width: 32px; height: 32px; border-radius: var(--r-md);
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; border: 1px solid transparent; color: var(--ink-600);
+      cursor: pointer; transition: all .12s;
+    }
+    .icon-btn:hover { background: var(--ink-100); color: var(--ink-900); border-color: var(--ink-200); }
+    .icon-btn.danger:hover { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-bg); }
+
+    .pagination { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-top: 1px solid var(--ink-200); background: var(--ink-50); }
+    .pagination .pages { display: flex; gap: 4px; }
+    .pagination .pages a { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--r-md); font-size: 13px; color: var(--ink-700); text-decoration: none; }
+    .pagination .pages a.active { background: var(--brand-green); color: white; font-weight: 600; }
+    .pagination .pages a:hover:not(.active) { background: var(--ink-100); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="employer" data-active="jobs">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Empleador · Mis empleos" data-i18n-en="Employer · My jobs">Empleador · Mis empleos</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Gestión de empleos" data-i18n-en="Job management">Gestión de empleos</h1>
+          <div class="t-body-sm muted" data-i18n-es="12 empleos en total · 7 activos" data-i18n-en="12 jobs total · 7 active">12 empleos en total · 7 activos</div>
+        </div>
+        <div class="row items-center gap-3">
+          <a href="e03-create-job.html" class="btn btn-primary"><span>＋</span> <span data-i18n-es="Publicar empleo" data-i18n-en="Post a job">Publicar empleo</span></a>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <a href="#" class="active" data-i18n-es="Todos" data-i18n-en="All">Todos<span class="count">12</span></a>
+        <a href="#" data-i18n-es="Activos" data-i18n-en="Active">Activos<span class="count">7</span></a>
+        <a href="#" data-i18n-es="Pausados" data-i18n-en="Paused">Pausados<span class="count">2</span></a>
+        <a href="#" data-i18n-es="Cerrados" data-i18n-en="Closed">Cerrados<span class="count">3</span></a>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <i class="i search-i" data-icon="search"></i>
+          <input class="input" data-i18n-es-placeholder="Buscar por título o ubicación…" data-i18n-en-placeholder="Search by title or location…" placeholder="Buscar por título o ubicación…" />
+        </div>
+        <select class="select" style="width: auto; min-width: 140px;">
+          <option data-i18n-es="Todas las industrias" data-i18n-en="All industries">Todas las industrias</option>
+          <option>Hospitality</option><option>Healthcare</option><option>Construction</option>
+        </select>
+        <select class="select" style="width: auto; min-width: 140px;">
+          <option data-i18n-es="Ordenar: Más recientes" data-i18n-en="Sort: Most recent">Ordenar: Más recientes</option>
+          <option data-i18n-es="Ordenar: Más aplicantes" data-i18n-en="Sort: Most applicants">Ordenar: Más aplicantes</option>
+          <option data-i18n-es="Ordenar: Alfabético" data-i18n-en="Sort: A–Z">Ordenar: Alfabético</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" data-i18n-es="Limpiar filtros" data-i18n-en="Clear filters">Limpiar filtros</button>
+      </div>
+
+      <!-- Table -->
+      <div class="job-table-wrap">
+        <table class="job-table">
+          <thead>
+            <tr>
+              <th data-i18n-es="Empleo" data-i18n-en="Job">Empleo</th>
+              <th>Status</th>
+              <th class="text-center" data-i18n-es="Aplicantes" data-i18n-en="Applicants">Aplicantes</th>
+              <th class="text-center" data-i18n-es="Por revisar" data-i18n-en="To review">Por revisar</th>
+              <th data-i18n-es="Publicado" data-i18n-en="Posted">Publicado</th>
+              <th data-i18n-es="Fecha límite" data-i18n-en="Deadline">Fecha límite</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td>
+                <div class="job-title-cell">
+                  <a href="e04-edit-job.html" class="title" style="color: var(--ink-900);">Hospitality Marketing Lead</a>
+                  <span class="meta">Miami, FL · Full-time · Hospitality</span>
+                </div>
+              </td>
+              <td><span class="badge badge-success"><span class="dot"></span>Active</span></td>
+              <td class="text-center"><div class="mini-stat"><span class="v">24</span></div></td>
+              <td class="text-center"><div class="mini-stat"><span class="v" style="color: var(--brand-orange);">6</span></div></td>
+              <td><div class="t-body-sm">16 May 2026</div><div class="t-caption muted" data-i18n-es="hace 3 días" data-i18n-en="3 days ago">hace 3 días</div></td>
+              <td><div class="t-body-sm">30 Jun 2026</div></td>
+              <td>
+                <div class="row-actions">
+                  <a href="e06-applicants.html" class="icon-btn" title="View applicants">◉</a>
+                  <a href="e04-edit-job.html" class="icon-btn" title="Edit">✎</a>
+                  <button class="icon-btn" title="Pause"><i class='i' data-icon='pause'></i></button>
+                  <button class="icon-btn danger" title="Close">✕</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="job-title-cell">
+                  <a href="e04-edit-job.html" class="title" style="color: var(--ink-900);">Front Office Manager</a>
+                  <span class="meta">Miami Beach, FL · Full-time · Hospitality</span>
+                </div>
+              </td>
+              <td><span class="badge badge-success"><span class="dot"></span>Active</span></td>
+              <td class="text-center"><div class="mini-stat"><span class="v">18</span></div></td>
+              <td class="text-center"><div class="mini-stat"><span class="v" style="color: var(--brand-orange);">2</span></div></td>
+              <td><div class="t-body-sm">11 May 2026</div><div class="t-caption muted" data-i18n-es="hace 1 semana" data-i18n-en="1 week ago">hace 1 semana</div></td>
+              <td><div class="t-body-sm">15 Jun 2026</div></td>
+              <td>
+                <div class="row-actions">
+                  <a href="e06-applicants.html" class="icon-btn" title="View applicants">◉</a>
+                  <a href="e04-edit-job.html" class="icon-btn" title="Edit">✎</a>
+                  <button class="icon-btn" title="Pause"><i class='i' data-icon='pause'></i></button>
+                  <button class="icon-btn danger" title="Close">✕</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="job-title-cell">
+                  <a href="e04-edit-job.html" class="title" style="color: var(--ink-900);">Concierge Specialist</a>
+                  <span class="meta">Miami, FL · Full-time · Hospitality</span>
+                </div>
+              </td>
+              <td><span class="badge badge-warning"><span class="dot"></span>Paused</span></td>
+              <td class="text-center"><div class="mini-stat"><span class="v">31</span></div></td>
+              <td class="text-center"><div class="mini-stat"><span class="v">0</span></div></td>
+              <td><div class="t-body-sm">04 May 2026</div><div class="t-caption muted" data-i18n-es="hace 2 semanas" data-i18n-en="2 weeks ago">hace 2 semanas</div></td>
+              <td><div class="t-body-sm muted">—</div></td>
+              <td>
+                <div class="row-actions">
+                  <a href="e06-applicants.html" class="icon-btn" title="View applicants">◉</a>
+                  <a href="e04-edit-job.html" class="icon-btn" title="Edit">✎</a>
+                  <button class="icon-btn" title="Resume" style="color: var(--success);">▶</button>
+                  <button class="icon-btn danger" title="Close">✕</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="job-title-cell">
+                  <a href="e04-edit-job.html" class="title" style="color: var(--ink-900);">Building Engineer</a>
+                  <span class="meta">Brickell, FL · Full-time · Construction</span>
+                </div>
+              </td>
+              <td><span class="badge badge-success"><span class="dot"></span>Active</span></td>
+              <td class="text-center"><div class="mini-stat"><span class="v">12</span></div></td>
+              <td class="text-center"><div class="mini-stat"><span class="v" style="color: var(--brand-orange);">1</span></div></td>
+              <td><div class="t-body-sm">28 Apr 2026</div><div class="t-caption muted" data-i18n-es="hace 3 semanas" data-i18n-en="3 weeks ago">hace 3 semanas</div></td>
+              <td><div class="t-body-sm">31 May 2026</div></td>
+              <td>
+                <div class="row-actions">
+                  <a href="e06-applicants.html" class="icon-btn" title="View applicants">◉</a>
+                  <a href="e04-edit-job.html" class="icon-btn" title="Edit">✎</a>
+                  <button class="icon-btn" title="Pause"><i class='i' data-icon='pause'></i></button>
+                  <button class="icon-btn danger" title="Close">✕</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="job-title-cell">
+                  <a href="e04-edit-job.html" class="title" style="color: var(--ink-900);">Executive Housekeeper</a>
+                  <span class="meta">Miami, FL · Full-time · Hospitality</span>
+                </div>
+              </td>
+              <td><span class="badge badge-success"><span class="dot"></span>Active</span></td>
+              <td class="text-center"><div class="mini-stat"><span class="v">9</span></div></td>
+              <td class="text-center"><div class="mini-stat"><span class="v" style="color: var(--brand-orange);">3</span></div></td>
+              <td><div class="t-body-sm">22 Apr 2026</div><div class="t-caption muted" data-i18n-es="hace 4 semanas" data-i18n-en="4 weeks ago">hace 4 semanas</div></td>
+              <td><div class="t-body-sm">22 May 2026</div></td>
+              <td>
+                <div class="row-actions">
+                  <a href="e06-applicants.html" class="icon-btn" title="View applicants">◉</a>
+                  <a href="e04-edit-job.html" class="icon-btn" title="Edit">✎</a>
+                  <button class="icon-btn" title="Pause"><i class='i' data-icon='pause'></i></button>
+                  <button class="icon-btn danger" title="Close">✕</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="job-title-cell">
+                  <a href="e04-edit-job.html" class="title" style="color: var(--ink-700);">Bell Captain</a>
+                  <span class="meta">Miami Beach, FL · Full-time · Hospitality</span>
+                </div>
+              </td>
+              <td><span class="badge badge-neutral"><span class="dot"></span>Closed</span></td>
+              <td class="text-center"><div class="mini-stat"><span class="v">42</span></div></td>
+              <td class="text-center"><div class="mini-stat"><span class="v">0</span></div></td>
+              <td><div class="t-body-sm">02 Apr 2026</div></td>
+              <td><div class="t-body-sm">30 Apr 2026</div></td>
+              <td>
+                <div class="row-actions">
+                  <a href="e06-applicants.html" class="icon-btn" title="View applicants">◉</a>
+                  <button class="icon-btn" title="Duplicate">⎘</button>
+                  <button class="icon-btn danger" title="Delete"><i class='i' data-icon='trash'></i></button>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <div class="pagination">
+          <div class="t-body-sm muted"><span data-i18n-es="Mostrando 1–6 de 12 empleos" data-i18n-en="Showing 1–6 of 12 jobs">Mostrando 1–6 de 12 empleos</span></div>
+          <div class="pages">
+            <a href="#">←</a>
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">→</a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>
