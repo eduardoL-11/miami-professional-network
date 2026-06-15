@@ -11,19 +11,23 @@
     { key: 'jobs',       href: 'e05-manage-jobs.html',      icon: 'briefcase',    label_es: 'Mis empleos',         label_en: 'My jobs' },
     { key: 'create',     href: 'e03-create-job.html',       icon: 'plus-circle',  label_es: 'Publicar empleo',     label_en: 'Post a job' },
     { key: 'applicants', href: 'e06-applicants.html',       icon: 'users',        label_es: 'Aplicantes',          label_en: 'Applicants' },
+    { key: 'messaging',  href: 'e12-messaging.html',        icon: 'message-square', label_es: 'Mensajes',         label_en: 'Messages' },
+    { key: 'analytics',  href: 'e11-analytics.html',        icon: 'bar-chart',    label_es: 'Analytics',           label_en: 'Analytics' },
     { section: 'account', label_es: 'Cuenta', label_en: 'Account' },
     { key: 'company',    href: '#',                          icon: 'building',     label_es: 'Perfil de empresa',   label_en: 'Company profile' },
+    { key: 'payments',   href: 'e13-payment-methods.html',   icon: 'dollar-sign',  label_es: 'Métodos de pago',     label_en: 'Payment methods' },
     { key: 'settings',   href: '#',                          icon: 'settings',     label_es: 'Configuración',       label_en: 'Settings' },
   ];
 
   const CANDIDATE_NAV = [
     { section: 'main', label_es: 'Explorar', label_en: 'Explore' },
-    { key: 'jobs',         href: 'c04-jobs.html',                  icon: 'search',     label_es: 'Buscar empleos',     label_en: 'Browse jobs' },
-    { key: 'saved',        href: 'c06-saved-jobs.html',            icon: 'bookmark',   label_es: 'Empleos guardados',  label_en: 'Saved jobs' },
-    { key: 'applications', href: 'c07-my-applications.html',       icon: 'briefcase',  label_es: 'Mis aplicaciones',   label_en: 'My applications' },
+    { key: 'jobs',         href: 'c04-jobs.html',                  icon: 'search',         label_es: 'Buscar empleos',     label_en: 'Browse jobs' },
+    { key: 'saved',        href: 'c06-saved-jobs.html',            icon: 'bookmark',       label_es: 'Empleos guardados',  label_en: 'Saved jobs' },
+    { key: 'applications', href: 'c07-my-applications.html',       icon: 'briefcase',      label_es: 'Mis aplicaciones',   label_en: 'My applications' },
+    { key: 'messaging',    href: 'c10-messaging.html',             icon: 'message-square', label_es: 'Mensajes',           label_en: 'Messages' },
     { section: 'account', label_es: 'Cuenta', label_en: 'Account' },
-    { key: 'profile',      href: 'c02-profile.html',               icon: 'user',       label_es: 'Mi perfil',          label_en: 'My profile' },
-    { key: 'settings',     href: 'c09-settings.html',              icon: 'settings',   label_es: 'Configuración',      label_en: 'Settings' },
+    { key: 'profile',      href: 'c02-profile.html',               icon: 'user',           label_es: 'Mi perfil',          label_en: 'My profile' },
+    { key: 'settings',     href: 'c09-settings.html',              icon: 'settings',       label_es: 'Configuración',      label_en: 'Settings' },
   ];
 
   const ADMIN_NAV = [

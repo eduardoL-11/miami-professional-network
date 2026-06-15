@@ -406,6 +406,144 @@
     .cta-strip p { color: rgba(255,255,255,0.65); font-size: 15px; margin: 0 auto 24px; max-width: 480px; }
     .cta-strip .row { justify-content: center; }
 
+    /* Events teaser */
+    .events-teaser-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 900px) { .events-teaser-grid { grid-template-columns: 1fr; } }
+
+    .event-teaser-card {
+      position: relative; aspect-ratio: 4/5;
+      border-radius: var(--r-lg); overflow: hidden;
+      text-decoration: none; color: #FFFFFF;
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 20px;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .event-teaser-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.10) 0%, transparent 30%, rgba(0,0,0,0.50) 100%);
+      pointer-events: none;
+    }
+    .event-teaser-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); text-decoration: none; }
+    .event-teaser-card > * { position: relative; z-index: 1; }
+
+    .event-teaser-card .ev-date {
+      align-self: flex-start; background: rgba(255,255,255,0.95); color: var(--ink-900);
+      padding: 8px 14px; border-radius: var(--r-md);
+      display: flex; flex-direction: column; align-items: center; line-height: 1.1;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .event-teaser-card .ev-date .d { font-size: 22px; font-weight: 700; }
+    .event-teaser-card .ev-date .m { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-600); margin-top: 2px; }
+
+    .event-teaser-card .ev-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.16);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.20);
+      padding: 4px 10px; border-radius: var(--r-full);
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: #FFFFFF; margin-bottom: 10px;
+    }
+    .event-teaser-card h3 {
+      font-size: 18px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.2;
+      color: #FFFFFF; margin: 0 0 8px; max-width: 100%;
+    }
+    .event-teaser-card p {
+      font-size: 12px; color: rgba(255,255,255,0.80); margin: 0;
+    }
+
+    .events-foot {
+      display: flex; justify-content: space-between; align-items: center; gap: 24px;
+      flex-wrap: wrap;
+      padding-top: 28px; border-top: 1px solid var(--ink-200);
+    }
+    .member-firms-mini { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .firms-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-500); }
+    .firms-list { display: flex; gap: 6px; }
+    .firm-mini {
+      width: 36px; height: 36px; border-radius: var(--r-sm);
+      background: var(--white); border: 1px solid var(--ink-200);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--ink-700);
+    }
+    .firm-mini:last-child { background: var(--ink-100); color: var(--ink-600); }
+
+    /* Newsletter band — pre-footer */
+    .newsletter-band {
+      background: var(--surface-dark);
+      color: #FFFFFF;
+      padding: 56px 0;
+      position: relative; overflow: hidden;
+      --white: #FFFFFF;
+    }
+    .newsletter-band::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(243,107,27,0.18) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .newsletter-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 32px;
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center;
+      position: relative; z-index: 1;
+    }
+    @media (max-width: 900px) { .newsletter-inner { grid-template-columns: 1fr; gap: 32px; } }
+    .newsletter-copy .eyebrow {
+      display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.10em;
+      text-transform: uppercase; color: var(--brand-orange-500); margin-bottom: 14px;
+    }
+    .newsletter-copy h2 {
+      font-size: 30px; font-weight: 600; letter-spacing: -0.025em;
+      color: #FFFFFF; margin: 0 0 12px; line-height: 1.15;
+    }
+    .newsletter-copy p {
+      font-size: 15px; color: rgba(255,255,255,0.70); line-height: 1.6; margin: 0; max-width: 480px;
+    }
+    .newsletter-form { display: flex; flex-direction: column; gap: 12px; }
+    .newsletter-input-wrap {
+      position: relative;
+    }
+    .newsletter-input-wrap .i {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,0.55); pointer-events: none; font-size: 16px;
+    }
+    .newsletter-input-wrap input {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: var(--r-md);
+      padding: 14px 14px 14px 44px;
+      color: #FFFFFF; font-family: var(--font-sans); font-size: 15px;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .newsletter-input-wrap input::placeholder { color: rgba(255,255,255,0.50); }
+    .newsletter-input-wrap input:focus {
+      outline: none;
+      border-color: rgba(255,255,255,0.32);
+      background: rgba(255,255,255,0.12);
+    }
+    .newsletter-form .btn-primary { justify-content: center; }
+    .newsletter-link {
+      font-size: 12px; color: rgba(255,255,255,0.65); text-decoration: none;
+      text-align: center;
+    }
+    .newsletter-link:hover { color: #FFFFFF; text-decoration: none; }
+
+    /* Social icons */
+    .social-icons { display: flex; gap: 8px; }
+    .social-btn {
+      width: 36px; height: 36px; border-radius: var(--r-md);
+      background: var(--white); border: 1px solid var(--ink-200);
+      color: var(--ink-700); display: inline-flex; align-items: center; justify-content: center;
+      transition: border-color .12s, color .12s, background .12s;
+    }
+    .social-btn:hover {
+      border-color: var(--brand-orange); color: var(--brand-orange); background: var(--brand-orange-50);
+      text-decoration: none;
+    }
+
     /* Footer */
     footer {
       background: var(--ink-50); border-top: 1px solid var(--ink-200);
@@ -424,13 +562,13 @@
   <!-- Nav -->
   <header class="nav">
     <div class="nav-inner">
-      <a href="../../index.html" class="brand">
-        <img src="../../assets/logo-fullcolor.png" alt="" />
-        <span>Miami Professional Network</span>
+      <a href="../../index.html" class="brand" aria-label="Miami Professional Network">
+        <img src="../../assets/logo-fullcolor.png" alt="Miami Professional Network" />
       </a>
       <nav class="links">
         <a href="#for-you" data-i18n-es="Para ti" data-i18n-en="For you">Para ti</a>
         <a href="#how" data-i18n-es="Cómo funciona" data-i18n-en="How it works">Cómo funciona</a>
+        <a href="events.html" data-i18n-es="Eventos" data-i18n-en="Events">Eventos</a>
         <a href="#faq">FAQ</a>
         <a href="p04-login.html" data-i18n-es="Iniciar sesión" data-i18n-en="Sign in">Iniciar sesión</a>
       </nav>
@@ -688,6 +826,65 @@
     </div>
   </section>
 
+  <!-- Events teaser -->
+  <section class="s alt" id="events-teaser">
+    <div class="s-inner">
+      <div class="s-head">
+        <span class="eyebrow" data-i18n-es="Eventos" data-i18n-en="Events">Eventos</span>
+        <h2 data-i18n-es="La red profesional de Miami se reúne." data-i18n-en="Miami's professional network meets.">La red profesional de Miami se reúne.</h2>
+        <p data-i18n-es="Mixers, paneles, talleres y cenas íntimas. Solo para miembros y firmas aprobadas." data-i18n-en="Mixers, panels, workshops and intimate dinners. Members and approved firms only.">Mixers, paneles, talleres y cenas íntimas. Solo para miembros y firmas aprobadas.</p>
+      </div>
+
+      <div class="events-teaser-grid">
+
+        <a href="events.html" class="event-teaser-card" style="background: linear-gradient(135deg, #0E1410 0%, #295E24 100%);">
+          <div class="ev-date"><span class="d">14</span><span class="m">JUN</span></div>
+          <div class="ev-content">
+            <span class="ev-tag" data-i18n-es="Mixer" data-i18n-en="Mixer">Mixer</span>
+            <h3>Summer Mixer · Hospitality & Real Estate</h3>
+            <p>Brickell · 7:00 PM · Networking rooftop</p>
+          </div>
+        </a>
+
+        <a href="events.html" class="event-teaser-card" style="background: linear-gradient(135deg, #1A0F1A 0%, #F36B1B 100%);">
+          <div class="ev-date"><span class="d">22</span><span class="m">JUN</span></div>
+          <div class="ev-content">
+            <span class="ev-tag" data-i18n-es="Panel" data-i18n-en="Panel">Panel</span>
+            <h3 data-i18n-es="El futuro de Legal & Compliance" data-i18n-en="The future of Legal & Compliance">El futuro de Legal & Compliance</h3>
+            <p>Wynwood Hall · 6:00 PM</p>
+          </div>
+        </a>
+
+        <a href="events.html" class="event-teaser-card" style="background: linear-gradient(135deg, #050810 0%, #0A1426 60%, #1A0F22 100%);">
+          <div class="ev-date"><span class="d">06</span><span class="m">JUL</span></div>
+          <div class="ev-content">
+            <span class="ev-tag" data-i18n-es="Workshop" data-i18n-en="Workshop">Workshop</span>
+            <h3 data-i18n-es="Hiring Workshop · Equipos high-performance" data-i18n-en="Hiring Workshop · High-performance teams">Hiring Workshop · Equipos high-performance</h3>
+            <p>Coconut Grove · 9:00 AM</p>
+          </div>
+        </a>
+
+      </div>
+
+      <div class="events-foot">
+        <div class="member-firms-mini">
+          <span class="firms-label" data-i18n-es="Member firms" data-i18n-en="Member firms">Member firms</span>
+          <div class="firms-list">
+            <span class="firm-mini">SH</span>
+            <span class="firm-mini">BB</span>
+            <span class="firm-mini">WH</span>
+            <span class="firm-mini">MR</span>
+            <span class="firm-mini">OM</span>
+            <span class="firm-mini">PB</span>
+            <span class="firm-mini">CV</span>
+            <span class="firm-mini">+24</span>
+          </div>
+        </div>
+        <a href="events.html" class="btn btn-outline" data-i18n-es="Ver todos los eventos →" data-i18n-en="View all events →">Ver todos los eventos →</a>
+      </div>
+    </div>
+  </section>
+
   <!-- FAQ -->
   <section class="s alt" id="faq">
     <div class="s-inner" style="max-width: 800px; margin: 0 auto;">
@@ -752,16 +949,42 @@
     </div>
   </section>
 
+  <!-- Newsletter signup band -->
+  <section class="newsletter-band">
+    <div class="newsletter-inner">
+      <div class="newsletter-copy">
+        <span class="eyebrow" data-i18n-es="Newsletter" data-i18n-en="Newsletter">Newsletter</span>
+        <h2 data-i18n-es="Recibe el pulso de Miami profesional" data-i18n-en="Get the pulse of professional Miami">Recibe el pulso de Miami profesional</h2>
+        <p data-i18n-es="Insights de la red, eventos, nuevas oportunidades y movimientos del mercado. Una vez por semana, directo a tu bandeja." data-i18n-en="Network insights, events, new opportunities and market moves. Once a week, straight to your inbox.">Insights de la red, eventos, nuevas oportunidades y movimientos del mercado. Una vez por semana, directo a tu bandeja.</p>
+      </div>
+      <form class="newsletter-form" action="https://mpnetwork.beehiiv.com/" target="_blank" rel="noopener" onsubmit="return true;">
+        <div class="newsletter-input-wrap">
+          <i class="i" data-icon="mail"></i>
+          <input type="email" required data-i18n-es-placeholder="tu@email.com" data-i18n-en-placeholder="your@email.com" placeholder="tu@email.com" />
+        </div>
+        <button class="btn btn-primary btn-lg" type="submit" data-i18n-es="Suscribirme" data-i18n-en="Subscribe">Suscribirme</button>
+        <a href="https://mpnetwork.beehiiv.com/" target="_blank" rel="noopener" class="newsletter-link" data-i18n-es="Ver ediciones anteriores →" data-i18n-en="See past issues →">Ver ediciones anteriores →</a>
+      </form>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer>
     <div class="footer-inner">
       <div class="footer-top">
         <div>
           <div class="row items-center gap-2 mb-4">
-            <img src="../../assets/logo-fullcolor.png" alt="" style="height: 28px;" />
-            <span style="font-weight: 700; color: var(--ink-900); font-size: 14px;">Miami Professional Network</span>
+            <img src="../../assets/logo-fullcolor.png" alt="Miami Professional Network" style="height: 28px;" />
           </div>
-          <p style="font-size: 13px; color: var(--ink-600); margin: 0; max-width: 320px; line-height: 1.55;" data-i18n-es="La red profesional curada de Miami. Conectamos candidatos verificados con empleadores aprobados." data-i18n-en="Miami's curated professional network. Connecting verified candidates with approved employers.">La red profesional curada de Miami. Conectamos candidatos verificados con empleadores aprobados.</p>
+          <p style="font-size: 13px; color: var(--ink-600); margin: 0 0 20px; max-width: 320px; line-height: 1.55;" data-i18n-es="La red profesional curada de Miami. Conectamos candidatos verificados con empleadores aprobados." data-i18n-en="Miami's curated professional network. Connecting verified candidates with approved employers.">La red profesional curada de Miami. Conectamos candidatos verificados con empleadores aprobados.</p>
+          <div class="social-icons">
+            <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-btn">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.37 4.26 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0Z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+            </a>
+          </div>
         </div>
         <div class="footer-col">
           <h5 data-i18n-es="Producto" data-i18n-en="Product">Producto</h5>
@@ -773,8 +996,9 @@
         <div class="footer-col">
           <h5 data-i18n-es="Compañía" data-i18n-en="Company">Compañía</h5>
           <a href="#" data-i18n-es="Sobre nosotros" data-i18n-en="About">Sobre nosotros</a>
+          <a href="events.html" data-i18n-es="Eventos" data-i18n-en="Events">Eventos</a>
           <a href="#" data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</a>
-          <a href="#" data-i18n-es="Prensa" data-i18n-en="Press">Prensa</a>
+          <a href="https://mpnetwork.beehiiv.com/" target="_blank" rel="noopener" data-i18n-es="Newsletter" data-i18n-en="Newsletter">Newsletter</a>
         </div>
         <div class="footer-col">
           <h5 data-i18n-es="Legal" data-i18n-en="Legal">Legal</h5>

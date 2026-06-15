@@ -49,6 +49,15 @@
     .job-mini-row .info { flex: 1; }
     .job-mini-row .name { font-weight: 600; font-size: 14px; color: var(--ink-900); }
     .job-mini-row .meta { font-size: 12px; color: var(--ink-600); margin-top: 2px; }
+    a.similar-link {
+      text-decoration: none; color: inherit;
+      margin: 0 -10px; padding: 12px 10px;
+      border-radius: var(--r-sm);
+      transition: background .12s;
+    }
+    a.similar-link:hover { background: var(--ink-100); text-decoration: none; }
+    a.similar-link:hover .name { color: var(--brand-orange-700); }
+    a.similar-link:hover .i { color: var(--brand-orange) !important; }
 
     .side-col { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 24px; }
     .side-card { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 20px; }
@@ -177,14 +186,6 @@
             <div class="hint mt-2" data-i18n-es="Solo visible para el equipo admin. El empleador no las ve." data-i18n-en="Only visible to the admin team. The employer does not see them.">Solo visible para el equipo admin. El empleador no las ve.</div>
           </div>
 
-          <!-- Danger zone (for approved employers, shown here as example) -->
-          <div class="section danger-zone">
-            <h3 class="t-h4" style="color: var(--danger);" data-i18n-es="Acción crítica" data-i18n-en="Danger action">Acción crítica</h3>
-            <p style="margin: 0 0 12px; font-size: 13px; color: var(--ink-700);" data-i18n-es="Si rechazas esta solicitud, el empleador recibirá un correo de notificación. Puedes incluir una razón." data-i18n-en="If you reject this request, the employer will receive a notification email. You can include a reason.">Si rechazas esta solicitud, el empleador recibirá un correo de notificación. Puedes incluir una razón.</p>
-            <textarea class="textarea" style="min-height: 70px; margin-bottom: 12px;" data-i18n-es-placeholder="Razón del rechazo (opcional, incluida en el correo al empleador)…" data-i18n-en-placeholder="Rejection reason (optional, included in the email)…" placeholder="Razón del rechazo (opcional, incluida en el correo al empleador)…"></textarea>
-            <button class="btn btn-danger btn-sm" data-i18n-es="Rechazar solicitud" data-i18n-en="Reject request">Rechazar solicitud</button>
-          </div>
-
         </div>
 
         <!-- RIGHT: Sidebar -->
@@ -215,18 +216,21 @@
           <!-- Similar approved -->
           <div class="side-card">
             <div class="t-h4 mb-3" data-i18n-es="Empleadores similares aprobados" data-i18n-en="Similar approved employers">Empleadores similares aprobados</div>
-            <div class="job-mini-row">
+            <a href="a03-employer-detail.html?id=mango-republic" class="job-mini-row similar-link">
               <div class="avatar">MR</div>
               <div class="info"><div class="name">Mango Republic</div><div class="meta">Retail · 9 hires</div></div>
-            </div>
-            <div class="job-mini-row">
+              <i class="i i-sm" data-icon="chevron-right" style="color: var(--ink-400);"></i>
+            </a>
+            <a href="a03-employer-detail.html?id=sunset-hotels" class="job-mini-row similar-link">
               <div class="avatar">SH</div>
               <div class="info"><div class="name">Sunset Hotels Group</div><div class="meta">Hospitality · 12 hires</div></div>
-            </div>
-            <div class="job-mini-row">
+              <i class="i i-sm" data-icon="chevron-right" style="color: var(--ink-400);"></i>
+            </a>
+            <a href="a03-employer-detail.html?id=wynwood-creative" class="job-mini-row similar-link">
               <div class="avatar">WC</div>
               <div class="info"><div class="name">Wynwood Creative</div><div class="meta">Marketing · 4 hires</div></div>
-            </div>
+              <i class="i i-sm" data-icon="chevron-right" style="color: var(--ink-400);"></i>
+            </a>
           </div>
 
         </aside>

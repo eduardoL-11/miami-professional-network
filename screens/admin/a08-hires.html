@@ -10,6 +10,17 @@
   <link rel="stylesheet" href="../../css/brand.css" />
   <link rel="stylesheet" href="../../css/lang-toggle.css" />
   <style>
+    .a-filter-bar {
+      background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-md);
+      padding: 6px; display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .a-search-wrap { position: relative; flex: 1; min-width: 240px; }
+    .a-search-wrap .input { padding-left: 36px; border: 0; }
+    .a-search-wrap .a-search-i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-500); font-size: 14px; pointer-events: none; }
+    .a-filter-bar .select { width: auto; min-width: 150px; border: 0; }
+    .a-filter-bar > .a-divider { width: 1px; align-self: stretch; background: var(--ink-200); }
+
     .summary-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
     @media (max-width: 900px) { .summary-strip { grid-template-columns: repeat(2, 1fr); } }
     .summary-card {
@@ -136,6 +147,29 @@
         <a href="#" data-i18n-es="Facturados" data-i18n-en="Invoiced">Facturados<span class="count">2</span></a>
         <a href="#" data-i18n-es="Pagados" data-i18n-en="Paid">Pagados<span class="count">88</span></a>
         <a href="#" data-i18n-es="Disputas" data-i18n-en="Disputes">Disputas<span class="count">0</span></a>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="a-filter-bar">
+        <div class="a-search-wrap">
+          <i class="i a-search-i" data-icon="search"></i>
+          <input class="input" data-i18n-es-placeholder="Buscar por candidato, empleador, posición…" data-i18n-en-placeholder="Search by candidate, employer, position…" placeholder="Buscar por candidato, empleador, posición…" />
+        </div>
+        <div class="a-divider"></div>
+        <select class="select">
+          <option data-i18n-es="Todas las compañías" data-i18n-en="All companies">Todas las compañías</option>
+          <option>Sunset Hotels Group</option>
+          <option>Brickell Build Co.</option>
+          <option>Wynwood Health</option>
+          <option>Mango Republic</option>
+        </select>
+        <select class="select">
+          <option data-i18n-es="Cualquier fecha" data-i18n-en="Any date">Cualquier fecha</option>
+          <option data-i18n-es="Este mes" data-i18n-en="This month">Este mes</option>
+          <option data-i18n-es="Últimos 30 días" data-i18n-en="Last 30 days">Últimos 30 días</option>
+          <option data-i18n-es="Últimos 90 días" data-i18n-en="Last 90 days">Últimos 90 días</option>
+          <option data-i18n-es="Este año" data-i18n-en="This year">Este año</option>
+        </select>
       </div>
 
       <!-- Hire cards -->

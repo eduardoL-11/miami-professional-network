@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-11 · Analytics — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    @media (max-width: 1000px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+    .kpi {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 18px 20px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .kpi .l { font-size: 11px; color: var(--ink-600); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .kpi .n { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink-900); line-height: 1; }
+    .kpi .delta { font-size: 12px; font-weight: 500; }
+    .kpi .delta.up { color: var(--success); }
+    .kpi .delta.down { color: var(--danger); }
+    .kpi .spark { margin-top: 8px; height: 28px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; align-items: start; }
+    @media (max-width: 1100px) { .grid-2 { grid-template-columns: 1fr; } }
+    .grid-2-eq { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 900px) { .grid-2-eq { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 22px;
+    }
+    .panel-head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 18px; gap: 12px;
+    }
+    .panel-head .t { font-weight: 600; font-size: 15px; color: var(--ink-900); letter-spacing: -0.01em; }
+    .panel-head .s { font-size: 12px; color: var(--ink-600); margin-top: 2px; }
+
+    /* Funnel */
+    .funnel { display: flex; flex-direction: column; gap: 8px; }
+    .funnel-row {
+      display: grid; grid-template-columns: 110px 1fr 60px 60px;
+      gap: 12px; align-items: center; font-size: 13px;
+    }
+    .funnel-row .l { color: var(--ink-700); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+    .funnel-row .l .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .funnel-row .bar {
+      position: relative; height: 30px; background: var(--ink-100); border-radius: var(--r-sm); overflow: hidden;
+    }
+    .funnel-row .bar > div {
+      height: 100%; background: var(--ink-900);
+      display: flex; align-items: center; padding-left: 10px; color: var(--white);
+      font-size: 12px; font-weight: 600;
+    }
+    .funnel-row .v { text-align: right; font-weight: 600; color: var(--ink-900); }
+    .funnel-row .pct { text-align: right; font-size: 11px; color: var(--ink-500); font-family: var(--font-mono); }
+
+    /* Line chart svg */
+    .line-chart { width: 100%; height: 220px; display: block; }
+
+    /* Donut */
+    .donut-row { display: flex; gap: 24px; align-items: center; }
+    .donut-row svg { flex-shrink: 0; }
+    .donut-legend { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .donut-legend .item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+    .donut-legend .item .dot { width: 10px; height: 10px; border-radius: 2px; }
+    .donut-legend .item .name { flex: 1; color: var(--ink-700); }
+    .donut-legend .item .val { font-weight: 600; color: var(--ink-900); }
+
+    /* Top jobs */
+    .top-row {
+      display: grid; grid-template-columns: 1fr auto auto;
+      gap: 14px; align-items: center;
+      padding: 12px 0; border-bottom: 1px solid var(--ink-200);
+      font-size: 13px;
+    }
+    .top-row:last-child { border-bottom: 0; }
+    .top-row .ttl { font-weight: 600; color: var(--ink-900); }
+    .top-row .sub { font-size: 11px; color: var(--ink-600); margin-top: 2px; }
+    .top-row .stat-pair { text-align: right; }
+    .top-row .stat-pair .n { font-weight: 600; color: var(--ink-900); font-size: 15px; }
+    .top-row .stat-pair .l { font-size: 10px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* Range tabs */
+    .range-tabs {
+      display: inline-flex; gap: 2px; padding: 3px;
+      background: var(--ink-100); border-radius: var(--r-md);
+    }
+    .range-tabs button {
+      border: 0; background: transparent;
+      padding: 6px 12px; border-radius: var(--r-sm);
+      font-family: var(--font-sans); font-size: 12px; font-weight: 600;
+      color: var(--ink-600); cursor: pointer;
+    }
+    .range-tabs button.active { background: var(--white); color: var(--ink-900); box-shadow: var(--shadow-xs); }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="employer" data-active="analytics">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Empleador · Analytics" data-i18n-en="Employer · Analytics">Empleador · Analytics</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Analytics" data-i18n-en="Analytics">Analytics</h1>
+          <div class="t-body-sm muted" data-i18n-es="Métricas de tus empleos y procesos de contratación" data-i18n-en="Metrics for your jobs and hiring processes">Métricas de tus empleos y procesos de contratación</div>
+        </div>
+        <div class="row items-center gap-3">
+          <div class="range-tabs">
+            <button data-range="7d">7d</button>
+            <button class="active" data-range="30d">30d</button>
+            <button data-range="90d">90d</button>
+            <button data-range="ytd">YTD</button>
+          </div>
+          <button class="btn btn-outline btn-sm"><i class="i" data-icon="download"></i> <span data-i18n-es="Exportar" data-i18n-en="Export">Exportar</span></button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-row">
+        <div class="kpi">
+          <span class="l" data-i18n-es="Aplicantes totales" data-i18n-en="Total applicants">Aplicantes totales</span>
+          <span class="n">142</span>
+          <span class="delta up">+18 <span data-i18n-es="vs período anterior" data-i18n-en="vs prev period">vs período anterior</span></span>
+          <svg class="spark" viewBox="0 0 200 30" preserveAspectRatio="none">
+            <polyline fill="none" stroke="var(--brand-orange)" stroke-width="1.8" points="0,22 20,18 40,16 60,20 80,14 100,12 120,15 140,9 160,8 180,6 200,4"/>
+          </svg>
+        </div>
+        <div class="kpi">
+          <span class="l" data-i18n-es="Conversion rate" data-i18n-en="Conversion rate">Conversion rate</span>
+          <span class="n">5.6<span style="font-size: 18px; font-weight: 500; color: var(--ink-600);">%</span></span>
+          <span class="delta up">+0.8pp</span>
+          <svg class="spark" viewBox="0 0 200 30" preserveAspectRatio="none">
+            <polyline fill="none" stroke="var(--success)" stroke-width="1.8" points="0,20 20,18 40,22 60,17 80,16 100,14 120,15 140,10 160,11 180,8 200,9"/>
+          </svg>
+        </div>
+        <div class="kpi">
+          <span class="l" data-i18n-es="Time to hire" data-i18n-en="Time to hire">Time to hire</span>
+          <span class="n">23 <span style="font-size: 16px; font-weight: 500; color: var(--ink-600);" data-i18n-es="días" data-i18n-en="days">días</span></span>
+          <span class="delta down">+2d <span data-i18n-es="más lento" data-i18n-en="slower">más lento</span></span>
+          <svg class="spark" viewBox="0 0 200 30" preserveAspectRatio="none">
+            <polyline fill="none" stroke="var(--ink-700)" stroke-width="1.8" points="0,18 20,15 40,17 60,12 80,14 100,11 120,15 140,18 160,16 180,20 200,22"/>
+          </svg>
+        </div>
+        <div class="kpi">
+          <span class="l" data-i18n-es="Aplicantes vencidos" data-i18n-en="Overdue applicants">Aplicantes vencidos</span>
+          <span class="n" style="color: var(--warning);">2</span>
+          <span class="delta" style="color: var(--warning);">+14d Under Review</span>
+          <svg class="spark" viewBox="0 0 200 30" preserveAspectRatio="none">
+            <polyline fill="none" stroke="var(--warning)" stroke-width="1.8" points="0,20 20,22 40,18 60,20 80,16 100,18 120,14 140,12 160,15 180,11 200,8"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Funnel + status breakdown -->
+      <div class="grid-2 mb-4" style="margin-bottom: 16px;">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="t" data-i18n-es="Embudo de contratación" data-i18n-en="Hiring funnel">Embudo de contratación</div>
+              <div class="s" data-i18n-es="Conversiones entre etapas · 30 días" data-i18n-en="Stage-to-stage conversion · 30 days">Conversiones entre etapas · 30 días</div>
+            </div>
+          </div>
+
+          <div class="funnel">
+            <div class="funnel-row">
+              <div class="l"><span class="dot" style="background: var(--ink-500);"></span>Applied</div>
+              <div class="bar"><div style="width: 100%;">142</div></div>
+              <div class="v">142</div>
+              <div class="pct">100%</div>
+            </div>
+            <div class="funnel-row">
+              <div class="l"><span class="dot" style="background: var(--info);"></span>Under Review</div>
+              <div class="bar"><div style="width: 78%; background: var(--info);">111</div></div>
+              <div class="v">111</div>
+              <div class="pct">78%</div>
+            </div>
+            <div class="funnel-row">
+              <div class="l"><span class="dot" style="background: var(--violet);"></span>Interviewing</div>
+              <div class="bar"><div style="width: 42%; background: var(--violet);">59</div></div>
+              <div class="v">59</div>
+              <div class="pct">42%</div>
+            </div>
+            <div class="funnel-row">
+              <div class="l"><span class="dot" style="background: var(--brand-orange);"></span>Offer</div>
+              <div class="bar"><div style="width: 16%; background: var(--brand-orange);">23</div></div>
+              <div class="v">23</div>
+              <div class="pct">16%</div>
+            </div>
+            <div class="funnel-row">
+              <div class="l"><span class="dot" style="background: var(--success);"></span>Hired</div>
+              <div class="bar"><div style="width: 8%; background: var(--success);">11</div></div>
+              <div class="v">11</div>
+              <div class="pct">8%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="t" data-i18n-es="Distribución por status" data-i18n-en="Status distribution">Distribución por status</div>
+              <div class="s" data-i18n-es="Aplicaciones activas hoy" data-i18n-en="Active applications today">Aplicaciones activas hoy</div>
+            </div>
+          </div>
+
+          <div class="donut-row">
+            <svg width="140" height="140" viewBox="0 0 36 36">
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--ink-100)" stroke-width="3.6"/>
+              <!-- 142 total: Applied 34, Under Review 48, Interviewing 38, Offer 12, Hired 6, NotSel 4 -->
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--ink-500)"  stroke-width="3.6" stroke-dasharray="24 76" stroke-dashoffset="0" transform="rotate(-90 18 18)"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--info)"     stroke-width="3.6" stroke-dasharray="34 66" stroke-dashoffset="-24" transform="rotate(-90 18 18)"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--violet)"   stroke-width="3.6" stroke-dasharray="27 73" stroke-dashoffset="-58" transform="rotate(-90 18 18)"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--brand-orange)" stroke-width="3.6" stroke-dasharray="8 92"  stroke-dashoffset="-85" transform="rotate(-90 18 18)"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--success)"  stroke-width="3.6" stroke-dasharray="4 96"  stroke-dashoffset="-93" transform="rotate(-90 18 18)"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--danger)"   stroke-width="3.6" stroke-dasharray="3 97"  stroke-dashoffset="-97" transform="rotate(-90 18 18)"/>
+              <text x="18" y="20" text-anchor="middle" font-size="6" font-weight="700" fill="var(--ink-900)">142</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="item"><span class="dot" style="background: var(--ink-500);"></span><span class="name">Applied</span><span class="val">34</span></div>
+              <div class="item"><span class="dot" style="background: var(--info);"></span><span class="name">Under Review</span><span class="val">48</span></div>
+              <div class="item"><span class="dot" style="background: var(--violet);"></span><span class="name">Interviewing</span><span class="val">38</span></div>
+              <div class="item"><span class="dot" style="background: var(--brand-orange);"></span><span class="name">Offer</span><span class="val">12</span></div>
+              <div class="item"><span class="dot" style="background: var(--success);"></span><span class="name">Hired</span><span class="val">6</span></div>
+              <div class="item"><span class="dot" style="background: var(--danger);"></span><span class="name">Not Selected</span><span class="val">4</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Applications over time + Top jobs -->
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="t" data-i18n-es="Aplicaciones a través del tiempo" data-i18n-en="Applications over time">Aplicaciones a través del tiempo</div>
+              <div class="s" data-i18n-es="Diarias · últimos 30 días" data-i18n-en="Daily · last 30 days">Diarias · últimos 30 días</div>
+            </div>
+            <div class="row items-center gap-3" style="font-size: 12px; color: var(--ink-600);">
+              <span><span style="display:inline-block; width:10px; height:2px; background:var(--brand-orange); vertical-align: middle; margin-right: 4px;"></span> Aplicaciones</span>
+              <span><span style="display:inline-block; width:10px; height:2px; background:var(--success); vertical-align: middle; margin-right: 4px;"></span> Hires</span>
+            </div>
+          </div>
+
+          <svg class="line-chart" viewBox="0 0 600 220" preserveAspectRatio="none">
+            <!-- Grid lines -->
+            <line x1="0" y1="50"  x2="600" y2="50"  stroke="var(--ink-100)" stroke-width="1"/>
+            <line x1="0" y1="110" x2="600" y2="110" stroke="var(--ink-100)" stroke-width="1"/>
+            <line x1="0" y1="170" x2="600" y2="170" stroke="var(--ink-100)" stroke-width="1"/>
+            <!-- Applications line (orange) -->
+            <polyline fill="none" stroke="var(--brand-orange)" stroke-width="2.2" stroke-linejoin="round"
+              points="0,150 20,140 40,135 60,148 80,130 100,120 120,128 140,110 160,118 180,100 200,108 220,95 240,90 260,82 280,76 300,84 320,68 340,72 360,60 380,58 400,52 420,68 440,55 460,48 480,40 500,52 520,38 540,42 560,30 580,28 600,22"/>
+            <!-- Filled area below applications line -->
+            <polygon fill="rgba(243,107,27,0.10)"
+              points="0,150 20,140 40,135 60,148 80,130 100,120 120,128 140,110 160,118 180,100 200,108 220,95 240,90 260,82 280,76 300,84 320,68 340,72 360,60 380,58 400,52 420,68 440,55 460,48 480,40 500,52 520,38 540,42 560,30 580,28 600,22 600,220 0,220"/>
+            <!-- Hires line (success) -->
+            <polyline fill="none" stroke="var(--success)" stroke-width="2.2" stroke-linejoin="round"
+              points="0,200 20,200 40,195 60,200 80,195 100,190 120,195 140,185 160,190 180,180 200,180 220,175 240,170 260,170 280,165 300,165 320,160 340,160 360,155 380,155 400,150 420,160 440,150 460,145 480,140 500,150 520,140 540,140 560,135 580,135 600,130"/>
+          </svg>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="t" data-i18n-es="Top empleos" data-i18n-en="Top jobs">Top empleos</div>
+              <div class="s" data-i18n-es="Por número de aplicaciones" data-i18n-en="By application volume">Por número de aplicaciones</div>
+            </div>
+          </div>
+
+          <div class="top-row">
+            <div>
+              <div class="ttl">Hospitality Marketing Lead</div>
+              <div class="sub">Miami, FL · Hospitality</div>
+            </div>
+            <div class="stat-pair">
+              <div class="n">24</div>
+              <div class="l" data-i18n-es="aplicantes" data-i18n-en="applicants">aplicantes</div>
+            </div>
+            <div class="stat-pair">
+              <div class="n" style="color: var(--success);">8.3%</div>
+              <div class="l" data-i18n-es="conversión" data-i18n-en="conv.">conversión</div>
+            </div>
+          </div>
+
+          <div class="top-row">
+            <div>
+              <div class="ttl">Concierge Specialist</div>
+              <div class="sub">Miami, FL · Hospitality</div>
+            </div>
+            <div class="stat-pair">
+              <div class="n">31</div>
+              <div class="l" data-i18n-es="aplicantes" data-i18n-en="applicants">aplicantes</div>
+            </div>
+            <div class="stat-pair">
+              <div class="n" style="color: var(--success);">6.5%</div>
+              <div class="l">conversión</div>
+            </div>
+          </div>
+
+          <div class="top-row">
+            <div>
+              <div class="ttl">Front Office Manager</div>
+              <div class="sub">Miami Beach, FL · Hospitality</div>
+            </div>
+            <div class="stat-pair">
+              <div class="n">18</div>
+              <div class="l">aplicantes</div>
+            </div>
+            <div class="stat-pair">
+              <div class="n" style="color: var(--warning);">3.1%</div>
+              <div class="l">conversión</div>
+            </div>
+          </div>
+
+          <div class="top-row">
+            <div>
+              <div class="ttl">Building Engineer</div>
+              <div class="sub">Brickell, FL · Hospitality</div>
+            </div>
+            <div class="stat-pair">
+              <div class="n">12</div>
+              <div class="l">aplicantes</div>
+            </div>
+            <div class="stat-pair">
+              <div class="n" style="color: var(--success);">7.8%</div>
+              <div class="l">conversión</div>
+            </div>
+          </div>
+
+          <div class="top-row">
+            <div>
+              <div class="ttl">Executive Housekeeper</div>
+              <div class="sub">Miami, FL · Hospitality</div>
+            </div>
+            <div class="stat-pair">
+              <div class="n">9</div>
+              <div class="l">aplicantes</div>
+            </div>
+            <div class="stat-pair">
+              <div class="n" style="color: var(--ink-700);">5.4%</div>
+              <div class="l">conversión</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secondary KPIs -->
+      <div class="grid-2-eq mt-4" style="margin-top: 16px;">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="t" data-i18n-es="Origen de aplicantes" data-i18n-en="Applicant sources">Origen de aplicantes</div>
+              <div class="s" data-i18n-es="Cómo te encontraron" data-i18n-en="How they found you">Cómo te encontraron</div>
+            </div>
+          </div>
+
+          <div class="funnel">
+            <div class="funnel-row" style="grid-template-columns: 140px 1fr 60px 60px;">
+              <div class="l">Search · Miami Pro</div>
+              <div class="bar"><div style="width: 64%; background: var(--brand-orange);">91</div></div>
+              <div class="v">91</div>
+              <div class="pct">64%</div>
+            </div>
+            <div class="funnel-row" style="grid-template-columns: 140px 1fr 60px 60px;">
+              <div class="l">Direct link</div>
+              <div class="bar"><div style="width: 21%;">30</div></div>
+              <div class="v">30</div>
+              <div class="pct">21%</div>
+            </div>
+            <div class="funnel-row" style="grid-template-columns: 140px 1fr 60px 60px;">
+              <div class="l">Referral</div>
+              <div class="bar"><div style="width: 11%; background: var(--brand-green);">15</div></div>
+              <div class="v">15</div>
+              <div class="pct">11%</div>
+            </div>
+            <div class="funnel-row" style="grid-template-columns: 140px 1fr 60px 60px;">
+              <div class="l">Newsletter</div>
+              <div class="bar"><div style="width: 4%; background: var(--info);">6</div></div>
+              <div class="v">6</div>
+              <div class="pct">4%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="t" data-i18n-es="Salud del proceso" data-i18n-en="Process health">Salud del proceso</div>
+              <div class="s" data-i18n-es="Indicadores operativos" data-i18n-en="Operational indicators">Indicadores operativos</div>
+            </div>
+          </div>
+
+          <div class="funnel">
+            <div class="funnel-row" style="grid-template-columns: 1fr auto;">
+              <div class="l" data-i18n-es="Tiempo promedio a Under Review" data-i18n-en="Avg. time to Under Review">Tiempo promedio a Under Review</div>
+              <div style="text-align: right; font-weight: 600; color: var(--ink-900);">1.4 <span style="font-size: 11px; color: var(--ink-500); font-weight: 500;">días</span></div>
+            </div>
+            <div class="funnel-row" style="grid-template-columns: 1fr auto;">
+              <div class="l" data-i18n-es="Tiempo promedio a Interviewing" data-i18n-en="Avg. time to Interviewing">Tiempo promedio a Interviewing</div>
+              <div style="text-align: right; font-weight: 600; color: var(--ink-900);">8.1 <span style="font-size: 11px; color: var(--ink-500); font-weight: 500;">días</span></div>
+            </div>
+            <div class="funnel-row" style="grid-template-columns: 1fr auto;">
+              <div class="l" data-i18n-es="Tiempo promedio a Offer" data-i18n-en="Avg. time to Offer">Tiempo promedio a Offer</div>
+              <div style="text-align: right; font-weight: 600; color: var(--ink-900);">17.5 <span style="font-size: 11px; color: var(--ink-500); font-weight: 500;">días</span></div>
+            </div>
+            <div class="funnel-row" style="grid-template-columns: 1fr auto;">
+              <div class="l" data-i18n-es="Offer acceptance rate" data-i18n-en="Offer acceptance rate">Offer acceptance rate</div>
+              <div style="text-align: right; font-weight: 600; color: var(--success);">82%</div>
+            </div>
+            <div class="funnel-row" style="grid-template-columns: 1fr auto;">
+              <div class="l" data-i18n-es="Withdraw rate de candidatos" data-i18n-en="Candidate withdraw rate">Withdraw rate de candidatos</div>
+              <div style="text-align: right; font-weight: 600; color: var(--ink-900);">4.2%</div>
+            </div>
+            <div class="funnel-row" style="grid-template-columns: 1fr auto;">
+              <div class="l" data-i18n-es="SLA cumplido (&lt;14d Under Review)" data-i18n-en="SLA met (&lt;14d Under Review)">SLA cumplido (&lt;14d Under Review)</div>
+              <div style="text-align: right; font-weight: 600; color: var(--warning);">96%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+  <script>
+    document.querySelectorAll('.range-tabs button').forEach(b => b.addEventListener('click', () => {
+      document.querySelectorAll('.range-tabs button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    }));
+  </script>
+</body>
+</html>

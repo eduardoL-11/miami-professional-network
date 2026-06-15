@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventos · Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    body { background: var(--white); }
+
+    .nav {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(140%) blur(8px);
+      border-bottom: 1px solid var(--ink-200);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 16px 32px; }
+    .nav .brand img { height: 30px; }
+    .nav .links { display: flex; gap: 28px; }
+    .nav .links a { font-size: 14px; color: var(--ink-700); font-weight: 500; }
+    .nav .links a.active { color: var(--ink-900); }
+
+    /* Hero events */
+    .events-hero {
+      max-width: 1200px; margin: 0 auto; padding: 80px 32px 56px;
+      text-align: center;
+    }
+    .events-hero .eyebrow {
+      display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.10em;
+      text-transform: uppercase; color: var(--brand-orange); margin-bottom: 14px;
+    }
+    .events-hero h1 {
+      font-size: clamp(36px, 5vw, 56px); line-height: 1.05;
+      letter-spacing: -0.03em; font-weight: 600;
+      color: var(--ink-900); margin: 0 0 16px;
+    }
+    .events-hero p {
+      font-size: 17px; color: var(--ink-600); line-height: 1.6;
+      max-width: 620px; margin: 0 auto;
+    }
+
+    /* Section base */
+    section.s { padding: 64px 0; border-top: 1px solid var(--ink-200); }
+    section.s.alt { background: var(--ink-50); }
+    .s-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+    .s-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 14px; }
+    .s-head h2 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0; color: var(--ink-900); }
+    .s-head .sub { font-size: 14px; color: var(--ink-600); }
+
+    /* Upcoming events */
+    .upcoming-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 1000px) { .upcoming-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 700px)  { .upcoming-grid { grid-template-columns: 1fr; } }
+
+    .event-card {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); overflow: hidden;
+      transition: border-color .15s, box-shadow .15s, transform .15s;
+      display: flex; flex-direction: column;
+    }
+    .event-card:hover { border-color: var(--ink-300); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+    .event-photo {
+      width: 100%; aspect-ratio: 4/3; position: relative; overflow: hidden;
+      background: var(--ink-100);
+    }
+    .event-photo .img-placeholder {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.55); font-size: 38px;
+    }
+    .event-photo .date-chip {
+      position: absolute; top: 14px; left: 14px;
+      background: rgba(255,255,255,0.95); color: var(--ink-900);
+      padding: 6px 12px; border-radius: var(--r-md);
+      font-size: 12px; font-weight: 600;
+      backdrop-filter: blur(8px);
+      display: flex; flex-direction: column; align-items: center; line-height: 1.1;
+      min-width: 46px;
+    }
+    .event-photo .date-chip .d { font-size: 18px; font-weight: 700; }
+    .event-photo .date-chip .m { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-600); margin-top: 1px; }
+
+    .event-body { padding: 18px 18px 20px; flex: 1; display: flex; flex-direction: column; }
+    .event-body .badge-row { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+    .event-body h3 { font-size: 17px; font-weight: 600; color: var(--ink-900); margin: 0 0 8px; letter-spacing: -0.01em; line-height: 1.3; }
+    .event-body p { font-size: 13px; color: var(--ink-600); margin: 0 0 12px; line-height: 1.55; flex: 1; }
+    .event-meta { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--ink-600); padding-top: 12px; border-top: 1px solid var(--ink-100); }
+    .event-meta span { display: inline-flex; align-items: center; gap: 5px; }
+
+    /* Photo gallery */
+    .gallery {
+      display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: repeat(2, 200px); gap: 8px;
+    }
+    @media (max-width: 700px) { .gallery { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 180px); } }
+    .gallery .tile {
+      position: relative; overflow: hidden; border-radius: var(--r-md);
+      cursor: pointer; transition: transform .2s;
+    }
+    .gallery .tile:hover { transform: scale(1.01); }
+    .gallery .tile-1 { grid-row: 1 / span 2; }
+    .gallery .tile-bg {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.45); font-size: 44px;
+    }
+    .gallery .tile-caption {
+      position: absolute; bottom: 12px; left: 12px;
+      color: white; font-size: 12px; font-weight: 600;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    }
+    .gallery .tile::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.45) 100%);
+    }
+
+    /* Member firms grid */
+    .firms-grid {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px;
+      background: var(--ink-200);
+      border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+      overflow: hidden;
+    }
+    @media (max-width: 900px) { .firms-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 500px) { .firms-grid { grid-template-columns: repeat(2, 1fr); } }
+    .firm {
+      background: var(--white); aspect-ratio: 5/3;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 18px; gap: 6px;
+      transition: background .15s;
+    }
+    .firm:hover { background: var(--ink-50); }
+    .firm .logo-sq {
+      width: 44px; height: 44px; border-radius: var(--r-md);
+      background: var(--ink-100); color: var(--ink-700);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px;
+    }
+    .firm .nm { font-size: 12px; font-weight: 600; color: var(--ink-800); text-align: center; }
+    .firm .industry { font-size: 10px; color: var(--ink-500); }
+
+    /* Past events list */
+    .past-row {
+      display: grid; grid-template-columns: 80px 1fr auto;
+      gap: 18px; align-items: center;
+      padding: 16px 0; border-bottom: 1px solid var(--ink-200);
+    }
+    .past-row:last-child { border-bottom: 0; }
+    .past-row .date-block {
+      text-align: center; padding: 10px;
+      background: var(--ink-100); border-radius: var(--r-md);
+    }
+    .past-row .date-block .d { font-size: 22px; font-weight: 700; color: var(--ink-900); line-height: 1; }
+    .past-row .date-block .m { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-600); margin-top: 4px; }
+    .past-row .info .nm { font-size: 15px; font-weight: 600; color: var(--ink-900); }
+    .past-row .info .meta { font-size: 12px; color: var(--ink-600); margin-top: 4px; }
+    .past-row .info .meta span { display: inline-flex; align-items: center; gap: 4px; margin-right: 14px; }
+
+    /* CTA newsletter */
+    .cta-strip {
+      background: var(--surface-dark); border-radius: var(--r-xl);
+      padding: 56px 48px; position: relative; overflow: hidden;
+      --white: #FFFFFF;
+    }
+    .cta-strip::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 75% 50%, rgba(243,107,27,0.20) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .cta-strip > * { position: relative; z-index: 1; }
+    .cta-strip h2 { color: var(--white); font-size: 30px; font-weight: 600; margin: 0 0 12px; letter-spacing: -0.025em; }
+    .cta-strip p { color: rgba(255,255,255,0.70); font-size: 15px; margin: 0 0 28px; max-width: 540px; }
+    .cta-strip form { display: flex; gap: 10px; max-width: 480px; flex-wrap: wrap; }
+    .cta-strip input {
+      flex: 1; min-width: 240px;
+      background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.18);
+      border-radius: var(--r-md); padding: 12px 14px;
+      color: var(--white); font-family: var(--font-sans); font-size: 14px;
+    }
+    .cta-strip input::placeholder { color: rgba(255,255,255,0.50); }
+    .cta-strip input:focus { outline: none; border-color: rgba(255,255,255,0.32); background: rgba(255,255,255,0.14); }
+
+    /* Pretty gradient backgrounds for placeholder photos */
+    .bg-1 { background: linear-gradient(135deg, #0E1410 0%, #295E24 100%); }
+    .bg-2 { background: linear-gradient(135deg, #1A0F1A 0%, #F36B1B 100%); }
+    .bg-3 { background: linear-gradient(135deg, #050810 0%, #0A1426 60%, #1A0F22 100%); }
+    .bg-4 { background: linear-gradient(135deg, #2B1318 0%, #F36B1B 80%); }
+    .bg-5 { background: linear-gradient(135deg, #16A34A 0%, #295E24 100%); }
+    .bg-6 { background: linear-gradient(135deg, #7C3AED 0%, #295E24 100%); }
+    .bg-7 { background: linear-gradient(135deg, #FF8541 0%, #C8530E 100%); }
+    .bg-8 { background: linear-gradient(135deg, #0A1018 0%, #E13C8C 100%); }
+    .bg-9 { background: linear-gradient(135deg, #295E24 0%, #1A0F22 100%); }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="p01-landing.html" class="brand" aria-label="Miami Professional Network">
+        <img src="../../assets/logo-fullcolor.png" alt="Miami Professional Network" />
+      </a>
+      <nav class="links">
+        <a href="p01-landing.html#for-you" data-i18n-es="Para ti" data-i18n-en="For you">Para ti</a>
+        <a href="p01-landing.html#how" data-i18n-es="Cómo funciona" data-i18n-en="How it works">Cómo funciona</a>
+        <a href="events.html" class="active" data-i18n-es="Eventos" data-i18n-en="Events">Eventos</a>
+        <a href="p04-login.html" data-i18n-es="Iniciar sesión" data-i18n-en="Sign in">Iniciar sesión</a>
+      </nav>
+      <div class="row items-center gap-3">
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+        <div class="lang-toggle">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+        <a href="p02-candidate-signup.html" class="btn btn-primary btn-sm" data-i18n-es="Crear cuenta" data-i18n-en="Sign up">Crear cuenta</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="events-hero">
+    <span class="eyebrow" data-i18n-es="Eventos · Miami Professional Network" data-i18n-en="Events · Miami Professional Network">Eventos · Miami Professional Network</span>
+    <h1 data-i18n-es="Donde la red profesional de Miami se conecta." data-i18n-en="Where Miami's professional network meets.">Donde la red profesional de Miami se conecta.</h1>
+    <p data-i18n-es="Mixers mensuales, paneles con líderes de industria, talleres y cenas íntimas. Solo para miembros y firmas aprobadas." data-i18n-en="Monthly mixers, industry leader panels, workshops and intimate dinners. Members and approved firms only.">Mixers mensuales, paneles con líderes de industria, talleres y cenas íntimas. Solo para miembros y firmas aprobadas.</p>
+  </section>
+
+  <!-- Upcoming events -->
+  <section class="s alt">
+    <div class="s-inner">
+      <div class="s-head">
+        <div>
+          <h2 data-i18n-es="Próximos eventos" data-i18n-en="Upcoming events">Próximos eventos</h2>
+          <div class="sub" data-i18n-es="Junio – Agosto 2026" data-i18n-en="June – August 2026">Junio – Agosto 2026</div>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm" data-i18n-es="Ver calendario completo →" data-i18n-en="View full calendar →">Ver calendario completo →</a>
+      </div>
+
+      <div class="upcoming-grid">
+
+        <article class="event-card">
+          <div class="event-photo bg-1">
+            <div class="img-placeholder"><i class="i" data-icon="users"></i></div>
+            <div class="date-chip"><span class="d">14</span><span class="m">JUN</span></div>
+          </div>
+          <div class="event-body">
+            <div class="badge-row">
+              <span class="badge"><span class="dot" style="background: var(--brand-orange);"></span>Mixer</span>
+              <span class="badge"><span class="dot" style="background: var(--ink-400);"></span>Brickell</span>
+            </div>
+            <h3 data-i18n-es="Summer Mixer · Hospitality & Real Estate" data-i18n-en="Summer Mixer · Hospitality & Real Estate">Summer Mixer · Hospitality & Real Estate</h3>
+            <p data-i18n-es="Networking informal en rooftop con líderes de dos industrias clave en Miami. Drinks + bites." data-i18n-en="Casual rooftop networking with leaders from two key Miami industries. Drinks + bites.">Networking informal en rooftop con líderes de dos industrias clave en Miami. Drinks + bites.</p>
+            <div class="event-meta">
+              <span><i class="i i-sm" data-icon="clock"></i> 7:00 PM</span>
+              <span><i class="i i-sm" data-icon="map-pin"></i> Brickell</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-photo bg-2">
+            <div class="img-placeholder"><i class="i" data-icon="message-square"></i></div>
+            <div class="date-chip"><span class="d">22</span><span class="m">JUN</span></div>
+          </div>
+          <div class="event-body">
+            <div class="badge-row">
+              <span class="badge"><span class="dot" style="background: var(--violet);"></span>Panel</span>
+              <span class="badge"><span class="dot" style="background: var(--ink-400);"></span>Wynwood</span>
+            </div>
+            <h3 data-i18n-es="Panel · El futuro de Legal & Compliance en Miami" data-i18n-en="Panel · The future of Legal & Compliance in Miami">Panel · El futuro de Legal & Compliance en Miami</h3>
+            <p data-i18n-es="Conversación con 4 socios de firmas top sobre cambios regulatorios y oportunidades 2026." data-i18n-en="A conversation with 4 top firm partners on regulatory changes and 2026 opportunities.">Conversación con 4 socios de firmas top sobre cambios regulatorios y oportunidades 2026.</p>
+            <div class="event-meta">
+              <span><i class="i i-sm" data-icon="clock"></i> 6:00 PM</span>
+              <span><i class="i i-sm" data-icon="map-pin"></i> Wynwood Hall</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-photo bg-3">
+            <div class="img-placeholder"><i class="i" data-icon="lightbulb"></i></div>
+            <div class="date-chip"><span class="d">06</span><span class="m">JUL</span></div>
+          </div>
+          <div class="event-body">
+            <div class="badge-row">
+              <span class="badge"><span class="dot" style="background: var(--info);"></span>Workshop</span>
+              <span class="badge"><span class="dot" style="background: var(--ink-400);"></span>Coconut Grove</span>
+            </div>
+            <h3 data-i18n-es="Hiring Workshop · Cómo construir equipos high-performance" data-i18n-en="Hiring Workshop · Building high-performance teams">Hiring Workshop · Cómo construir equipos high-performance</h3>
+            <p data-i18n-es="Sesión práctica de 3 horas para hiring managers y founders. Frameworks, casos reales, herramientas." data-i18n-en="3-hour hands-on session for hiring managers and founders. Frameworks, real cases, tools.">Sesión práctica de 3 horas para hiring managers y founders. Frameworks, casos reales, herramientas.</p>
+            <div class="event-meta">
+              <span><i class="i i-sm" data-icon="clock"></i> 9:00 AM</span>
+              <span><i class="i i-sm" data-icon="map-pin"></i> Coconut Grove</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-photo bg-4">
+            <div class="img-placeholder"><i class="i" data-icon="award"></i></div>
+            <div class="date-chip"><span class="d">19</span><span class="m">JUL</span></div>
+          </div>
+          <div class="event-body">
+            <div class="badge-row">
+              <span class="badge"><span class="dot" style="background: var(--brand-orange);"></span>Cena íntima</span>
+              <span class="badge"><span class="dot" style="background: var(--ink-400);"></span>South Beach</span>
+            </div>
+            <h3 data-i18n-es="Cena · Member Dinner Series · Healthcare" data-i18n-en="Dinner · Member Dinner Series · Healthcare">Cena · Member Dinner Series · Healthcare</h3>
+            <p data-i18n-es="Cena privada para 12 ejecutivos del sector healthcare. Solo por invitación curada." data-i18n-en="Private dinner for 12 healthcare executives. By curated invitation only.">Cena privada para 12 ejecutivos del sector healthcare. Solo por invitación curada.</p>
+            <div class="event-meta">
+              <span><i class="i i-sm" data-icon="clock"></i> 8:00 PM</span>
+              <span><i class="i i-sm" data-icon="map-pin"></i> South Beach</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-photo bg-5">
+            <div class="img-placeholder"><i class="i" data-icon="trending-up"></i></div>
+            <div class="date-chip"><span class="d">02</span><span class="m">AUG</span></div>
+          </div>
+          <div class="event-body">
+            <div class="badge-row">
+              <span class="badge"><span class="dot" style="background: var(--success);"></span>Conferencia</span>
+              <span class="badge"><span class="dot" style="background: var(--ink-400);"></span>Downtown</span>
+            </div>
+            <h3 data-i18n-es="State of Tech & Software · Miami Summit" data-i18n-en="State of Tech & Software · Miami Summit">State of Tech & Software · Miami Summit</h3>
+            <p data-i18n-es="Día completo con founders, VCs y heads of engineering. 8 charlas + breakouts + party." data-i18n-en="Full day with founders, VCs and heads of engineering. 8 talks + breakouts + party.">Día completo con founders, VCs y heads of engineering. 8 charlas + breakouts + party.</p>
+            <div class="event-meta">
+              <span><i class="i i-sm" data-icon="clock"></i> 9:00 AM</span>
+              <span><i class="i i-sm" data-icon="map-pin"></i> Downtown</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-photo bg-6">
+            <div class="img-placeholder"><i class="i" data-icon="briefcase"></i></div>
+            <div class="date-chip"><span class="d">16</span><span class="m">AUG</span></div>
+          </div>
+          <div class="event-body">
+            <div class="badge-row">
+              <span class="badge"><span class="dot" style="background: var(--brand-orange);"></span>Mixer</span>
+              <span class="badge"><span class="dot" style="background: var(--ink-400);"></span>Aventura</span>
+            </div>
+            <h3 data-i18n-es="Marketing & Communications · Late Summer Social" data-i18n-en="Marketing & Communications · Late Summer Social">Marketing & Communications · Late Summer Social</h3>
+            <p data-i18n-es="Encuentro casual para profesionales de marketing, comms y creative. Pool party + cocktails." data-i18n-en="Casual meet for marketing, comms and creative pros. Pool party + cocktails.">Encuentro casual para profesionales de marketing, comms y creative. Pool party + cocktails.</p>
+            <div class="event-meta">
+              <span><i class="i i-sm" data-icon="clock"></i> 6:30 PM</span>
+              <span><i class="i i-sm" data-icon="map-pin"></i> Aventura</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Past events photo gallery -->
+  <section class="s">
+    <div class="s-inner">
+      <div class="s-head">
+        <div>
+          <h2 data-i18n-es="Galería de eventos pasados" data-i18n-en="Past events gallery">Galería de eventos pasados</h2>
+          <div class="sub" data-i18n-es="Algunos momentos de la red en 2026" data-i18n-en="Some moments from the network in 2026">Algunos momentos de la red en 2026</div>
+        </div>
+        <a href="#" class="btn btn-ghost btn-sm" data-i18n-es="Ver toda la galería →" data-i18n-en="View full gallery →">Ver toda la galería →</a>
+      </div>
+
+      <div class="gallery">
+        <div class="tile tile-1 bg-7"><div class="tile-bg"><i class="i i-2xl" data-icon="image"></i></div><div class="tile-caption">Spring Mixer · April · Wynwood</div></div>
+        <div class="tile bg-8"><div class="tile-bg"><i class="i i-2xl" data-icon="image"></i></div><div class="tile-caption">Hiring Panel · March</div></div>
+        <div class="tile bg-9"><div class="tile-bg"><i class="i i-2xl" data-icon="image"></i></div><div class="tile-caption">Hospitality Dinner</div></div>
+        <div class="tile bg-3"><div class="tile-bg"><i class="i i-2xl" data-icon="image"></i></div><div class="tile-caption">Tech Summit · Feb</div></div>
+        <div class="tile bg-5"><div class="tile-bg"><i class="i i-2xl" data-icon="image"></i></div><div class="tile-caption">Healthcare Roundtable</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Member Firms -->
+  <section class="s alt">
+    <div class="s-inner">
+      <div class="s-head">
+        <div>
+          <h2 data-i18n-es="Member Firms" data-i18n-en="Member Firms">Member Firms</h2>
+          <div class="sub" data-i18n-es="Empresas que confían en Miami Professional Network" data-i18n-en="Companies that trust Miami Professional Network">Empresas que confían en Miami Professional Network</div>
+        </div>
+        <a href="p03-employer-signup.html" class="btn btn-primary btn-sm" data-i18n-es="Solicitar membresía" data-i18n-en="Request membership">Solicitar membresía</a>
+      </div>
+
+      <div class="firms-grid">
+        <div class="firm"><div class="logo-sq">SH</div><div class="nm">Sunset Hotels Group</div><div class="industry">Hospitality</div></div>
+        <div class="firm"><div class="logo-sq">BB</div><div class="nm">Brickell Build Co.</div><div class="industry">Real Estate</div></div>
+        <div class="firm"><div class="logo-sq">WH</div><div class="nm">Wynwood Health</div><div class="industry">Healthcare</div></div>
+        <div class="firm"><div class="logo-sq">MR</div><div class="nm">Mango Republic</div><div class="industry">Marketing</div></div>
+        <div class="firm"><div class="logo-sq">OM</div><div class="nm">Ocean Mirage</div><div class="industry">Hospitality</div></div>
+        <div class="firm"><div class="logo-sq">PB</div><div class="nm">Palm Beach Studios</div><div class="industry">Media & Creative</div></div>
+        <div class="firm"><div class="logo-sq">CV</div><div class="nm">Coastal Ventures</div><div class="industry">Hospitality</div></div>
+        <div class="firm"><div class="logo-sq">DC</div><div class="nm">Doral Construction</div><div class="industry">Construction</div></div>
+        <div class="firm"><div class="logo-sq">PG</div><div class="nm">Palmetto Group</div><div class="industry">Legal</div></div>
+        <div class="firm"><div class="logo-sq">CN</div><div class="nm">Coral Networks</div><div class="industry">Technology</div></div>
+        <div class="firm"><div class="logo-sq">KF</div><div class="nm">Key Finance</div><div class="industry">Finance</div></div>
+        <div class="firm"><div class="logo-sq">AC</div><div class="nm">Aventura Consulting</div><div class="industry">Consulting</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Past events list (compact) -->
+  <section class="s">
+    <div class="s-inner">
+      <div class="s-head">
+        <div>
+          <h2 data-i18n-es="Histórico" data-i18n-en="Past events list">Histórico</h2>
+          <div class="sub" data-i18n-es="Todos los eventos realizados" data-i18n-en="All past events">Todos los eventos realizados</div>
+        </div>
+      </div>
+
+      <div class="past-row">
+        <div class="date-block"><div class="d">12</div><div class="m">May</div></div>
+        <div class="info">
+          <div class="nm">Hospitality Spring Mixer · Wynwood</div>
+          <div class="meta"><span><i class="i i-sm" data-icon="users"></i> 84 asistentes</span><span><i class="i i-sm" data-icon="briefcase"></i> 18 firmas</span><span><i class="i i-sm" data-icon="award"></i> 4 hires post-evento</span></div>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm" data-i18n-es="Ver recap →" data-i18n-en="View recap →">Ver recap →</a>
+      </div>
+
+      <div class="past-row">
+        <div class="date-block"><div class="d">28</div><div class="m">Apr</div></div>
+        <div class="info">
+          <div class="nm">Panel · Hiring in 2026 — Tech & Software</div>
+          <div class="meta"><span><i class="i i-sm" data-icon="users"></i> 112 asistentes</span><span><i class="i i-sm" data-icon="briefcase"></i> 24 firmas</span><span><i class="i i-sm" data-icon="map-pin"></i> Downtown</span></div>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm" data-i18n-es="Ver recap →" data-i18n-en="View recap →">Ver recap →</a>
+      </div>
+
+      <div class="past-row">
+        <div class="date-block"><div class="d">15</div><div class="m">Apr</div></div>
+        <div class="info">
+          <div class="nm">Member Dinner · Real Estate & Construction</div>
+          <div class="meta"><span><i class="i i-sm" data-icon="users"></i> 14 asistentes</span><span><i class="i i-sm" data-icon="briefcase"></i> 12 firmas</span><span><i class="i i-sm" data-icon="map-pin"></i> South Beach</span></div>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm" data-i18n-es="Ver recap →" data-i18n-en="View recap →">Ver recap →</a>
+      </div>
+
+      <div class="past-row">
+        <div class="date-block"><div class="d">22</div><div class="m">Mar</div></div>
+        <div class="info">
+          <div class="nm">Tech Summit Miami · Q1 Edition</div>
+          <div class="meta"><span><i class="i i-sm" data-icon="users"></i> 280 asistentes</span><span><i class="i i-sm" data-icon="briefcase"></i> 52 firmas</span><span><i class="i i-sm" data-icon="award"></i> 11 hires post-evento</span></div>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm" data-i18n-es="Ver recap →" data-i18n-en="View recap →">Ver recap →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA newsletter -->
+  <section class="s">
+    <div class="s-inner">
+      <div class="cta-strip">
+        <span class="t-overline" style="color: var(--brand-orange-500); margin-bottom: 14px; display: inline-block;" data-i18n-es="Newsletter" data-i18n-en="Newsletter">Newsletter</span>
+        <h2 data-i18n-es="No te pierdas un evento" data-i18n-en="Never miss an event">No te pierdas un evento</h2>
+        <p data-i18n-es="Recibe el calendario mensual + actualizaciones de la red profesional de Miami." data-i18n-en="Get the monthly calendar + updates from Miami's professional network.">Recibe el calendario mensual + actualizaciones de la red profesional de Miami.</p>
+        <form action="https://mpnetwork.beehiiv.com/" target="_blank" rel="noopener" onsubmit="return true;">
+          <input type="email" required data-i18n-es-placeholder="tu@email.com" data-i18n-en-placeholder="your@email.com" placeholder="tu@email.com" />
+          <button class="btn btn-primary btn-lg" type="submit" data-i18n-es="Suscribirme al newsletter" data-i18n-en="Subscribe to newsletter">Suscribirme al newsletter</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+</body>
+</html>

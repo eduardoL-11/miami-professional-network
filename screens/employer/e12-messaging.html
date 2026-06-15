@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-12 · Messaging — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .msg-shell { display: grid; grid-template-columns: 320px 1fr; gap: 0; height: calc(100vh - 200px); min-height: 560px;
+      border: 1px solid var(--ink-200); border-radius: var(--r-lg); overflow: hidden; background: var(--white); }
+    @media (max-width: 900px) { .msg-shell { grid-template-columns: 1fr; height: auto; } }
+
+    /* Threads list */
+    .threads { border-right: 1px solid var(--ink-200); display: flex; flex-direction: column; min-width: 0; }
+    .threads-head { padding: 14px 14px 10px; border-bottom: 1px solid var(--ink-200); }
+    .threads-search {
+      position: relative;
+    }
+    .threads-search .i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-500); font-size: 14px; pointer-events: none; }
+    .threads-search input {
+      width: 100%; padding: 8px 12px 8px 36px;
+      background: var(--ink-100); border: 1px solid transparent;
+      border-radius: var(--r-sm);
+      font-family: var(--font-sans); font-size: 13px; color: var(--ink-900);
+    }
+    .threads-search input:focus { outline: none; background: var(--white); border-color: var(--ink-300); }
+
+    .thread-filters { display: flex; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--ink-200); }
+    .thread-filters button {
+      padding: 4px 10px; background: var(--ink-100); border: 0;
+      border-radius: var(--r-full); font-size: 11px; font-weight: 600;
+      color: var(--ink-700); cursor: pointer; font-family: var(--font-sans);
+    }
+    .thread-filters button.active { background: var(--ink-900); color: var(--white); }
+
+    .thread-list { flex: 1; overflow-y: auto; }
+    .thread {
+      display: flex; gap: 12px; padding: 14px;
+      border-bottom: 1px solid var(--ink-100);
+      cursor: pointer; transition: background .12s;
+    }
+    .thread:hover { background: var(--ink-50); }
+    .thread.active { background: var(--ink-50); border-left: 3px solid var(--brand-orange); padding-left: 11px; }
+    .thread .avatar { flex-shrink: 0; }
+    .thread .body { flex: 1; min-width: 0; }
+    .thread .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .thread .nm { font-size: 13px; font-weight: 600; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .thread .when { font-size: 11px; color: var(--ink-500); flex-shrink: 0; font-family: var(--font-mono); }
+    .thread .position { font-size: 11px; color: var(--ink-600); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .thread .preview { font-size: 12px; color: var(--ink-700); margin-top: 4px; line-height: 1.4;
+      display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    .thread.unread .nm { color: var(--ink-900); font-weight: 700; }
+    .thread.unread .preview { color: var(--ink-900); font-weight: 500; }
+    .thread .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brand-orange); flex-shrink: 0; }
+
+    /* Chat panel */
+    .chat { display: flex; flex-direction: column; min-width: 0; }
+    .chat-head {
+      padding: 14px 18px; border-bottom: 1px solid var(--ink-200);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .chat-head .who { flex: 1; min-width: 0; }
+    .chat-head .nm { font-size: 14px; font-weight: 600; color: var(--ink-900); }
+    .chat-head .role { font-size: 12px; color: var(--ink-600); margin-top: 2px; }
+    .chat-head .badge { font-size: 11px; }
+
+    .chat-status-bar {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 18px; background: var(--brand-orange-50);
+      border-bottom: 1px solid var(--brand-orange-100);
+      font-size: 12px; color: var(--brand-orange-700);
+    }
+    .chat-status-bar a { color: var(--brand-orange-700); font-weight: 600; margin-left: auto; }
+
+    .chat-body { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; background: var(--ink-50); }
+    .day-sep {
+      text-align: center; font-size: 11px; color: var(--ink-500);
+      font-weight: 500; padding: 8px 0; position: relative;
+    }
+    .day-sep::before {
+      content: ''; position: absolute; left: 0; right: 0; top: 50%;
+      height: 1px; background: var(--ink-200); z-index: 0;
+    }
+    .day-sep span { background: var(--ink-50); padding: 0 12px; position: relative; z-index: 1; }
+
+    .msg { display: flex; gap: 10px; max-width: 78%; }
+    .msg.me { align-self: flex-end; flex-direction: row-reverse; }
+    .msg .avatar { width: 32px; height: 32px; font-size: 11px; flex-shrink: 0; }
+    .msg .bubble {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: 14px; padding: 10px 14px;
+      font-size: 13px; line-height: 1.5; color: var(--ink-900);
+    }
+    .msg.me .bubble {
+      background: var(--ink-900); color: var(--white); border-color: var(--ink-900);
+    }
+    .msg .meta {
+      font-size: 11px; color: var(--ink-500); margin-top: 4px;
+      display: flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono);
+    }
+    .msg.me .meta { justify-content: flex-end; }
+    .msg .meta .read { color: var(--brand-orange); }
+
+    .chat-input {
+      border-top: 1px solid var(--ink-200);
+      padding: 12px 18px;
+      display: flex; gap: 10px; align-items: flex-end;
+      background: var(--white);
+    }
+    .chat-input .toolbar { display: flex; gap: 4px; }
+    .chat-input .toolbar button {
+      width: 32px; height: 32px; border-radius: var(--r-sm);
+      background: transparent; border: 1px solid transparent;
+      color: var(--ink-600); cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .chat-input .toolbar button:hover { background: var(--ink-100); color: var(--ink-900); border-color: var(--ink-200); }
+    .chat-input textarea {
+      flex: 1; resize: none; min-height: 38px; max-height: 120px;
+      padding: 8px 12px; border: 1px solid var(--ink-200);
+      border-radius: var(--r-md); background: var(--white);
+      font-family: var(--font-sans); font-size: 13px; color: var(--ink-900); line-height: 1.4;
+    }
+    .chat-input textarea:focus { outline: none; border-color: var(--ink-400); }
+    .chat-input .send-btn { padding: 9px 14px; }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="employer" data-active="messaging">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Empleador · Messaging" data-i18n-en="Employer · Messaging">Empleador · Messaging</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Mensajes" data-i18n-en="Messages">Mensajes</h1>
+          <div class="t-body-sm muted" data-i18n-es="Conversaciones con candidatos por empleo" data-i18n-en="Conversations with candidates by job">Conversaciones con candidatos por empleo</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="btn btn-outline btn-sm"><i class="i" data-icon="settings"></i> <span data-i18n-es="Preferencias" data-i18n-en="Preferences">Preferencias</span></button>
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="msg-shell">
+
+        <!-- LEFT: threads -->
+        <aside class="threads">
+          <div class="threads-head">
+            <div class="threads-search">
+              <i class="i" data-icon="search"></i>
+              <input data-i18n-es-placeholder="Buscar candidato o empleo…" data-i18n-en-placeholder="Search candidate or job…" placeholder="Buscar candidato o empleo…" />
+            </div>
+          </div>
+
+          <div class="thread-filters">
+            <button class="active" data-i18n-es="Todos" data-i18n-en="All">Todos</button>
+            <button data-i18n-es="No leídos" data-i18n-en="Unread">No leídos</button>
+            <button data-i18n-es="Activos" data-i18n-en="Active">Activos</button>
+          </div>
+
+          <div class="thread-list">
+
+            <div class="thread active">
+              <div class="avatar">MG</div>
+              <div class="body">
+                <div class="top"><span class="nm">María González</span><span class="when">14:08</span></div>
+                <div class="position">Hospitality Marketing Lead</div>
+                <div class="preview">Hola Carlos, tengo unas preguntas sobre la posición. ¿Sería posible coordinar una llamada esta semana?</div>
+              </div>
+            </div>
+
+            <div class="thread unread">
+              <div class="avatar">AL</div>
+              <div class="body">
+                <div class="top">
+                  <span class="nm">Andrea López</span>
+                  <span class="unread-dot"></span>
+                </div>
+                <div class="position">Front Office Manager</div>
+                <div class="preview">Perfecto, confirmo la entrevista para el martes a las 10 AM. ¿Es presencial u online?</div>
+              </div>
+            </div>
+
+            <div class="thread">
+              <div class="avatar">DP</div>
+              <div class="body">
+                <div class="top"><span class="nm">Diego Pérez</span><span class="when" data-i18n-es="ayer" data-i18n-en="yest">ayer</span></div>
+                <div class="position">Senior Product Designer</div>
+                <div class="preview">Gracias por la oportunidad. Te paso mi portfolio actualizado en el siguiente link…</div>
+              </div>
+            </div>
+
+            <div class="thread">
+              <div class="avatar">SK</div>
+              <div class="body">
+                <div class="top"><span class="nm">Samantha Kim</span><span class="when">2d</span></div>
+                <div class="position">Concierge Specialist</div>
+                <div class="preview">¡Acepto la oferta! Muchas gracias por la confianza. ¿Cuándo empiezo?</div>
+              </div>
+            </div>
+
+            <div class="thread">
+              <div class="avatar">JR</div>
+              <div class="body">
+                <div class="top"><span class="nm">Jonathan Reyes</span><span class="when">3d</span></div>
+                <div class="position">Operations Manager</div>
+                <div class="preview">Buenos días Carlos, te escribo para preguntar si hay novedades sobre mi aplicación…</div>
+              </div>
+            </div>
+
+            <div class="thread">
+              <div class="avatar">CT</div>
+              <div class="body">
+                <div class="top"><span class="nm">Carolina Torres</span><span class="when">5d</span></div>
+                <div class="position">Marketing Manager</div>
+                <div class="preview">Aplicación recibida. Te confirmo recepción y te contactaremos en breve para próximos pasos.</div>
+              </div>
+            </div>
+
+            <div class="thread">
+              <div class="avatar">DV</div>
+              <div class="body">
+                <div class="top"><span class="nm">Daniel Vargas</span><span class="when">1w</span></div>
+                <div class="position">Building Engineer</div>
+                <div class="preview">¡Listo! Acabo de firmar el contrato. Nos vemos el lunes. Saludos.</div>
+              </div>
+            </div>
+
+          </div>
+        </aside>
+
+        <!-- RIGHT: chat -->
+        <section class="chat">
+          <div class="chat-head">
+            <div class="avatar avatar-lg">MG</div>
+            <div class="who">
+              <div class="nm">María González</div>
+              <div class="role">Senior UX Designer · <span data-i18n-es="Aplicó a" data-i18n-en="Applied to">Aplicó a</span> Hospitality Marketing Lead</div>
+            </div>
+            <span class="badge"><span class="dot" style="background: var(--violet);"></span>Interviewing</span>
+            <a href="e07-applicant-detail.html" class="btn btn-outline btn-sm" data-i18n-es="Ver perfil" data-i18n-en="View profile">Ver perfil</a>
+          </div>
+
+          <div class="chat-status-bar">
+            <i class="i" data-icon="alert-circle"></i>
+            <span data-i18n-es="Recordatorio: la conversación queda registrada y solo es visible para ti y el equipo. María no ve esto." data-i18n-en="Reminder: conversation is logged and visible only to you and your team. María cannot see this.">Recordatorio: la conversación queda registrada y solo es visible para ti y el equipo. María no ve esto.</span>
+            <a href="#" data-i18n-es="Ver políticas →" data-i18n-en="View policies →">Ver políticas →</a>
+          </div>
+
+          <div class="chat-body">
+            <div class="day-sep"><span data-i18n-es="22 Mar 2026" data-i18n-en="Mar 22, 2026">22 Mar 2026</span></div>
+
+            <div class="msg me">
+              <div class="avatar" style="background: var(--brand-orange); color: white;">CR</div>
+              <div>
+                <div class="bubble">
+                  Hola María, gracias por aplicar. Tu perfil nos llamó la atención. ¿Tienes disponibilidad para una llamada esta semana?
+                </div>
+                <div class="meta">10:42 <span class="read">✓✓</span></div>
+              </div>
+            </div>
+
+            <div class="msg">
+              <div class="avatar">MG</div>
+              <div>
+                <div class="bubble">
+                  ¡Hola Carlos! Gracias a ti por la consideración. Sí, claro. Tengo disponibilidad miércoles y jueves entre 10 AM y 4 PM. ¿Qué horario les funciona mejor?
+                </div>
+                <div class="meta">11:08</div>
+              </div>
+            </div>
+
+            <div class="day-sep"><span data-i18n-es="HOY · 28 Mar 2026" data-i18n-en="TODAY · Mar 28, 2026">HOY · 28 Mar 2026</span></div>
+
+            <div class="msg me">
+              <div class="avatar" style="background: var(--brand-orange); color: white;">CR</div>
+              <div>
+                <div class="bubble">
+                  Perfecto. Te envío invitación de Google Meet para el jueves 28 de marzo a las 10:00 AM. La entrevista será con Valeria López (HR Director) y yo. Durará ~60 minutos.
+                </div>
+                <div class="meta">09:14 <span class="read">✓✓</span></div>
+              </div>
+            </div>
+
+            <div class="msg">
+              <div class="avatar">MG</div>
+              <div>
+                <div class="bubble">
+                  Confirmado, agregado al calendario. ¿Hay algo específico que necesiten que prepare? ¿Portfolio, casos de estudio, algo en particular?
+                </div>
+                <div class="meta">09:22</div>
+              </div>
+            </div>
+
+            <div class="msg">
+              <div class="avatar">MG</div>
+              <div>
+                <div class="bubble">
+                  Hola Carlos, tengo unas preguntas sobre la posición. ¿Sería posible coordinar una llamada esta semana?
+                </div>
+                <div class="meta">14:08</div>
+              </div>
+            </div>
+          </div>
+
+          <form class="chat-input" onsubmit="event.preventDefault();">
+            <div class="toolbar">
+              <button type="button" title="Attach"><i class="i" data-icon="paperclip"></i></button>
+              <button type="button" title="Calendar"><i class="i" data-icon="calendar"></i></button>
+            </div>
+            <textarea data-i18n-es-placeholder="Escribe un mensaje…" data-i18n-en-placeholder="Type a message…" placeholder="Escribe un mensaje…"></textarea>
+            <button class="btn btn-primary send-btn" type="submit"><i class="i" data-icon="send"></i> <span data-i18n-es="Enviar" data-i18n-en="Send">Enviar</span></button>
+          </form>
+        </section>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>

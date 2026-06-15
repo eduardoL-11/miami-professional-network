@@ -42,6 +42,14 @@
     @media (max-width: 800px) { .info-grid { grid-template-columns: repeat(2, 1fr); } }
     .info-grid .lbl { font-size: 10px; color: var(--ink-500); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 4px; }
     .info-grid .val { font-size: 13px; color: var(--ink-900); font-weight: 500; }
+    .open-roles-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--brand-orange-700); font-weight: 600; text-decoration: none;
+      transition: color .12s, transform .12s;
+    }
+    .open-roles-link:hover { color: var(--brand-orange); text-decoration: none; }
+    .open-roles-link:hover .i { transform: translate(2px, -2px); }
+    .open-roles-link .i { transition: transform .12s; }
 
     .needs-block {
       background: var(--ink-50); border: 1px solid var(--ink-200);
@@ -78,7 +86,7 @@
       <div class="topbar">
         <div>
           <div class="t-overline muted" data-i18n-es="Admin · Aprobaciones" data-i18n-en="Admin · Approvals">Admin · Aprobaciones</div>
-          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Aprobaciones de empleadores" data-i18n-en="Employer approvals">Aprobaciones de empleadores</h1>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Aprobados y rechazados" data-i18n-en="Approved and rejected">Aprobados y rechazados</h1>
           <div class="t-body-sm muted" data-i18n-es="Revisa las solicitudes de acceso. Tiempo promedio: 1.2 días." data-i18n-en="Review access requests. Average turnaround: 1.2 days.">Revisa las solicitudes de acceso. Tiempo promedio: 1.2 días.</div>
         </div>
         <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
@@ -101,7 +109,7 @@
         <input data-i18n-es-placeholder="Buscar por nombre de empresa, industria, contacto…" data-i18n-en-placeholder="Search by company name, industry, contact…" placeholder="Buscar por nombre de empresa, industria, contacto…" />
         <select class="select" style="width: auto; min-width: 140px; border: 0; background-color: transparent;">
           <option data-i18n-es="Todas las industrias" data-i18n-en="All industries">Todas las industrias</option>
-          <option>Hospitality</option><option>Tech</option><option>Construction</option>
+          <option>Finance & Investment</option><option>Legal & Compliance</option><option>Technology & Software</option><option>Real Estate & Construction</option><option>Healthcare & Life Sciences</option><option>Consulting & Strategy</option><option>Marketing & Communications</option><option>Hospitality & Entertainment</option><option>Media & Creative</option><option>Government & Public Policy</option><option>Human Resources & Talent</option>
         </select>
       </div>
 
@@ -121,7 +129,7 @@
           <div><div class="lbl" data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</div><div class="val">Ana Vargas</div></div>
           <div><div class="lbl">Email</div><div class="val">ana@palmbeach.studio</div></div>
           <div><div class="lbl" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</div><div class="val">+1 (305) 555-0188</div></div>
-          <div><div class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</div><div class="val">4</div></div>
+          <div><div class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</div><a href="a05-job-management.html?employer=palm-beach-studios" class="open-roles-link"><span class="val">4</span> <i class="i i-sm" data-icon="arrow-up-right"></i></a></div>
         </div>
 
         <div class="needs-block">
@@ -152,7 +160,7 @@
           <div><div class="lbl" data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</div><div class="val">Pedro Castillo</div></div>
           <div><div class="lbl">Email</div><div class="val">pedro@coastalv.com</div></div>
           <div><div class="lbl" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</div><div class="val">+1 (786) 555-2014</div></div>
-          <div><div class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</div><div class="val">8</div></div>
+          <div><div class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</div><a href="a05-job-management.html?employer=coastal-ventures" class="open-roles-link"><span class="val">8</span> <i class="i i-sm" data-icon="arrow-up-right"></i></a></div>
         </div>
 
         <div class="needs-block">
@@ -183,7 +191,7 @@
           <div><div class="lbl" data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</div><div class="val">Ricardo Méndez</div></div>
           <div><div class="lbl">Email</div><div class="val">r.mendez@doralcc.com</div></div>
           <div><div class="lbl" data-i18n-es="Teléfono" data-i18n-en="Phone">Teléfono</div><div class="val">+1 (305) 555-9921</div></div>
-          <div><div class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</div><div class="val">12</div></div>
+          <div><div class="lbl" data-i18n-es="Roles abiertos" data-i18n-en="Open roles">Roles abiertos</div><a href="a05-job-management.html?employer=doral-construction" class="open-roles-link"><span class="val">12</span> <i class="i i-sm" data-icon="arrow-up-right"></i></a></div>
         </div>
 
         <div class="needs-block">

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-13 · Métodos de pago — Miami Professional Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/brand.css" />
+  <link rel="stylesheet" href="../../css/lang-toggle.css" />
+  <style>
+    .layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+    @media (max-width: 1100px) { .layout { grid-template-columns: 1fr; } }
+
+    .section {
+      background: var(--white); border: 1px solid var(--ink-200);
+      border-radius: var(--r-lg); padding: 24px; margin-bottom: 16px;
+    }
+    .section h3 { margin: 0 0 4px; }
+    .section .sec-desc { margin: 0 0 18px; font-size: 13px; color: var(--ink-600); }
+    .section-head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 16px; gap: 12px;
+    }
+
+    /* Credit card visual */
+    .card-visual {
+      position: relative;
+      background: linear-gradient(135deg, #0E1410 0%, #1F2926 50%, #1A0F22 100%);
+      color: #FFFFFF;
+      border-radius: var(--r-lg);
+      padding: 22px;
+      aspect-ratio: 1.586/1; /* credit card ratio */
+      max-width: 380px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .card-visual::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(243,107,27,0.30) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .card-visual > * { position: relative; z-index: 1; }
+    .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+    .card-brand-text { font-size: 11px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+    .card-network {
+      width: 48px; height: 30px;
+      background: linear-gradient(135deg, #FF8541, #F36B1B);
+      border-radius: var(--r-xs);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; color: white;
+    }
+    .card-chip { width: 36px; height: 26px; background: linear-gradient(135deg, #D6DCD9, #94A09A); border-radius: 5px; margin-bottom: 18px; }
+    .card-number { font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.04em; color: #FFFFFF; margin-bottom: 18px; }
+    .card-foot { display: flex; align-items: flex-end; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.75); }
+    .card-foot .lbl { font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.50); margin-bottom: 2px; }
+    .card-foot .val { font-weight: 600; color: #FFFFFF; font-family: var(--font-mono); }
+
+    /* Method cards (list) */
+    .method-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px; background: var(--ink-50);
+      border: 1px solid var(--ink-200); border-radius: var(--r-md);
+      margin-bottom: 10px;
+    }
+    .method-row .ico-sq {
+      width: 44px; height: 44px; border-radius: var(--r-md);
+      background: var(--white); border: 1px solid var(--ink-200);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 20px; color: var(--ink-700);
+      flex-shrink: 0;
+    }
+    .method-row .info { flex: 1; min-width: 0; }
+    .method-row .nm { font-size: 14px; font-weight: 600; color: var(--ink-900); }
+    .method-row .meta { font-size: 12px; color: var(--ink-600); margin-top: 2px; font-family: var(--font-mono); }
+    .method-row .badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+
+    .field-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field-grid-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .field-grid-2, .field-grid-3 { grid-template-columns: 1fr; } }
+
+    .add-action {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+
+    /* Side card */
+    .side-col { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 24px; }
+    .side-card { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 20px; }
+    .side-card .row-line { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; }
+    .side-card .row-line .l { color: var(--ink-600); }
+    .side-card .row-line .v { color: var(--ink-900); font-weight: 600; }
+    .side-card .row-line.total { border-top: 1px solid var(--ink-200); margin-top: 6px; padding-top: 14px; font-weight: 700; }
+    .side-card .row-line.total .v { font-size: 16px; }
+
+    .info-banner {
+      display: flex; gap: 12px; padding: 12px 14px;
+      background: var(--info-bg); border: 1px solid rgba(37,99,235,0.18);
+      border-radius: var(--r-md);
+      font-size: 13px; color: var(--ink-700); margin-bottom: 16px;
+    }
+    .info-banner > .i { color: var(--info); font-size: 18px; margin-top: 1px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell" data-shell="employer" data-active="company">
+    <main class="app-main">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div>
+          <div class="t-overline muted" data-i18n-es="Empleador · Métodos de pago" data-i18n-en="Employer · Payment methods">Empleador · Métodos de pago</div>
+          <h1 class="t-h2" style="margin:4px 0 4px;" data-i18n-es="Métodos de pago" data-i18n-en="Payment methods">Métodos de pago</h1>
+          <div class="t-body-sm muted" data-i18n-es="Configura el método principal y el respaldo para el cobro del fee 1% al contratar" data-i18n-en="Set up your primary and backup method for the 1% fee at hire">Configura el método principal y el respaldo para el cobro del fee 1% al contratar</div>
+        </div>
+        <div class="row items-center gap-3">
+          <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><i class="i" data-icon="moon" data-theme-icon="dark"></i><i class="i" data-icon="sun" data-theme-icon="light"></i></button>
+          <div class="lang-toggle">
+            <button data-lang="es">ES</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info banner -->
+      <div class="info-banner">
+        <i class="i" data-icon="shield-check"></i>
+        <div>
+          <strong data-i18n-es="Requerimos un método principal + respaldo." data-i18n-en="We require a primary method + backup.">Requerimos un método principal + respaldo.</strong>
+          <span data-i18n-es="El cobro del 1% se realiza solo cuando confirmas una contratación. Pagos cifrados y procesados con un proveedor PCI-compliant (Stripe o Squarespace TBD)." data-i18n-en="The 1% fee is charged only on confirmed hire. Payments encrypted and processed via a PCI-compliant provider (Stripe or Squarespace TBD)."> El cobro del 1% se realiza solo cuando confirmas una contratación. Pagos cifrados y procesados con un proveedor PCI-compliant (Stripe o Squarespace TBD).</span>
+        </div>
+      </div>
+
+      <div class="layout">
+
+        <!-- LEFT -->
+        <div>
+
+          <!-- Primary credit card -->
+          <div class="section">
+            <div class="section-head">
+              <div>
+                <h3 class="t-h4" data-i18n-es="Método principal" data-i18n-en="Primary method">Método principal <span style="color: var(--brand-orange); font-size: 13px; font-weight: 600; margin-left: 4px;" data-i18n-es="· Tarjeta de crédito requerida" data-i18n-en="· Credit card required">· Tarjeta de crédito requerida</span></h3>
+                <p class="sec-desc" data-i18n-es="Tarjeta de crédito principal. Se cobra al confirmar cada hire." data-i18n-en="Primary credit card. Charged on each confirmed hire.">Tarjeta de crédito principal. Se cobra al confirmar cada hire.</p>
+              </div>
+              <span class="badge"><span class="dot" style="background: var(--success);"></span><span data-i18n-es="Activo" data-i18n-en="Active">Activo</span></span>
+            </div>
+
+            <!-- Card preview -->
+            <div class="card-visual">
+              <div class="card-top">
+                <div class="card-brand-text">Miami PN</div>
+                <div class="card-network">VISA</div>
+              </div>
+              <div class="card-chip"></div>
+              <div class="card-number">•••• •••• •••• 4242</div>
+              <div class="card-foot">
+                <div>
+                  <div class="lbl" data-i18n-es="Titular" data-i18n-en="Cardholder">Titular</div>
+                  <div class="val">Carlos Rivera</div>
+                </div>
+                <div>
+                  <div class="lbl">Exp.</div>
+                  <div class="val">11 / 28</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row gap-2">
+              <button class="btn btn-outline btn-sm"><i class="i" data-icon="edit"></i> <span data-i18n-es="Editar" data-i18n-en="Edit">Editar</span></button>
+              <button class="btn btn-ghost btn-sm" style="color: var(--danger);"><i class="i" data-icon="trash"></i> <span data-i18n-es="Eliminar" data-i18n-en="Remove">Eliminar</span></button>
+            </div>
+          </div>
+
+          <!-- Backup checking account -->
+          <div class="section">
+            <div class="section-head">
+              <div>
+                <h3 class="t-h4" data-i18n-es="Método de respaldo" data-i18n-en="Backup method">Método de respaldo <span style="color: var(--brand-orange); font-size: 13px; font-weight: 600; margin-left: 4px;" data-i18n-es="· Cuenta corriente requerida" data-i18n-en="· Checking account required">· Cuenta corriente requerida</span></h3>
+                <p class="sec-desc" data-i18n-es="Se usa si el cobro principal falla. ACH/wire desde tu cuenta corriente." data-i18n-en="Used if the primary charge fails. ACH/wire from your checking account.">Se usa si el cobro principal falla. ACH/wire desde tu cuenta corriente.</p>
+              </div>
+              <span class="badge"><span class="dot" style="background: var(--success);"></span><span data-i18n-es="Verificada" data-i18n-en="Verified">Verificada</span></span>
+            </div>
+
+            <div class="method-row">
+              <div class="ico-sq"><i class="i" data-icon="building"></i></div>
+              <div class="info">
+                <div class="nm">Chase Bank · Business Checking</div>
+                <div class="meta">•••••• 8924 · Routing 021000021</div>
+                <div class="badges">
+                  <span class="badge"><span class="dot" style="background: var(--success);"></span><span data-i18n-es="Verificada" data-i18n-en="Verified">Verificada</span></span>
+                  <span class="badge"><span class="dot" style="background: var(--ink-400);"></span><span data-i18n-es="Solo respaldo" data-i18n-en="Backup only">Solo respaldo</span></span>
+                </div>
+              </div>
+              <button class="btn btn-outline btn-sm"><i class="i" data-icon="edit"></i> <span data-i18n-es="Editar" data-i18n-en="Edit">Editar</span></button>
+            </div>
+          </div>
+
+          <!-- Add new methods section -->
+          <div class="section">
+            <div class="section-head">
+              <div>
+                <h3 class="t-h4" data-i18n-es="Agregar método" data-i18n-en="Add method">Agregar método</h3>
+                <p class="sec-desc" data-i18n-es="Puedes registrar más tarjetas o cuentas para tener opciones." data-i18n-en="You can register more cards or accounts to have options.">Puedes registrar más tarjetas o cuentas para tener opciones.</p>
+              </div>
+            </div>
+
+            <div class="add-action">
+              <button class="btn btn-outline"><i class="i" data-icon="plus"></i> <span data-i18n-es="Agregar tarjeta de crédito" data-i18n-en="Add credit card">Agregar tarjeta de crédito</span></button>
+              <button class="btn btn-outline"><i class="i" data-icon="plus"></i> <span data-i18n-es="Agregar cuenta corriente" data-i18n-en="Add checking account">Agregar cuenta corriente</span></button>
+            </div>
+          </div>
+
+          <!-- Billing settings -->
+          <div class="section">
+            <h3 class="t-h4" data-i18n-es="Información de facturación" data-i18n-en="Billing information">Información de facturación</h3>
+            <p class="sec-desc" data-i18n-es="Se incluirá en cada factura de hire." data-i18n-en="Will be included on each hire invoice.">Se incluirá en cada factura de hire.</p>
+
+            <div class="stack-4" style="display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <label class="label" data-i18n-es="Razón social" data-i18n-en="Legal name">Razón social <span class="req">*</span></label>
+                <input class="input" value="Sunset Hotels Group, LLC" />
+              </div>
+              <div class="field-grid-2">
+                <div>
+                  <label class="label" data-i18n-es="Tax ID / EIN" data-i18n-en="Tax ID / EIN">Tax ID / EIN <span class="req">*</span></label>
+                  <input class="input" value="XX-XXXXXXX" />
+                </div>
+                <div>
+                  <label class="label" data-i18n-es="Email de facturación" data-i18n-en="Billing email">Email de facturación <span class="req">*</span></label>
+                  <input class="input" value="billing@sunset.com" type="email" />
+                </div>
+              </div>
+              <div>
+                <label class="label" data-i18n-es="Dirección" data-i18n-en="Address">Dirección</label>
+                <input class="input" value="1450 Brickell Ave, Suite 1800" />
+              </div>
+              <div class="field-grid-3">
+                <div>
+                  <label class="label" data-i18n-es="Ciudad" data-i18n-en="City">Ciudad</label>
+                  <input class="input" value="Miami" />
+                </div>
+                <div>
+                  <label class="label" data-i18n-es="Estado" data-i18n-en="State">Estado</label>
+                  <input class="input" value="FL" />
+                </div>
+                <div>
+                  <label class="label" data-i18n-es="ZIP" data-i18n-en="ZIP">ZIP</label>
+                  <input class="input" value="33131" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row justify-end gap-2 mt-6" style="display: flex; justify-content: flex-end; margin-top: 18px;">
+              <button class="btn btn-ghost" data-i18n-es="Cancelar" data-i18n-en="Cancel">Cancelar</button>
+              <button class="btn btn-primary" data-i18n-es="Guardar cambios" data-i18n-en="Save changes">Guardar cambios</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT sidebar -->
+        <aside class="side-col">
+
+          <!-- Pending fee preview -->
+          <div class="side-card">
+            <div class="t-h4 mb-4" data-i18n-es="Próximo cobro" data-i18n-en="Next charge">Próximo cobro</div>
+            <div class="row-line"><span class="l" data-i18n-es="Hire pendiente" data-i18n-en="Pending hire">Hire pendiente</span><span class="v">María González</span></div>
+            <div class="row-line"><span class="l" data-i18n-es="Salario base anual" data-i18n-en="Annual base salary">Salario base anual</span><span class="v">$95,000</span></div>
+            <div class="row-line"><span class="l" data-i18n-es="Fee plataforma" data-i18n-en="Platform fee">Fee plataforma</span><span class="v">1.00%</span></div>
+            <div class="row-line total"><span class="l" data-i18n-es="Total a cobrar" data-i18n-en="Total to charge">Total a cobrar</span><span class="v">$950.00</span></div>
+            <div class="t-body-sm muted mt-3" style="margin-top: 10px;" data-i18n-es="Se cobrará a Visa •••• 4242 al confirmar la contratación." data-i18n-en="Will be charged to Visa •••• 4242 upon confirmed hire.">Se cobrará a Visa •••• 4242 al confirmar la contratación.</div>
+          </div>
+
+          <!-- Provider -->
+          <div class="side-card">
+            <div class="t-h4 mb-3" data-i18n-es="Procesador" data-i18n-en="Processor">Procesador</div>
+            <p class="t-body-sm muted" style="margin: 0;" data-i18n-es="Pagos procesados con un proveedor PCI-compliant. La elección entre Stripe y Squarespace está pendiente." data-i18n-en="Payments processed via a PCI-compliant provider. Stripe vs Squarespace choice pending.">Pagos procesados con un proveedor PCI-compliant. La elección entre Stripe y Squarespace está pendiente.</p>
+            <div class="row gap-2 mt-4" style="margin-top: 14px;">
+              <span class="badge"><span class="dot" style="background: var(--info);"></span>Stripe</span>
+              <span class="badge"><span class="dot" style="background: var(--ink-400);"></span>Squarespace</span>
+            </div>
+          </div>
+
+          <!-- Help -->
+          <div class="side-card">
+            <div class="t-h4 mb-3" data-i18n-es="Ayuda" data-i18n-en="Help">Ayuda</div>
+            <div class="t-body-sm" style="line-height: 1.55; color: var(--ink-700);" data-i18n-es="¿Dudas sobre facturación o pagos? Escríbenos a billing@miamipn.com." data-i18n-en="Questions about billing or payments? Email us at billing@miamipn.com.">¿Dudas sobre facturación o pagos? Escríbenos a billing@miamipn.com.</div>
+            <a href="#" class="btn btn-outline btn-sm mt-3" style="margin-top: 12px;"><i class="i" data-icon="mail"></i> <span data-i18n-es="Contactar billing" data-i18n-en="Contact billing">Contactar billing</span></a>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/icons.js"></script>
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/shell.js"></script>
+</body>
+</html>
