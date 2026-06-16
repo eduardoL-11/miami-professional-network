@@ -1,22 +1,23 @@
 /* Miami Professional Network — Brand tokens (refined: tech / minimal / clean) */
 
 :root {
-  /* Brand */
+  /* Brand — Miami identity stays in CTAs, dots, logo + key accents.
+     Tints 50/100 are intentionally near-neutral so they read as quiet grays. */
   --brand-green: #295E24;
   --brand-green-800: #19381A;
   --brand-green-700: #1F4A1B;
   --brand-green-600: #295E24;
   --brand-green-500: #357A2E;
-  --brand-green-100: #E4F0E2;
-  --brand-green-50:  #F3F8F2;
+  --brand-green-100: #ECEFEC;
+  --brand-green-50:  #F6F7F6;
 
   --brand-orange: #F36B1B;
   --brand-orange-800: #A8420A;
   --brand-orange-700: #C8530E;
   --brand-orange-600: #F36B1B;
   --brand-orange-500: #FF8541;
-  --brand-orange-100: #FCE2D1;
-  --brand-orange-50:  #FFF4EC;
+  --brand-orange-100: #F0EAE5;
+  --brand-orange-50:  #F8F5F2;
 
   /* Neutrals (cooler, cleaner) */
   --ink-900: #0E1410;
@@ -31,7 +32,7 @@
   --ink-50:  #FBFCFB;
   --white:   #FFFFFF;
 
-  /* Semantic — slightly muted, tech feel */
+  /* Semantic — used as subtle hints (functional state colors) */
   --info:    #2563EB;
   --info-bg: #EFF6FF;
   --success: #16A34A;
@@ -508,13 +509,13 @@ a:hover { text-decoration: underline; text-decoration-color: var(--brand-green-1
   content: '';
   position: absolute;
   left: -10px;
-  top: 8px;
-  bottom: 8px;
+  top: 10px;
+  bottom: 10px;
   width: 2px;
-  background: var(--brand-orange);
+  background: rgba(255,255,255,0.55);
   border-radius: var(--r-full);
 }
-.sidebar .nav a.active .i { color: var(--brand-orange); }
+.sidebar .nav a.active .i { color: var(--white); }
 .sidebar .nav .section {
   font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
   color: rgba(255,255,255,0.35); padding: 14px 10px 4px; font-weight: 600;

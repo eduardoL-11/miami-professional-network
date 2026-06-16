@@ -12,13 +12,13 @@
   <style>
     .stat-card {
       background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg);
-      padding: 20px; display: flex; flex-direction: column; gap: 6px;
+      padding: 18px 20px; display: flex; flex-direction: column; gap: 4px;
     }
-    .stat-card .label { font-size: 12px; color: var(--ink-600); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
-    .stat-card .value { font-size: 32px; font-weight: 700; color: var(--ink-900); line-height: 1; }
-    .stat-card .delta { font-size: 12px; font-weight: 600; }
-    .stat-card .delta.up   { color: var(--success); }
-    .stat-card .delta.warn { color: var(--warning); }
+    .stat-card .label { font-size: 12px; color: var(--ink-600); font-weight: 500; }
+    .stat-card .value { font-size: 28px; font-weight: 600; color: var(--ink-900); line-height: 1.1; letter-spacing: -0.02em; }
+    .stat-card .delta { font-size: 12px; font-weight: 500; color: var(--ink-500); }
+    .stat-card .delta.up   { color: var(--ink-500); }
+    .stat-card .delta.warn { color: var(--ink-500); }
     .stat-card .delta.danger { color: var(--danger); }
 
     .applicant-row {
@@ -83,13 +83,13 @@
         </div>
         <div class="stat-card">
           <span class="label" data-i18n-es="Por revisar" data-i18n-en="To review">Por revisar</span>
-          <span class="value" style="color: var(--brand-orange);">9</span>
-          <span class="delta warn" data-i18n-es="Nuevos hoy" data-i18n-en="New today">Nuevos hoy</span>
+          <span class="value">9</span>
+          <span class="delta" data-i18n-es="Nuevos hoy" data-i18n-en="New today">Nuevos hoy</span>
         </div>
         <div class="stat-card">
           <span class="label" data-i18n-es="Vencidas" data-i18n-en="Overdue">Vencidas</span>
-          <span class="value" style="color: var(--danger);">2</span>
-          <span class="delta danger" data-i18n-es="+14 días Under Review" data-i18n-en="+14 days Under Review">+14 días Under Review</span>
+          <span class="value">2</span>
+          <span class="delta" data-i18n-es="+14 días Under Review" data-i18n-en="+14 days Under Review">+14 días Under Review</span>
         </div>
       </div>
 

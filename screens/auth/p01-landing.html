@@ -35,29 +35,36 @@
     }
     .hero-bg {
       position: absolute; inset: 0; z-index: 0;
-      background:
-        linear-gradient(98deg,
-          rgba(2,5,16,0.92) 0%,
-          rgba(2,5,16,0.72) 32%,
-          rgba(2,5,16,0.30) 62%,
-          rgba(2,5,16,0.58) 100%),
-        url("../../assets/miami-night-2.jpg") center/cover no-repeat,
-        #050810;
+      overflow: hidden;
+      background: #050810;
+    }
+    .hero-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(180deg,
+        rgba(2,5,16,0.55) 0%,
+        rgba(2,5,16,0.45) 35%,
+        rgba(2,5,16,0.62) 100%);
     }
     .hero-inner {
       position: relative; z-index: 2;
       max-width: 1280px; width: 100%;
       margin: 0 auto;
       padding: 96px 32px 80px;
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 64px;
-      align-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
     }
     @media (max-width: 980px) {
       .hero { min-height: 640px; }
-      .hero-inner { grid-template-columns: 1fr; padding: 56px 24px; gap: 40px; }
-      .hero-cards { display: none; }
+      .hero-inner { padding: 56px 24px; }
     }
 
     .hero-content { color: #FFFFFF; }
@@ -105,7 +112,7 @@
     }
 
     .hero-ctas { display: flex; gap: 12px; margin-bottom: 48px; flex-wrap: wrap; }
-    .hero .btn-primary { box-shadow: 0 8px 24px rgba(243,107,27,0.30); }
+    .hero .btn-primary { box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
     .hero .btn-cta-ghost {
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.18);
@@ -131,196 +138,6 @@
       font-size: 12px; color: rgba(255,255,255,0.58);
       margin-top: 6px;
     }
-
-    /* === Symbol stage (Miami logo animation) === */
-    .symbol-stage {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1;
-      max-width: 520px;
-      max-height: 520px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* Concentric "broadcast" halo rings */
-    .halo {
-      position: absolute;
-      border-radius: 50%;
-      border: 1px solid rgba(243,107,27,0.35);
-      animation: haloPulse 5s cubic-bezier(.22,.6,.36,1) infinite;
-      pointer-events: none;
-    }
-    .halo-1 { width: 38%; height: 38%; animation-delay: 0s; }
-    .halo-2 { width: 56%; height: 56%; animation-delay: 1.3s; }
-    .halo-3 { width: 76%; height: 76%; animation-delay: 2.6s; }
-    .halo-4 { width: 96%; height: 96%; animation-delay: 3.9s; }
-    @keyframes haloPulse {
-      0%   { transform: scale(0.7); opacity: 0; }
-      18%  { opacity: 1; }
-      100% { transform: scale(1.45); opacity: 0; }
-    }
-
-    /* Ambient orange glow disc behind symbol */
-    .symbol-glow {
-      position: absolute;
-      width: 60%; height: 60%;
-      background: radial-gradient(circle, rgba(243,107,27,0.30) 0%, rgba(243,107,27,0.06) 50%, transparent 75%);
-      filter: blur(20px);
-      animation: glowBreath 6s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes glowBreath {
-      0%, 100% { transform: scale(0.95); opacity: 0.7; }
-      50%      { transform: scale(1.05); opacity: 1; }
-    }
-
-    /* The symbol itself */
-    .symbol-wrap {
-      position: relative;
-      width: 56%;
-      aspect-ratio: 1;
-      z-index: 2;
-      animation: symRotate 90s linear infinite;
-    }
-    @keyframes symRotate {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    .symbol-svg {
-      width: 100%; height: 100%;
-      filter: drop-shadow(0 0 28px rgba(243,107,27,0.55))
-              drop-shadow(0 0 60px rgba(243,107,27,0.30));
-    }
-    .symbol-svg .arm {
-      fill: #F36B1B;
-      transform-box: view-box;
-      transform-origin: 521.1px 521.1px;
-      animation: armPulse 4.2s ease-in-out infinite;
-    }
-    .symbol-svg .arm-up    { animation-delay: 0s; }
-    .symbol-svg .arm-right { animation-delay: 1.05s; }
-    .symbol-svg .arm-down  { animation-delay: 2.1s; }
-    .symbol-svg .arm-left  { animation-delay: 3.15s; }
-    @keyframes armPulse {
-      0%, 100% { opacity: 0.92; }
-      50%      { opacity: 1;    fill: #FF8541; }
-    }
-
-    /* Small orbiting dots (network nodes) */
-    .orbit-dot {
-      position: absolute;
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--brand-orange-500);
-      box-shadow: 0 0 12px rgba(243,107,27,0.85);
-    }
-    .od-1 {
-      top: 14%; left: 50%;
-      animation: orbit-a 14s linear infinite;
-      transform-origin: 0 220px;
-    }
-    .od-2 {
-      bottom: 14%; left: 50%;
-      animation: orbit-b 18s linear infinite;
-      transform-origin: 0 -220px;
-      width: 5px; height: 5px;
-      background: rgba(255,255,255,0.85);
-      box-shadow: 0 0 10px rgba(255,255,255,0.6);
-    }
-    .od-3 {
-      top: 50%; left: 14%;
-      animation: orbit-c 22s linear infinite;
-      transform-origin: 220px 0;
-      width: 6px; height: 6px;
-      background: rgba(255,180,138,0.95);
-      box-shadow: 0 0 10px rgba(243,107,27,0.6);
-    }
-    @keyframes orbit-a {
-      from { transform: rotate(0deg)   translateX(0); }
-      to   { transform: rotate(360deg) translateX(0); }
-    }
-    @keyframes orbit-b {
-      from { transform: rotate(0deg)   translateX(0); }
-      to   { transform: rotate(-360deg) translateX(0); }
-    }
-    @keyframes orbit-c {
-      from { transform: rotate(0deg)   translateX(0); }
-      to   { transform: rotate(360deg) translateX(0); }
-    }
-
-    /* === Live activity strip (below hero, before For You) === */
-    .activity-strip {
-      background: var(--white);
-      border-bottom: 1px solid var(--ink-200);
-      padding: 40px 0 56px;
-      overflow: hidden;
-      position: relative;
-    }
-    .activity-head {
-      max-width: 1200px; margin: 0 auto 22px; padding: 0 32px;
-      display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
-    }
-    .activity-head .live-pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.10em;
-      text-transform: uppercase; color: var(--brand-orange-700);
-    }
-    .activity-head .live-pill::before {
-      content: ''; width: 8px; height: 8px; border-radius: 50%;
-      background: var(--brand-orange);
-      box-shadow: 0 0 0 4px rgba(243,107,27,0.18);
-      animation: livePulse 1.8s ease-in-out infinite;
-    }
-    @keyframes livePulse {
-      0%, 100% { box-shadow: 0 0 0 4px rgba(243,107,27,0.18); }
-      50%      { box-shadow: 0 0 0 10px rgba(243,107,27,0); }
-    }
-    .activity-head h3 {
-      font-size: 16px; font-weight: 600; color: var(--ink-900);
-      margin: 0; letter-spacing: -0.01em;
-    }
-
-    .ticker {
-      mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
-    }
-    .ticker-track {
-      display: flex; gap: 14px;
-      width: max-content;
-      padding: 4px 32px;
-      animation: tickerScroll 45s linear infinite;
-    }
-    .ticker:hover .ticker-track { animation-play-state: paused; }
-    @keyframes tickerScroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-
-    .tcard {
-      background: var(--white);
-      border: 1px solid var(--ink-200);
-      border-radius: var(--r-md);
-      padding: 12px 16px;
-      display: flex; gap: 12px; align-items: center;
-      min-width: 300px;
-      box-shadow: var(--shadow-xs);
-      transition: border-color .15s ease, box-shadow .15s ease;
-    }
-    .tcard:hover { border-color: var(--ink-300); box-shadow: var(--shadow-sm); }
-    .tcard .avatar { width: 32px; height: 32px; font-size: 11px; flex-shrink: 0; }
-    .tcard .avatar.orange { background: var(--brand-orange-50); color: var(--brand-orange-700); border-color: rgba(243,107,27,0.18); }
-    .tcard .ico-sq {
-      width: 32px; height: 32px; border-radius: var(--r-sm);
-      background: var(--ink-100); color: var(--ink-700);
-      display: inline-flex; align-items: center; justify-content: center;
-      font-size: 14px; flex-shrink: 0;
-    }
-    .tcard .ico-sq.orange { background: var(--brand-orange-50); color: var(--brand-orange-700); }
-    .tcard .info { flex: 1; min-width: 0; }
-    .tcard .nm { font-size: 13px; font-weight: 600; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tcard .rl { font-size: 11px; color: var(--ink-600); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tcard .timeago { font-size: 10px; color: var(--ink-500); font-family: var(--font-mono); flex-shrink: 0; }
 
     /* Section base */
     section.s { padding: 96px 0; }
@@ -585,11 +402,16 @@
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-bg" aria-hidden="true">
+      <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="../../assets/miami-night-2.jpg">
+        <source src="../../assets/miamivideo.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-overlay"></div>
+    </div>
 
     <div class="hero-inner">
 
-      <div class="hero-content">
+      <div class="hero-content" style="max-width: 760px;">
         <div class="hero-badge">
           <span class="dot"></span>
           <span data-i18n-es="Plataforma curada · Miami, FL" data-i18n-en="Curated network · Miami, FL">Plataforma curada · Miami, FL</span>
@@ -610,140 +432,6 @@
         </div>
       </div>
 
-      <!-- Animated Miami symbol -->
-      <div class="symbol-stage" aria-hidden="true">
-        <div class="symbol-glow"></div>
-        <div class="halo halo-1"></div>
-        <div class="halo halo-2"></div>
-        <div class="halo halo-3"></div>
-        <div class="halo halo-4"></div>
-
-        <div class="symbol-wrap">
-          <svg class="symbol-svg" viewBox="0 0 1042.2 1042.2" xmlns="http://www.w3.org/2000/svg">
-            <path class="arm arm-down"  d="M637.3,712.5l-46.6,46.6v-130.6h-139.2v130.6l-58.1-58.1h-35.2v30.7l104.4,104.5c32.2,32.2,84.5,32.2,116.7,0l104.4-104.5v-103.3h-46.6v84Z"/>
-            <path class="arm arm-left"  d="M413.6,637.3h-84l-46.6-46.6h130.6v-139.2h-130.6l58.1-58.1v-35.2h-30.7l-104.5,104.4c-32.2,32.2-32.2,84.5,0,116.7l104.5,104.4h103.3v-46.6Z"/>
-            <path class="arm arm-up"    d="M404.9,329.6l46.6-46.6v130.6h139.2v-130.6l58.1,58.1h35.2v-30.7l-104.4-104.5c-32.2-32.2-84.5-32.2-116.7,0l-104.4,104.5v103.3h46.6v-84Z"/>
-            <path class="arm arm-right" d="M731.8,358.3h-103.3v46.6h84l46.6,46.6h-130.6v139.2h130.6l-58.1,58.1v35.2h30.7l104.5-104.4c32.2-32.2,32.2-84.5,0-116.7l-104.5-104.4Z"/>
-          </svg>
-        </div>
-
-        <span class="orbit-dot od-1"></span>
-        <span class="orbit-dot od-2"></span>
-        <span class="orbit-dot od-3"></span>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Live activity strip — bridges dark hero to light content -->
-  <section class="activity-strip" aria-label="Live activity">
-    <div class="activity-head">
-      <span class="live-pill" data-i18n-es="En vivo" data-i18n-en="Live">En vivo</span>
-      <h3 data-i18n-es="Pasa ahora en Miami Professional Network" data-i18n-en="Happening now on Miami Professional Network">Pasa ahora en Miami Professional Network</h3>
-    </div>
-
-    <div class="ticker">
-      <div class="ticker-track">
-        <!-- First copy -->
-        <article class="tcard">
-          <div class="avatar">MG</div>
-          <div class="info">
-            <div class="nm">María González</div>
-            <div class="rl" data-i18n-es="Senior UX Designer · Hired" data-i18n-en="Senior UX Designer · Hired">Senior UX Designer · Hired</div>
-          </div>
-          <span class="badge"><span class="dot" style="background: var(--success);"></span>Hired</span>
-        </article>
-        <article class="tcard">
-          <div class="ico-sq"><i class="i" data-icon="briefcase"></i></div>
-          <div class="info">
-            <div class="nm">Hospitality Marketing Lead</div>
-            <div class="rl">Sunset Hotels · Miami</div>
-          </div>
-          <span class="timeago">3d</span>
-        </article>
-        <article class="tcard">
-          <div class="ico-sq orange"><i class="i" data-icon="gift"></i></div>
-          <div class="info">
-            <div class="nm" data-i18n-es="Oferta extendida · $95k" data-i18n-en="Offer extended · $95k">Oferta extendida · $95k</div>
-            <div class="rl">Diego Pérez · 28 May</div>
-          </div>
-          <span class="timeago">2h</span>
-        </article>
-        <article class="tcard">
-          <div class="avatar orange">CR</div>
-          <div class="info">
-            <div class="nm">Carlos Rivera</div>
-            <div class="rl" data-i18n-es="Hiring · Sunset Hotels Group" data-i18n-en="Hiring · Sunset Hotels Group">Hiring · Sunset Hotels Group</div>
-          </div>
-          <span class="badge"><span class="dot" style="background: var(--brand-orange);"></span>Approved</span>
-        </article>
-        <article class="tcard">
-          <div class="avatar">AL</div>
-          <div class="info">
-            <div class="nm">Andrea López</div>
-            <div class="rl" data-i18n-es="Front Desk Supervisor · Interviewing" data-i18n-en="Front Desk Supervisor · Interviewing">Front Desk Supervisor · Interviewing</div>
-          </div>
-          <span class="badge"><span class="dot" style="background: var(--violet);"></span>Interviewing</span>
-        </article>
-        <article class="tcard">
-          <div class="ico-sq"><i class="i" data-icon="user-check"></i></div>
-          <div class="info">
-            <div class="nm" data-i18n-es="Ocean Mirage Resort aprobado" data-i18n-en="Ocean Mirage Resort approved">Ocean Mirage Resort aprobado</div>
-            <div class="rl" data-i18n-es="Nuevo empleador · 3 roles" data-i18n-en="New employer · 3 roles">Nuevo empleador · 3 roles</div>
-          </div>
-          <span class="timeago">5h</span>
-        </article>
-
-        <!-- Duplicate copy for seamless loop -->
-        <article class="tcard">
-          <div class="avatar">MG</div>
-          <div class="info">
-            <div class="nm">María González</div>
-            <div class="rl" data-i18n-es="Senior UX Designer · Hired" data-i18n-en="Senior UX Designer · Hired">Senior UX Designer · Hired</div>
-          </div>
-          <span class="badge"><span class="dot" style="background: var(--success);"></span>Hired</span>
-        </article>
-        <article class="tcard">
-          <div class="ico-sq"><i class="i" data-icon="briefcase"></i></div>
-          <div class="info">
-            <div class="nm">Hospitality Marketing Lead</div>
-            <div class="rl">Sunset Hotels · Miami</div>
-          </div>
-          <span class="timeago">3d</span>
-        </article>
-        <article class="tcard">
-          <div class="ico-sq orange"><i class="i" data-icon="gift"></i></div>
-          <div class="info">
-            <div class="nm" data-i18n-es="Oferta extendida · $95k" data-i18n-en="Offer extended · $95k">Oferta extendida · $95k</div>
-            <div class="rl">Diego Pérez · 28 May</div>
-          </div>
-          <span class="timeago">2h</span>
-        </article>
-        <article class="tcard">
-          <div class="avatar orange">CR</div>
-          <div class="info">
-            <div class="nm">Carlos Rivera</div>
-            <div class="rl" data-i18n-es="Hiring · Sunset Hotels Group" data-i18n-en="Hiring · Sunset Hotels Group">Hiring · Sunset Hotels Group</div>
-          </div>
-          <span class="badge"><span class="dot" style="background: var(--brand-orange);"></span>Approved</span>
-        </article>
-        <article class="tcard">
-          <div class="avatar">AL</div>
-          <div class="info">
-            <div class="nm">Andrea López</div>
-            <div class="rl" data-i18n-es="Front Desk Supervisor · Interviewing" data-i18n-en="Front Desk Supervisor · Interviewing">Front Desk Supervisor · Interviewing</div>
-          </div>
-          <span class="badge"><span class="dot" style="background: var(--violet);"></span>Interviewing</span>
-        </article>
-        <article class="tcard">
-          <div class="ico-sq"><i class="i" data-icon="user-check"></i></div>
-          <div class="info">
-            <div class="nm" data-i18n-es="Ocean Mirage Resort aprobado" data-i18n-en="Ocean Mirage Resort approved">Ocean Mirage Resort aprobado</div>
-            <div class="rl" data-i18n-es="Nuevo empleador · 3 roles" data-i18n-en="New employer · 3 roles">Nuevo empleador · 3 roles</div>
-          </div>
-          <span class="timeago">5h</span>
-        </article>
-      </div>
     </div>
   </section>
 

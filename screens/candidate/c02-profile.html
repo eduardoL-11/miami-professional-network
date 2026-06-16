@@ -14,8 +14,8 @@
     @media (max-width: 1100px) { .layout { grid-template-columns: 1fr; } }
 
     .progress-banner {
-      background: linear-gradient(135deg, var(--brand-orange-50) 0%, #FFF7ED 100%);
-      border: 1px solid var(--brand-orange-100);
+      background: var(--white);
+      border: 1px solid var(--ink-200);
       border-radius: var(--r-lg);
       padding: 20px 24px;
       display: flex; align-items: center; gap: 24px;
@@ -29,11 +29,11 @@
     .progress-banner .ring .pct {
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px; font-weight: 800; color: var(--brand-orange-700);
+      font-size: 22px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.01em;
     }
     .progress-banner .copy { flex: 1; }
-    .progress-banner .copy h2 { margin: 0 0 4px; color: var(--brand-orange-700); }
-    .progress-banner .copy p { margin: 0; color: var(--ink-700); font-size: 14px; }
+    .progress-banner .copy h2 { margin: 0 0 4px; color: var(--ink-900); }
+    .progress-banner .copy p { margin: 0; color: var(--ink-600); font-size: 14px; }
 
     .section { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 24px; margin-bottom: 16px; scroll-margin-top: 24px; }
     .section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
@@ -119,10 +119,10 @@
     }
 
     .can-apply-card {
-      background: var(--brand-orange-50); border: 1px solid var(--brand-orange-100);
+      background: var(--ink-50); border: 1px solid var(--ink-200);
       border-radius: var(--r-lg); padding: 18px; text-align: center;
     }
-    .can-apply-card.ready { background: var(--success-bg); border-color: #BBF7D0; }
+    .can-apply-card.ready { background: var(--ink-50); border-color: var(--ink-200); }
   </style>
 </head>
 <body>
@@ -151,8 +151,8 @@
       <div class="progress-banner">
         <div class="ring">
           <svg width="84" height="84" viewBox="0 0 84 84">
-            <circle cx="42" cy="42" r="36" fill="none" stroke="rgba(243,107,27,0.18)" stroke-width="8" />
-            <circle cx="42" cy="42" r="36" fill="none" stroke="var(--brand-orange)" stroke-width="8"
+            <circle cx="42" cy="42" r="36" fill="none" stroke="var(--ink-200)" stroke-width="6" />
+            <circle cx="42" cy="42" r="36" fill="none" stroke="var(--ink-900)" stroke-width="6"
                     stroke-dasharray="226.19" stroke-dashoffset="33.93" stroke-linecap="round" />
           </svg>
           <div class="pct">85%</div>
@@ -397,7 +397,7 @@
 
           <div class="can-apply-card">
             <div style="font-size: 28px; margin-bottom: 8px;"><i class='i' data-icon='lock'></i></div>
-            <div style="font-weight: 700; font-size: 14px; color: var(--brand-orange-700); margin-bottom: 4px;" data-i18n-es="Aplicaciones bloqueadas" data-i18n-en="Applications blocked">Aplicaciones bloqueadas</div>
+            <div style="font-weight: 700; font-size: 14px; color: var(--ink-900); margin-bottom: 4px;" data-i18n-es="Aplicaciones bloqueadas" data-i18n-en="Applications blocked">Aplicaciones bloqueadas</div>
             <div class="t-body-sm" style="color: var(--ink-700);" data-i18n-es="Completa los 2 ítems pendientes para empezar a aplicar." data-i18n-en="Complete the 2 pending items to start applying.">Completa los 2 ítems pendientes para empezar a aplicar.</div>
           </div>
 

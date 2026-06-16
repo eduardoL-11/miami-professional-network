@@ -23,21 +23,16 @@
     .metric-tile .top { display: flex; align-items: center; justify-content: space-between; }
     .metric-tile .lbl { font-size: 12px; color: var(--ink-600); font-weight: 500; }
     .metric-tile .v { font-size: 28px; font-weight: 600; color: var(--ink-900); line-height: 1.1; letter-spacing: -0.02em; }
-    .metric-tile .delta { font-size: 12px; font-weight: 500; }
-    .metric-tile .delta.up   { color: var(--success); }
-    .metric-tile .delta.warn { color: var(--warning); }
+    .metric-tile .delta { font-size: 12px; font-weight: 500; color: var(--ink-500); }
     .metric-tile .delta.danger { color: var(--danger); }
     .metric-tile .ico {
-      width: 32px; height: 32px; border-radius: var(--r-md);
+      width: 30px; height: 30px; border-radius: var(--r-sm);
       background: var(--ink-100); color: var(--ink-700);
       display: inline-flex; align-items: center; justify-content: center;
-      font-size: 16px;
+      font-size: 15px;
     }
-    .metric-tile.attention .ico { background: var(--warning-bg); color: var(--warning); }
-    .metric-tile.attention .v { color: var(--warning); }
-    .metric-tile.danger .ico { background: var(--danger-bg); color: var(--danger); }
+    .metric-tile.attention .v { color: var(--ink-900); }
     .metric-tile.danger .v { color: var(--danger); }
-    .metric-tile.success .ico { background: var(--success-bg); color: var(--success); }
 
     .grid-2-1 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; align-items: start; }
     @media (max-width: 1100px) { .grid-2-1 { grid-template-columns: 1fr; } }
@@ -157,17 +152,17 @@
       </div>
 
       <!-- Hires row (full width single tile) -->
-      <a href="a08-hires.html" class="metric-tile success mb-6" style="display: flex; flex-direction: row; align-items: center; gap: 24px; padding: 20px 24px;">
-        <div class="ico" style="width: 48px; height: 48px;"><i class="i" data-icon="award" style="font-size: 22px;"></i></div>
+      <a href="a08-hires.html" class="metric-tile mb-6" style="display: flex; flex-direction: row; align-items: center; gap: 24px; padding: 18px 22px;">
+        <div class="ico"><i class="i" data-icon="award"></i></div>
         <div style="flex: 1;">
-          <div class="lbl" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;" data-i18n-es="Hires · Fee 1% pendiente de cobro" data-i18n-en="Hires · 1% fee pending collection">Hires · Fee 1% pendiente de cobro</div>
-          <div style="display: flex; gap: 40px; margin-top: 6px;">
-            <div><span class="v" style="font-size: 22px;">5</span> <span class="t-body-sm muted" data-i18n-es="hires este mes" data-i18n-en="hires this month">hires este mes</span></div>
-            <div><span class="v" style="font-size: 22px;">$4,250</span> <span class="t-body-sm muted" data-i18n-es="fee total pendiente" data-i18n-en="total fee pending">fee total pendiente</span></div>
-            <div><span class="v" style="font-size: 22px;">1</span> <span class="t-body-sm muted" data-i18n-es="no contactado aún" data-i18n-en="not yet contacted">no contactado aún</span></div>
+          <div class="lbl" data-i18n-es="Hires · Fee 1% pendiente de cobro" data-i18n-en="Hires · 1% fee pending collection">Hires · Fee 1% pendiente de cobro</div>
+          <div style="display: flex; gap: 40px; margin-top: 4px;">
+            <div><span class="v" style="font-size: 20px;">5</span> <span class="t-body-sm muted" data-i18n-es="hires este mes" data-i18n-en="hires this month">hires este mes</span></div>
+            <div><span class="v" style="font-size: 20px;">$4,250</span> <span class="t-body-sm muted" data-i18n-es="fee total pendiente" data-i18n-en="total fee pending">fee total pendiente</span></div>
+            <div><span class="v" style="font-size: 20px;">1</span> <span class="t-body-sm muted" data-i18n-es="no contactado aún" data-i18n-en="not yet contacted">no contactado aún</span></div>
           </div>
         </div>
-        <span class="badge"><span class="dot" style="background: var(--success);"></span><span data-i18n-es="Seguimiento manual" data-i18n-en="Manual follow-up">Seguimiento manual</span></span>
+        <span class="t-body-sm muted" data-i18n-es="Seguimiento manual →" data-i18n-en="Manual follow-up →">Seguimiento manual →</span>
       </a>
 
       <!-- Two-column: activity + pending approvals -->
@@ -185,7 +180,7 @@
           <div class="panel-body">
 
             <div class="activity-row">
-              <div class="ico-cell green"><i class="i" data-icon="award"></i></div>
+              <div class="ico-cell"><i class="i" data-icon="award"></i></div>
               <div class="body">
                 <div class="title" data-i18n-es-html="<strong>Sunset Hotels Group</strong> marcó como Hired a María González en Hospitality Marketing Lead" data-i18n-en-html="<strong>Sunset Hotels Group</strong> marked María González as Hired in Hospitality Marketing Lead"><strong>Sunset Hotels Group</strong> marcó como Hired a María González en Hospitality Marketing Lead</div>
                 <div class="time" data-i18n-es="hace 2 horas · fee 1% pendiente de cobro" data-i18n-en="2h ago · 1% fee pending collection">hace 2 horas · fee 1% pendiente de cobro</div>
@@ -194,7 +189,7 @@
             </div>
 
             <div class="activity-row">
-              <div class="ico-cell orange"><i class="i" data-icon="gift"></i></div>
+              <div class="ico-cell"><i class="i" data-icon="gift"></i></div>
               <div class="body">
                 <div class="title" data-i18n-es-html="<strong>Brickell Build Co.</strong> extendió una oferta a Diego Pérez en Senior Product Designer" data-i18n-en-html="<strong>Brickell Build Co.</strong> extended an offer to Diego Pérez in Senior Product Designer"><strong>Brickell Build Co.</strong> extendió una oferta a Diego Pérez en Senior Product Designer</div>
                 <div class="time" data-i18n-es="hace 5 horas" data-i18n-en="5h ago">hace 5 horas</div>
@@ -227,7 +222,7 @@
             </div>
 
             <div class="activity-row">
-              <div class="ico-cell violet"><i class="i" data-icon="user-check"></i></div>
+              <div class="ico-cell"><i class="i" data-icon="user-check"></i></div>
               <div class="body">
                 <div class="title" data-i18n-es-html="Aprobaste a <strong>Ocean Mirage Resort</strong> como empleador" data-i18n-en-html="You approved <strong>Ocean Mirage Resort</strong> as an employer">Aprobaste a <strong>Ocean Mirage Resort</strong> como empleador</div>
                 <div class="time" data-i18n-es="hace 2 días · Eduardo López" data-i18n-en="2 days ago · Eduardo López">hace 2 días · Eduardo López</div>
